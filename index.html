@@ -354,6 +354,254 @@
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
 
+  /* ================= Share feature ================= */
+  .btn-share{
+    background:linear-gradient(135deg, var(--color-peacock-emerald), var(--color-peacock-blue));
+    color:#fff; border:none;
+  }
+  .btn-share:hover{ background:linear-gradient(135deg, var(--color-peacock-blue), var(--color-peacock-indigo)); }
+  .btn-share[aria-expanded="true"]{ box-shadow:0 0 0 3px var(--color-gold-soft) inset; }
+
+  /* Accordion-style pop-down drawer (grid-rows trick = smooth height animation
+     without JS measuring the content, and it degrades safely on old browsers). */
+  .share-drawer{
+    display:grid; grid-template-rows:0fr;
+    transition:grid-template-rows .42s cubic-bezier(.4,0,.2,1);
+    margin:0 0 1.2rem;
+  }
+  .share-drawer.open{ grid-template-rows:1fr; }
+  .share-drawer-inner{ overflow:hidden; min-height:0; }
+  .share-panel{
+    background:var(--color-bg-card); border:1px solid var(--color-border);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:1.1rem 1.1rem 1.3rem; margin-top:.7rem;
+  }
+  .share-panel-head{
+    display:flex; align-items:center; justify-content:space-between; gap:.6rem;
+    margin-bottom:.9rem;
+  }
+  .share-panel-head h3{
+    margin:0; font-size:1.05rem; font-family:'Noto Serif Tamil','Fraunces',Georgia,serif;
+    color:var(--color-maroon-dark);
+  }
+  .share-panel-close{
+    width:28px; height:28px; border-radius:50%; border:none; cursor:pointer;
+    background:var(--color-border); color:var(--color-text); font-size:.95rem;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .share-panel-close:hover{ background:var(--color-gold-soft); color:var(--color-maroon-dark); }
+
+  .share-layout{ display:flex; gap:1.3rem; flex-wrap:wrap; align-items:flex-start; }
+  .share-preview-wrap{ display:flex; justify-content:center; flex:0 0 auto; }
+
+  /* ---- The visual "Share Card" (captured to PNG via html2canvas) ---- */
+  .share-card{
+    width:300px; min-height:375px; border-radius:20px; overflow:hidden;
+    position:relative; display:flex; flex-direction:column;
+    background:
+      radial-gradient(circle at 14% 8%, rgba(231,192,102,0.35), transparent 42%),
+      radial-gradient(circle at 92% 88%, rgba(21,94,117,0.35), transparent 46%),
+      linear-gradient(160deg, var(--color-teal-dark) 0%, var(--color-peacock-indigo) 55%, var(--color-maroon-dark) 100%);
+    color:#FBF6E9; padding:1.3rem 1.25rem 1.1rem;
+    font-family:'Noto Sans Tamil','Inter',system-ui,sans-serif;
+    box-shadow:0 10px 30px rgba(0,0,0,0.28);
+  }
+  .share-card-brand{
+    display:flex; align-items:center; gap:.4rem; font-size:.72rem; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--color-gold-soft);
+    opacity:.92;
+  }
+  .share-card-title{
+    font-family:'Noto Serif Tamil','Fraunces',Georgia,serif; font-weight:700;
+    font-size:1.32rem; line-height:1.4; margin:.85rem 0 .1rem; color:#FFFDF6;
+  }
+  .share-card-titleEn{ font-size:.78rem; font-style:italic; opacity:.85; margin-bottom:.15rem; }
+  .share-card-place{ font-size:.74rem; opacity:.85; margin-bottom:.5rem; }
+  .share-card-divider{ height:1px; background:rgba(255,255,255,0.22); margin:.55rem 0; }
+  .share-card-label{
+    font-size:.64rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--color-gold-soft); margin-bottom:.3rem;
+  }
+  .share-card-lyrics{
+    font-family:'Noto Serif Tamil',serif; font-size:.92rem; line-height:1.6;
+    white-space:pre-wrap; margin-bottom:.65rem;
+  }
+  .share-card-meaning{ font-size:.8rem; line-height:1.55; opacity:.96; flex:1 1 auto; }
+  .share-card-footer{
+    margin-top:.9rem; padding-top:.6rem; border-top:1px dashed rgba(255,255,255,0.28);
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:.66rem; opacity:.82; gap:.4rem;
+  }
+  .share-card-footer span:last-child{ text-align:right; }
+
+  .share-actions{ flex:1 1 260px; min-width:240px; }
+  .share-actions p.share-hint{
+    font-size:.84rem; color:var(--color-text-soft); margin:0 0 .8rem; line-height:1.5;
+  }
+  .share-platform-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(118px,1fr));
+    gap:.55rem;
+  }
+  .share-platform-btn{
+    display:flex; align-items:center; gap:.45rem; justify-content:center;
+    padding:.55rem .5rem; border-radius:12px; border:1px solid var(--color-border);
+    background:var(--color-bg); color:var(--color-text); cursor:pointer;
+    font-size:.82rem; font-weight:600; font-family:inherit;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .share-platform-btn:hover{ transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,0.12); }
+  .share-platform-btn .icon{ font-size:1.05rem; line-height:1; }
+  .share-platform-btn.wa{ background:#25D366; color:#fff; border-color:#25D366; }
+  .share-platform-btn.tw{ background:#111; color:#fff; border-color:#111; }
+  .share-platform-btn.fb{ background:#1877F2; color:#fff; border-color:#1877F2; }
+  .share-platform-btn.ig{ background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4); color:#fff; border:none; }
+  .share-platform-btn.em{ background:var(--color-maroon); color:#fff; border-color:var(--color-maroon); }
+  .share-platform-btn.dl{ background:var(--color-gold); color:#fff; border-color:var(--color-gold); }
+  .share-platform-btn.cp{ background:transparent; }
+  .share-platform-btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+  .share-status{ margin-top:.7rem; font-size:.8rem; color:var(--color-text-soft); min-height:1.1em; }
+
+  @media (max-width:640px){
+    .share-layout{ flex-direction:column; align-items:center; }
+    .share-preview-wrap{ width:100%; }
+    .share-card{ width:100%; max-width:340px; }
+    .share-actions{ width:100%; }
+  }
+
+  /* ================= Peacock assistant (Thiruppugazh origin) ================= */
+  .peacock-assistant{
+    position:fixed; right:1.1rem; bottom:1.3rem; z-index:60;
+    display:flex; flex-direction:column; align-items:flex-end; gap:.5rem;
+    font-family:'Noto Sans Tamil','Inter',system-ui,-apple-system,sans-serif;
+  }
+  .peacock-tooltip{
+    max-width:min(220px, 62vw);
+    background:var(--color-bg-card); color:var(--color-text);
+    border:1px solid var(--color-border); border-radius:14px;
+    padding:.55rem .8rem; font-size:.86rem; line-height:1.4; font-weight:500;
+    box-shadow:var(--shadow);
+    opacity:0; transform:translateY(6px) scale(.96);
+    pointer-events:none;
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .peacock-tooltip .en-tag{ display:block; margin-top:.15rem; font-size:.78em; }
+  .peacock-assistant.show-tip .peacock-tooltip,
+  .peacock-assistant:hover .peacock-tooltip,
+  .peacock-btn:focus-visible + .peacock-tooltip{
+    opacity:1; transform:translateY(0) scale(1); pointer-events:auto;
+  }
+  .peacock-assistant.open .peacock-tooltip{ opacity:0; pointer-events:none; }
+
+  .peacock-btn{
+    position:relative; width:64px; height:64px; border-radius:50%;
+    border:none; cursor:pointer; padding:0;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 32% 28%, var(--color-peacock-emerald), var(--color-peacock-blue) 55%, var(--color-peacock-indigo) 100%);
+    box-shadow:0 6px 18px rgba(14,80,70,0.35), 0 0 0 4px var(--color-bg);
+    animation:peacockFloat 3.6s ease-in-out infinite;
+  }
+  .peacock-btn::before{
+    content:""; position:absolute; inset:-8px; border-radius:50%;
+    border:2px solid var(--color-gold-soft); opacity:.55;
+    animation:peacockRing 2.6s ease-out infinite;
+  }
+  .peacock-btn svg{ width:40px; height:40px; position:relative; z-index:1; overflow:visible; }
+  .peacock-btn .feather-fan{ transform-origin:34px 40px; animation:feathersFan 3.6s ease-in-out infinite; }
+  .peacock-btn:hover{ box-shadow:0 8px 22px rgba(14,80,70,0.45), 0 0 0 4px var(--color-bg); }
+  .peacock-btn:active{ transform:scale(.94); }
+
+  @keyframes peacockFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-5px); }
+  }
+  @keyframes peacockRing{
+    0%{ transform:scale(.85); opacity:.6; }
+    80%{ transform:scale(1.18); opacity:0; }
+    100%{ transform:scale(1.18); opacity:0; }
+  }
+  @keyframes feathersFan{
+    0%,100%{ transform:rotate(0deg) scaleY(1); }
+    50%{ transform:rotate(-4deg) scaleY(1.04); }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .peacock-btn, .peacock-btn::before, .peacock-btn .feather-fan{ animation:none; }
+  }
+
+  /* ---- Cloud-shaped speech bubble that opens on click ---- */
+  .peacock-overlay{
+    position:fixed; inset:0; z-index:70;
+    background:rgba(20,30,25,0.42);
+    display:flex; align-items:flex-end; justify-content:flex-end;
+    padding:1.1rem; opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .peacock-overlay.open{ opacity:1; pointer-events:auto; }
+
+  .peacock-cloud-wrap{
+    position:relative; margin-bottom:5.6rem; margin-right:.1rem;
+    display:flex; flex-direction:column; align-items:flex-end;
+    transform:translateY(14px) scale(.94); opacity:0;
+    transition:transform .32s cubic-bezier(.2,.9,.3,1.2), opacity .28s ease;
+  }
+  .peacock-overlay.open .peacock-cloud-wrap{ transform:translateY(0) scale(1); opacity:1; }
+
+  .peacock-cloud{
+    position:relative;
+    width:min(420px, 88vw); max-height:min(66vh, 560px); overflow-y:auto;
+    background:var(--color-bg-card);
+    color:var(--color-text);
+    border:1px solid var(--color-border);
+    border-radius:38px 38px 6px 38px;
+    box-shadow:0 18px 44px rgba(0,0,0,0.28);
+    padding:1.5rem 1.5rem 1.3rem;
+  }
+  /* puffs around the top edge to sell the "cloud" silhouette */
+  .peacock-cloud::before, .peacock-cloud::after{
+    content:""; position:absolute; background:var(--color-bg-card);
+    border:1px solid var(--color-border); border-radius:50%;
+  }
+  .peacock-cloud::before{ width:46px; height:46px; top:-20px; left:34px; border-bottom:none; }
+  .peacock-cloud::after{ width:30px; height:30px; top:-12px; left:84px; border-bottom:none; }
+  /* small trailing bubbles pointing from the cloud down to the peacock button */
+  .peacock-cloud-tail1, .peacock-cloud-tail2{
+    position:absolute; right:26px; background:var(--color-bg-card);
+    border:1px solid var(--color-border); border-radius:50%;
+  }
+  .peacock-cloud-tail1{ width:18px; height:18px; bottom:-11px; right:34px; }
+  .peacock-cloud-tail2{ width:10px; height:10px; bottom:-22px; right:22px; }
+
+  .peacock-cloud-close{
+    position:sticky; top:0; float:right; margin:-.4rem -.4rem .2rem .6rem;
+    width:30px; height:30px; border-radius:50%; border:none; cursor:pointer;
+    background:var(--color-border); color:var(--color-text); font-size:1rem; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .peacock-cloud-close:hover{ background:var(--color-gold-soft); color:var(--color-maroon-dark); }
+
+  .peacock-cloud-content h3{
+    font-family:'Noto Serif Tamil','Fraunces',Georgia,serif;
+    color:var(--color-maroon-dark); font-size:1.28rem; margin:0 0 .7rem; line-height:1.4;
+    clear:both;
+  }
+  .peacock-cloud-content h4{
+    font-family:'Noto Serif Tamil','Fraunces',Georgia,serif;
+    color:var(--color-teal-dark); font-size:1.06rem; margin:1.1rem 0 .4rem;
+  }
+  .peacock-cloud-content p{
+    font-size:.98rem; line-height:1.85; color:var(--color-text); margin:0 0 .85rem;
+  }
+  .peacock-cloud-content p:last-child{ margin-bottom:0; }
+
+  @media (max-width:520px){
+    .peacock-assistant{ right:.7rem; bottom:1rem; }
+    .peacock-btn{ width:56px; height:56px; }
+    .peacock-btn svg{ width:34px; height:34px; }
+    .peacock-overlay{ padding:.6rem; }
+    .peacock-cloud-wrap{ margin-bottom:4.6rem; margin-right:0; width:100%; align-items:center; }
+    .peacock-cloud{ width:100%; border-radius:28px 28px 28px 28px; }
+    .peacock-cloud-tail1, .peacock-cloud-tail2{ display:none; }
+  }
+
   /* Faint footer disclaimer + visit-count line — intentionally understated
      so it stays out of the way of the devotional content above it. */
   .footer-fineprint{
@@ -521,6 +769,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- html2canvas: renders the "Share Card" DOM element to a PNG for platforms that need an image asset (Instagram/Facebook/Download) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <script>
   var firebaseConfig = {
     apiKey: "AIzaSyCG2F-FIMnl8EOUxnUJacxwDAG7NCKDWQs",
@@ -678,9 +928,56 @@
       <button type="button" class="btn btn-ghost btn-sm" id="backToListBtn">&larr; எல்லா பாடல்களுக்கும் திரும்பு <span class="en-tag">(Back to all songs)</span></button>
       <div style="display:flex; gap:.5rem;">
         <button type="button" class="btn btn-teal btn-sm" id="listenBtn">🔊 கேளுங்கள் <span class="en-tag">(Listen)</span></button>
+        <button type="button" class="btn btn-share btn-sm" id="shareBtn" aria-expanded="false" aria-controls="shareDrawer">📤 பகிர் <span class="en-tag">(Share)</span></button>
         <button type="button" class="btn btn-ghost btn-sm" id="printBtn">🖨️ அச்சிடு <span class="en-tag">(Print)</span></button>
       </div>
     </div>
+
+    <!-- Share drawer: pops down under the toolbar with a smooth expand/collapse animation -->
+    <div class="share-drawer" id="shareDrawer">
+      <div class="share-drawer-inner">
+        <div class="share-panel" id="sharePanel">
+          <div class="share-panel-head">
+            <h3>பாடலைப் பகிரவும் <span class="en-tag">(Share this song)</span></h3>
+            <button type="button" class="share-panel-close" id="shareCloseBtn" aria-label="மூடு (Close)">✕</button>
+          </div>
+          <div class="share-layout">
+            <div class="share-preview-wrap">
+              <div class="share-card" id="shareCard">
+                <div class="share-card-brand">🦚 திருப்புகழ் · Thiruppugazh</div>
+                <div class="share-card-title" id="shareCardTitle"></div>
+                <div class="share-card-titleEn" id="shareCardTitleEn"></div>
+                <div class="share-card-place" id="shareCardPlace"></div>
+                <div class="share-card-divider"></div>
+                <div class="share-card-label">பாடல் (Song)</div>
+                <div class="share-card-lyrics" id="shareCardLyrics"></div>
+                <div class="share-card-divider"></div>
+                <div class="share-card-label">பொருள் (Meaning)</div>
+                <div class="share-card-meaning" id="shareCardMeaning"></div>
+                <div class="share-card-footer">
+                  <span>ஓம் முருகா 🙏</span>
+                  <span>iaintcoding.github.io/thirupugazhsongs</span>
+                </div>
+              </div>
+            </div>
+            <div class="share-actions">
+              <p class="share-hint">பாடலையும் அதன் பொருளையும் ஒரு அழகிய அட்டையாக நேரடியாகப் பகிரலாம், அல்லது படமாகப் பதிவிறக்கம் செய்து இன்ஸ்டாகிராம் / பேஸ்புக்கில் இணைக்கலாம். <span class="en-tag">(Share directly as text, or download the card as an image to attach on Instagram/Facebook.)</span></p>
+              <div class="share-platform-grid">
+                <button type="button" class="share-platform-btn wa" id="shareWhatsappBtn"><span class="icon">💬</span> WhatsApp</button>
+                <button type="button" class="share-platform-btn tw" id="shareTwitterBtn"><span class="icon">𝕏</span> X / Twitter</button>
+                <button type="button" class="share-platform-btn fb" id="shareFacebookBtn"><span class="icon">📘</span> Facebook</button>
+                <button type="button" class="share-platform-btn ig" id="shareInstagramBtn"><span class="icon">📸</span> Instagram</button>
+                <button type="button" class="share-platform-btn em" id="shareEmailBtn"><span class="icon">✉️</span> Email</button>
+                <button type="button" class="share-platform-btn dl" id="shareDownloadBtn"><span class="icon">⬇️</span> <span class="en-tag" style="display:inline;">Save image</span></button>
+                <button type="button" class="share-platform-btn cp btn-ghost" id="shareCopyBtn"><span class="icon">📋</span> <span class="en-tag" style="display:inline;">Copy text</span></button>
+              </div>
+              <div class="share-status" id="shareStatus" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <article class="detail-card" id="detailCard"></article>
   </section>
 
@@ -792,6 +1089,74 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ===== Peacock assistant — tap to read the Thiruppugazh origin story ===== -->
+<div class="peacock-assistant" id="peacockAssistant">
+  <div class="peacock-tooltip" id="peacockTooltip">
+    திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் 🦚
+    <span class="en-tag">(Click here to know about Thirupugazh)</span>
+  </div>
+  <button
+    type="button"
+    class="peacock-btn"
+    id="peacockBtn"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls="peacockCloud"
+    aria-label="திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh)"
+  >
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g class="feather-fan">
+        <path d="M30 34 L6 6" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <circle cx="6" cy="6" r="6.5" fill="var(--color-peacock-emerald)"/>
+        <circle cx="6" cy="6" r="3.4" fill="var(--color-gold-soft)"/>
+        <circle cx="6" cy="6" r="1.3" fill="var(--color-maroon-dark)"/>
+        <path d="M30 34 L20 2" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <circle cx="20" cy="2" r="7" fill="var(--color-peacock-blue)"/>
+        <circle cx="20" cy="2" r="3.7" fill="var(--color-gold-soft)"/>
+        <circle cx="20" cy="2" r="1.4" fill="var(--color-maroon-dark)"/>
+        <path d="M30 34 L36 1" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <circle cx="36" cy="1" r="7.4" fill="var(--color-peacock-emerald)"/>
+        <circle cx="36" cy="1" r="3.9" fill="var(--color-gold-soft)"/>
+        <circle cx="36" cy="1" r="1.5" fill="var(--color-maroon-dark)"/>
+        <path d="M30 34 L52 4" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <circle cx="52" cy="4" r="6.7" fill="var(--color-peacock-indigo)"/>
+        <circle cx="52" cy="4" r="3.5" fill="var(--color-gold-soft)"/>
+        <circle cx="52" cy="4" r="1.3" fill="var(--color-maroon-dark)"/>
+      </g>
+      <path d="M30 34 C24 30 20 32 18 38 C24 41 20 47 24 52 C29 48 30 50 30 50 C30 50 31 48 36 52 C40 47 36 41 42 38 C40 32 36 30 30 34 Z" fill="var(--color-peacock-blue)"/>
+      <ellipse cx="30" cy="26" rx="7.5" ry="9" fill="var(--color-peacock-emerald)"/>
+      <circle cx="30" cy="16.5" r="6.6" fill="var(--color-peacock-blue)"/>
+      <path d="M30 10 L28 3" stroke="var(--color-peacock-blue)" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="27.6" cy="2.4" r="1.8" fill="var(--color-gold-soft)"/>
+      <circle cx="27" cy="16" r="1.5" fill="#fff"/>
+      <circle cx="27.4" cy="16" r=".7" fill="var(--color-maroon-dark)"/>
+      <path d="M22.5 18 Q19 19.5 21 24" stroke="var(--color-gold)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+    </svg>
+  </button>
+</div>
+
+<div class="peacock-overlay" id="peacockOverlay" role="presentation">
+  <div class="peacock-cloud-wrap">
+    <div class="peacock-cloud" id="peacockCloud" role="dialog" aria-modal="true" aria-labelledby="peacockCloudTitle" tabindex="-1">
+      <button type="button" class="peacock-cloud-close" id="peacockCloseBtn" aria-label="மூடு (Close)">✕</button>
+      <div class="peacock-cloud-content">
+        <h3 id="peacockCloudTitle">திருப்புகழ் தோற்றம்: ஒரு ஆன்மீக இசைப் பெட்டகம்</h3>
+        <p>திருப்புகழ் என்பது தமிழ் பக்தியிலக்கிய வரலாற்றில் தனித்துவமான இடம் பெற்ற ஒரு அருள் பொங்கும் பொக்கிஷமாகும். அருணகிரிநாதர் பெருமானால் அருளப்பட்ட இந்நூல், முருகப் பெருமானின் புகழைப் பாடும் இணையற்ற நூலாகும்.</p>
+
+        <h4>தோற்றப் பின்னணி:</h4>
+        <p>திருவண்ணாமலையில் அவதரித்த அருணகிரிநாதர், தனது ஆரம்ப காலத்தில் புலன்வழிக் வாழ்க்கையில் ஈடுபட்டு, அதிலிருந்து விடுபடத் துணிந்து திருவண்ணாமலை கோபுரத்தின் உச்சியிலிருந்து கீழே குதித்து உயிரை மாய்க்க முயன்றார். அப்போது முருகப் பெருமான் நேரில் தோன்றி அவரைத் தாங்கித் தடுத்து ஆட்கொண்டார்.</p>
+
+        <h4>காப்புச் சொற்களும் ஞானமும்:</h4>
+        <p>முருகப் பெருமான் தனது வேலால் அருணகிரிநாதரின் நாக்கில் 'ஓம்' என்ற பிரணவ மந்திரத்தை எழுதி, கவிபாடும் ஆற்றலையும் ஞானத்தையும் அருளினார். மேலும், "முத்தைத் தரு பத்தித் திருநகை..." என்ற முதல் பாடலின் அடியைக் கொடுத்து, "இந்தப் பாடலைப் பாடி என் புகழைப் பரப்பு" என்று கட்டளையிட்டார்.</p>
+
+        <p>இவ்வாறு இறைவனின் திருவருளாலும், அருணகிரிநாதரின் இணையற்ற தமிழ்ப் புலமையாலும் உருவானதே புகழ்பெற்ற 'திருப்புகழ்' ஆகும். சந்த நயங்கள் நிறைந்த இந்நூல், தமிழ் இலக்கியத்திற்குப் பெருமை சேர்க்கும் ஒப்பற்ற இசைக் குவியலாகும்.</p>
+      </div>
+      <div class="peacock-cloud-tail1" aria-hidden="true"></div>
+      <div class="peacock-cloud-tail2" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
 
 <footer class="site-footer">
   <div class="kolam-border" aria-hidden="true" style="margin-bottom:1.2rem;"></div>
@@ -1099,9 +1464,10 @@
       '<hr class="divider">' +
       '<div class="section-label">பொருள் <span class="en-tag">(Meaning)</span></div>' +
       '<div class="meaning-block">' + nl2br(song.meaning) + '</div>';
+    closeShareDrawer();
     showView("detail");
   }
-  $("backToListBtn").addEventListener("click", function(){ showView("list"); });
+  $("backToListBtn").addEventListener("click", function(){ closeShareDrawer(); showView("list"); });
   $("printBtn").addEventListener("click", function(){ window.print(); });
   $("listenBtn").addEventListener("click", function(){
     if(!activeSongId) return;
@@ -1116,6 +1482,209 @@
     utter.lang = "ta-IN";
     utter.rate = 0.85;
     window.speechSynthesis.speak(utter);
+  });
+
+  /* ---------- Share feature: expandable drawer + shareable card + platform intents ---------- */
+  var SITE_URL = "https://iaintcoding.github.io/thirupugazhsongs/";
+
+  function truncateWords(str, maxChars){
+    str = (str || "").trim();
+    if(str.length <= maxChars) return str;
+    return str.slice(0, maxChars).replace(/\s+\S*$/, "") + "…";
+  }
+
+  function shareLyricsSnippet(song){
+    var lines = (song.lyrics || "").split("\n").filter(function(l){ return l.trim(); });
+    var snippet = lines.slice(0, 4).join("\n");
+    return truncateWords(snippet, 180);
+  }
+
+  function shareMeaningSnippet(song){
+    var flat = (song.meaning || "").replace(/\n+/g, " ").trim();
+    return truncateWords(flat, 220);
+  }
+
+  function buildShareCard(song){
+    $("shareCardTitle").textContent = song.titleTamil || "";
+    $("shareCardTitleEn").textContent = song.titleEn || "";
+    $("shareCardTitleEn").style.display = song.titleEn ? "" : "none";
+    $("shareCardPlace").textContent = song.place ? ("📍 " + song.place) : "";
+    $("shareCardPlace").style.display = song.place ? "" : "none";
+    $("shareCardLyrics").textContent = shareLyricsSnippet(song);
+    $("shareCardMeaning").textContent = shareMeaningSnippet(song);
+  }
+
+  function buildShareText(song){
+    var title = song.titleTamil + (song.titleEn ? " (" + song.titleEn + ")" : "");
+    return (
+      "🦚 திருப்புகழ்: " + title + "\n\n" +
+      shareLyricsSnippet(song) + "\n\n" +
+      "📖 பொருள் (Meaning): " + shareMeaningSnippet(song) + "\n\n" +
+      "🔗 " + SITE_URL + "\n" +
+      "ஓம் முருகா 🙏"
+    );
+  }
+
+  function currentShareSong(){
+    return songs.find(function(s){ return s.id === activeSongId; });
+  }
+
+  function setShareStatus(msg){
+    var el = $("shareStatus");
+    if(el) el.textContent = msg || "";
+  }
+
+  function openShareDrawer(){
+    var song = currentShareSong();
+    if(!song){ return; }
+    buildShareCard(song);
+    setShareStatus("");
+    $("shareDrawer").classList.add("open");
+    $("shareBtn").setAttribute("aria-expanded", "true");
+  }
+
+  function closeShareDrawer(){
+    var drawer = $("shareDrawer");
+    if(drawer) drawer.classList.remove("open");
+    var btn = $("shareBtn");
+    if(btn) btn.setAttribute("aria-expanded", "false");
+  }
+
+  $("shareBtn").addEventListener("click", function(){
+    if($("shareDrawer").classList.contains("open")){ closeShareDrawer(); }
+    else { openShareDrawer(); }
+  });
+  $("shareCloseBtn").addEventListener("click", closeShareDrawer);
+
+  // Renders the visual card to a PNG blob (used by Download / Instagram / native share).
+  function renderShareCardImage(){
+    if(typeof html2canvas !== "function"){
+      return Promise.reject(new Error("html2canvas not loaded"));
+    }
+    return html2canvas($("shareCard"), {
+      backgroundColor: null,
+      scale: 3,
+      useCORS: true
+    }).then(function(canvas){
+      return new Promise(function(resolve, reject){
+        canvas.toBlob(function(blob){
+          if(blob) resolve({ canvas: canvas, blob: blob });
+          else reject(new Error("toBlob failed"));
+        }, "image/png");
+      });
+    });
+  }
+
+  function downloadBlob(blob, filename){
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+  }
+
+  // WhatsApp — click-to-chat with pre-filled formatted text.
+  $("shareWhatsappBtn").addEventListener("click", function(){
+    var song = currentShareSong();
+    if(!song) return;
+    var url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(buildShareText(song));
+    window.open(url, "_blank", "noopener");
+  });
+
+  // X / Twitter — tweet intent.
+  $("shareTwitterBtn").addEventListener("click", function(){
+    var song = currentShareSong();
+    if(!song) return;
+    var title = song.titleTamil + (song.titleEn ? " (" + song.titleEn + ")" : "");
+    var tweetText = "🦚 திருப்புகழ்: " + title + "\n" + truncateWords((song.meaning || "").replace(/\n+/g," "), 140);
+    var url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweetText) + "&url=" + encodeURIComponent(SITE_URL);
+    window.open(url, "_blank", "noopener");
+  });
+
+  // Email — mailto with subject + formatted body.
+  $("shareEmailBtn").addEventListener("click", function(){
+    var song = currentShareSong();
+    if(!song) return;
+    var subject = "திருப்புகழ்: " + song.titleTamil;
+    var url = "mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(buildShareText(song));
+    window.location.href = url;
+  });
+
+  // Facebook — web sharer (accepts a URL; the rendered card image can be downloaded
+  // separately and attached, since Facebook's web intent does not accept raw images).
+  $("shareFacebookBtn").addEventListener("click", function(){
+    var song = currentShareSong();
+    if(!song) return;
+    var quote = song.titleTamil + " — " + shareMeaningSnippet(song);
+    var url = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(SITE_URL) + "&quote=" + encodeURIComponent(quote);
+    window.open(url, "_blank", "noopener");
+  });
+
+  // Instagram has no web share intent, so we prefer the native OS share sheet
+  // (with the card image attached) where available, and fall back to a
+  // straightforward image download with on-screen instructions.
+  $("shareInstagramBtn").addEventListener("click", function(){
+    var song = currentShareSong();
+    if(!song) return;
+    var btn = $("shareInstagramBtn");
+    btn.disabled = true;
+    setShareStatus("அட்டையை உருவாக்குகிறோம்… (Preparing image…)");
+    renderShareCardImage().then(function(result){
+      var file = new File([result.blob], "thirupugazh-" + song.id + ".png", { type: "image/png" });
+      if(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })){
+        return navigator.share({
+          files: [file],
+          title: "திருப்புகழ்: " + song.titleTamil,
+          text: buildShareText(song)
+        }).then(function(){
+          setShareStatus("பகிரப்பட்டது! (Shared!)");
+        }).catch(function(){ /* user cancelled the native share sheet */ setShareStatus(""); });
+      }
+      downloadBlob(result.blob, "thirupugazh-" + song.id + ".png");
+      setShareStatus("படம் பதிவிறக்கப்பட்டது — இன்ஸ்டாகிராமில் இணைக்கவும். (Image downloaded — attach it in Instagram.)");
+    }).catch(function(){
+      setShareStatus("⚠️ படத்தை உருவாக்க முடியவில்லை. (Could not generate the image.)");
+    }).finally(function(){ btn.disabled = false; });
+  });
+
+  // Always-available "Save image" button — downloads the card as a PNG.
+  $("shareDownloadBtn").addEventListener("click", function(){
+    var song = currentShareSong();
+    if(!song) return;
+    var btn = $("shareDownloadBtn");
+    btn.disabled = true;
+    setShareStatus("அட்டையை உருவாக்குகிறோம்… (Preparing image…)");
+    renderShareCardImage().then(function(result){
+      downloadBlob(result.blob, "thirupugazh-" + song.id + ".png");
+      setShareStatus("படம் பதிவிறக்கப்பட்டது. (Image downloaded.)");
+    }).catch(function(){
+      setShareStatus("⚠️ படத்தை உருவாக்க முடியவில்லை. (Could not generate the image.)");
+    }).finally(function(){ btn.disabled = false; });
+  });
+
+  // Clipboard fallback — copies the formatted share text (works everywhere,
+  // including platforms/browsers with no direct web-intent support).
+  $("shareCopyBtn").addEventListener("click", function(){
+    var song = currentShareSong();
+    if(!song) return;
+    var text = buildShareText(song);
+    function done(){ showToast("பகிர் உரை நகலெடுக்கப்பட்டது! (Share text copied!)"); }
+    function fail(){
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done(); }
+      catch(e){ showToast("⚠️ நகலெடுக்க முடியவில்லை. (Could not copy.)"); }
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(fail);
+    } else {
+      fail();
+    }
   });
 
   /* ---------- Admin auth (Firebase Auth — real accounts, not a hash in the page source) ---------- */
@@ -1523,6 +2092,56 @@
     };
     reader.readAsText(file);
   });
+})();
+</script>
+
+<!-- ===== Peacock assistant behaviour (self-contained; does not touch app/Firebase logic) ===== -->
+<script>
+(function(){
+  "use strict";
+  var wrap = document.getElementById("peacockAssistant");
+  var btn = document.getElementById("peacockBtn");
+  var overlay = document.getElementById("peacockOverlay");
+  var cloud = document.getElementById("peacockCloud");
+  var closeBtn = document.getElementById("peacockCloseBtn");
+  if(!wrap || !btn || !overlay || !cloud || !closeBtn) return;
+
+  var lastFocused = null;
+
+  function openCloud(){
+    lastFocused = document.activeElement;
+    wrap.classList.add("open");
+    overlay.classList.add("open");
+    btn.setAttribute("aria-expanded", "true");
+    document.addEventListener("keydown", onKeydown);
+    window.setTimeout(function(){ cloud.focus(); }, 30);
+  }
+
+  function closeCloud(){
+    wrap.classList.remove("open");
+    overlay.classList.remove("open");
+    btn.setAttribute("aria-expanded", "false");
+    document.removeEventListener("keydown", onKeydown);
+    if(lastFocused && typeof lastFocused.focus === "function"){ lastFocused.focus(); }
+  }
+
+  function onKeydown(e){
+    if(e.key === "Escape" || e.key === "Esc"){ closeCloud(); }
+  }
+
+  btn.addEventListener("click", function(){
+    if(overlay.classList.contains("open")){ closeCloud(); } else { openCloud(); }
+  });
+  closeBtn.addEventListener("click", closeCloud);
+  overlay.addEventListener("click", function(e){
+    if(e.target === overlay){ closeCloud(); }
+  });
+
+  // Gently invite first-time visitors to notice the peacock, then let it rest.
+  window.setTimeout(function(){
+    if(!overlay.classList.contains("open")){ wrap.classList.add("show-tip"); }
+  }, 900);
+  window.setTimeout(function(){ wrap.classList.remove("show-tip"); }, 6500);
 })();
 </script>
 </body>
