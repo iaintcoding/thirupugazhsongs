@@ -394,15 +394,21 @@
   .share-layout{ display:flex; gap:1.3rem; flex-wrap:wrap; align-items:flex-start; }
   .share-preview-wrap{ display:flex; justify-content:center; flex:0 0 auto; }
 
-  /* ---- The visual "Share Card" (captured to PNG via html2canvas) ---- */
+  /* ---- The visual "Share Card" (captured to PNG via html2canvas) ----
+     Base size is 360×640 (9:16). html2canvas renders it at scale:3, so the
+     exported PNG is a crisp 1080×1920 — the recommended size for
+     WhatsApp/Instagram/Status shares — instead of a blurry, oddly-cropped
+     JPEG. Height is allowed to grow (min-height, not height) so the full
+     song and its full meaning are never cut off; only *taller* than 1920px
+     when a song genuinely needs more room, never smaller/blurrier. */
   .share-card{
-    width:300px; min-height:375px; border-radius:20px; overflow:hidden;
+    width:360px; min-height:640px; border-radius:20px; overflow:hidden;
     position:relative; display:flex; flex-direction:column;
     background:
       radial-gradient(circle at 14% 8%, rgba(231,192,102,0.35), transparent 42%),
       radial-gradient(circle at 92% 88%, rgba(21,94,117,0.35), transparent 46%),
       linear-gradient(160deg, var(--color-teal-dark) 0%, var(--color-peacock-indigo) 55%, var(--color-maroon-dark) 100%);
-    color:#FBF6E9; padding:1.3rem 1.25rem 1.1rem;
+    color:#FBF6E9; padding:1.5rem 1.4rem 1.2rem;
     font-family:'Noto Sans Tamil','Inter',system-ui,sans-serif;
     box-shadow:0 10px 30px rgba(0,0,0,0.28);
   }
@@ -464,7 +470,7 @@
   @media (max-width:640px){
     .share-layout{ flex-direction:column; align-items:center; }
     .share-preview-wrap{ width:100%; }
-    .share-card{ width:100%; max-width:340px; }
+    .share-card{ width:100%; max-width:360px; }
     .share-actions{ width:100%; }
   }
 
@@ -475,16 +481,21 @@
     font-family:'Noto Sans Tamil','Inter',system-ui,-apple-system,sans-serif;
   }
   .peacock-tooltip{
-    max-width:min(220px, 62vw);
+    max-width:min(168px, 52vw);
     background:var(--color-bg-card); color:var(--color-text);
     border:1px solid var(--color-border); border-radius:14px;
-    padding:.55rem .8rem; font-size:.86rem; line-height:1.4; font-weight:500;
+    padding:.4rem .6rem; font-size:.72rem; line-height:1.35; font-weight:500;
     box-shadow:var(--shadow);
     opacity:0; transform:translateY(6px) scale(.96);
     pointer-events:none;
     transition:opacity .35s ease, transform .35s ease;
   }
   .peacock-tooltip .en-tag{ display:block; margin-top:.15rem; font-size:.78em; }
+  /* Visible only on the main song-list page, so it never sits over the
+     admin dashboard or the song detail/reading view. */
+  .peacock-assistant.assistant-hidden{
+    display:none;
+  }
   .peacock-assistant.show-tip .peacock-tooltip,
   .peacock-assistant:hover .peacock-tooltip,
   .peacock-btn:focus-visible + .peacock-tooltip{
@@ -493,7 +504,7 @@
   .peacock-assistant.open .peacock-tooltip{ opacity:0; pointer-events:none; }
 
   .peacock-btn{
-    position:relative; width:64px; height:64px; border-radius:50%;
+    position:relative; width:50px; height:50px; border-radius:50%;
     border:none; cursor:pointer; padding:0;
     display:flex; align-items:center; justify-content:center;
     background:radial-gradient(circle at 32% 28%, var(--color-peacock-emerald), var(--color-peacock-blue) 55%, var(--color-peacock-indigo) 100%);
@@ -501,11 +512,11 @@
     animation:peacockFloat 3.6s ease-in-out infinite;
   }
   .peacock-btn::before{
-    content:""; position:absolute; inset:-8px; border-radius:50%;
+    content:""; position:absolute; inset:-6px; border-radius:50%;
     border:2px solid var(--color-gold-soft); opacity:.55;
     animation:peacockRing 2.6s ease-out infinite;
   }
-  .peacock-btn svg{ width:40px; height:40px; position:relative; z-index:1; overflow:visible; }
+  .peacock-btn svg{ width:30px; height:30px; position:relative; z-index:1; overflow:visible; }
   .peacock-btn .feather-fan{ transform-origin:34px 40px; animation:feathersFan 3.6s ease-in-out infinite; }
   .peacock-btn:hover{ box-shadow:0 8px 22px rgba(14,80,70,0.45), 0 0 0 4px var(--color-bg); }
   .peacock-btn:active{ transform:scale(.94); }
@@ -594,8 +605,8 @@
 
   @media (max-width:520px){
     .peacock-assistant{ right:.7rem; bottom:1rem; }
-    .peacock-btn{ width:56px; height:56px; }
-    .peacock-btn svg{ width:34px; height:34px; }
+    .peacock-btn{ width:44px; height:44px; }
+    .peacock-btn svg{ width:26px; height:26px; }
     .peacock-overlay{ padding:.6rem; }
     .peacock-cloud-wrap{ margin-bottom:4.6rem; margin-right:0; width:100%; align-items:center; }
     .peacock-cloud{ width:100%; border-radius:28px 28px 28px 28px; }
@@ -1322,6 +1333,11 @@
     ["view-list","view-detail","view-admin"].forEach(function(id){
       $(id).classList.toggle("hidden", id !== ("view-" + name));
     });
+    // The floating peacock assistant belongs on the main song-list page
+    // only — keep it out of the way on the detail/reading view and the
+    // admin dashboard so it never covers other controls.
+    var assistant = document.getElementById("peacockAssistant");
+    if(assistant){ assistant.classList.toggle("assistant-hidden", name !== "list"); }
     window.scrollTo({top:0, behavior:"smooth"});
   }
   $("brandHome").addEventListener("click", function(){ showView("list"); });
@@ -1334,16 +1350,14 @@
   function renderSongList(){
     var grid = $("songGrid");
     var q = currentSearch.trim().toLowerCase();
-    var visible = songs.filter(function(s){
-      if(!s.published) return false;
-      if(!q) return true;
-      return (s.titleTamil||"").toLowerCase().indexOf(q) > -1 ||
-             (s.titleEn||"").toLowerCase().indexOf(q) > -1 ||
-             (s.place||"").toLowerCase().indexOf(q) > -1;
-    });
-    // Ascending order = the order songs were added in (oldest first).
-    visible.sort(function(a,b){
+    // Ascending order = the order songs were added in (oldest first) —
+    // number songs against this same order so a numeric search ("5")
+    // matches the song a person would count as #5 in the list.
+    var allPublished = songs.filter(function(s){ return s.published; }).sort(function(a,b){
       return (a.createdAt||"").localeCompare(b.createdAt||"");
+    });
+    var visible = allPublished.filter(function(s, i){
+      return songMatchesQuery(s, q, i + 1);
     });
     if(visible.length === 0){
       grid.innerHTML =
@@ -1401,14 +1415,26 @@
     box.innerHTML = "";
     $("searchInput").setAttribute("aria-expanded", "false");
   }
+  // Matches a song against the query by title (Tamil/English), place, OR by
+  // its position number in the A-to-Z list (so typing e.g. "5" finds song #5),
+  // so people can search "by title, name, or by number".
+  function songMatchesQuery(song, q, serialNo){
+    if(!q) return true;
+    if((song.titleTamil||"").toLowerCase().indexOf(q) > -1) return true;
+    if((song.titleEn||"").toLowerCase().indexOf(q) > -1) return true;
+    if((song.place||"").toLowerCase().indexOf(q) > -1) return true;
+    if(/^\d+$/.test(q) && String(serialNo) === q) return true;
+    return false;
+  }
   function renderSearchSuggestions(){
     var box = $("searchSuggestions");
     var q = currentSearch.trim().toLowerCase();
-    var list = publishedSongsSorted().filter(function(s){
-      if(!q) return true;
-      return (s.titleTamil||"").toLowerCase().indexOf(q) > -1 ||
-             (s.titleEn||"").toLowerCase().indexOf(q) > -1 ||
-             (s.place||"").toLowerCase().indexOf(q) > -1;
+    // Don't expand and dump the entire song list just because the field was
+    // focused/tapped — only show results once the person has typed something.
+    if(!q){ hideSuggestions(); return; }
+    var sorted = publishedSongsSorted();
+    var list = sorted.filter(function(s, i){
+      return songMatchesQuery(s, q, i + 1);
     }).slice(0, 30);
     if(list.length === 0){
       box.innerHTML = '<div class="sugg-empty">பாடல்கள் இல்லை (No songs found)</div>';
@@ -1423,10 +1449,7 @@
         item.addEventListener("click", function(){
           var id = item.getAttribute("data-id");
           var song = songs.find(function(s){ return s.id === id; });
-          $("searchInput").value = song ? song.titleTamil : "";
-          currentSearch = $("searchInput").value;
           hideSuggestions();
-          renderSongList();
           if(song) openDetail(song.id);
         });
       });
@@ -1467,7 +1490,16 @@
     closeShareDrawer();
     showView("detail");
   }
-  $("backToListBtn").addEventListener("click", function(){ closeShareDrawer(); showView("list"); });
+  $("backToListBtn").addEventListener("click", function(){
+    closeShareDrawer();
+    // Going back always returns to the regular, unfiltered list — not the
+    // search that led to this particular song — so clear whatever was typed.
+    currentSearch = "";
+    $("searchInput").value = "";
+    hideSuggestions();
+    renderSongList();
+    showView("list");
+  });
   $("printBtn").addEventListener("click", function(){ window.print(); });
   $("listenBtn").addEventListener("click", function(){
     if(!activeSongId) return;
@@ -1493,15 +1525,23 @@
     return str.slice(0, maxChars).replace(/\s+\S*$/, "") + "…";
   }
 
+  // The share card and the "copy as text" action must always carry the
+  // COMPLETE song and its full meaning — many visitors (including senior
+  // citizens who rely on the shared image/text instead of opening the site)
+  // only ever see what gets shared, so nothing here may be shortened.
   function shareLyricsSnippet(song){
-    var lines = (song.lyrics || "").split("\n").filter(function(l){ return l.trim(); });
-    var snippet = lines.slice(0, 4).join("\n");
-    return truncateWords(snippet, 180);
+    return (song.lyrics || "").trim();
   }
 
   function shareMeaningSnippet(song){
+    return (song.meaning || "").trim();
+  }
+
+  // Short, teaser-only text for platforms with hard character limits (e.g.
+  // a tweet). The full song still travels via the link + the shared image.
+  function shareTeaser(song){
     var flat = (song.meaning || "").replace(/\n+/g, " ").trim();
-    return truncateWords(flat, 220);
+    return truncateWords(flat, 140);
   }
 
   function buildShareCard(song){
@@ -1575,6 +1615,20 @@
     });
   }
 
+  // Best-effort copy of the rendered PNG straight to the system clipboard,
+  // so tapping "Save image" also lets people simply paste it into WhatsApp,
+  // Notes, etc. — no file-manager hunting required (this matters a lot for
+  // senior citizens). Not all browsers support this, so callers should
+  // still fall back to the download.
+  function copyImageToClipboard(blob){
+    if(!navigator.clipboard || typeof window.ClipboardItem === "undefined"){
+      return Promise.reject(new Error("Clipboard image copy not supported"));
+    }
+    return navigator.clipboard.write([
+      new window.ClipboardItem({ "image/png": blob })
+    ]);
+  }
+
   function downloadBlob(blob, filename){
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
@@ -1599,7 +1653,7 @@
     var song = currentShareSong();
     if(!song) return;
     var title = song.titleTamil + (song.titleEn ? " (" + song.titleEn + ")" : "");
-    var tweetText = "🦚 திருப்புகழ்: " + title + "\n" + truncateWords((song.meaning || "").replace(/\n+/g," "), 140);
+    var tweetText = "🦚 திருப்புகழ்: " + title + "\n" + shareTeaser(song);
     var url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweetText) + "&url=" + encodeURIComponent(SITE_URL);
     window.open(url, "_blank", "noopener");
   });
@@ -1618,7 +1672,7 @@
   $("shareFacebookBtn").addEventListener("click", function(){
     var song = currentShareSong();
     if(!song) return;
-    var quote = song.titleTamil + " — " + shareMeaningSnippet(song);
+    var quote = song.titleTamil + " — " + shareTeaser(song);
     var url = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(SITE_URL) + "&quote=" + encodeURIComponent(quote);
     window.open(url, "_blank", "noopener");
   });
@@ -1659,7 +1713,13 @@
     setShareStatus("அட்டையை உருவாக்குகிறோம்… (Preparing image…)");
     renderShareCardImage().then(function(result){
       downloadBlob(result.blob, "thirupugazh-" + song.id + ".png");
-      setShareStatus("படம் பதிவிறக்கப்பட்டது. (Image downloaded.)");
+      // Also copy the image itself to the clipboard wherever supported, so
+      // it can be pasted directly (in addition to the saved file).
+      return copyImageToClipboard(result.blob).then(function(){
+        setShareStatus("படம் பதிவிறக்கப்பட்டு, நகலெடுக்கப்பட்டது! ஒட்டவும். (Image downloaded and copied — you can paste it too!)");
+      }).catch(function(){
+        setShareStatus("படம் பதிவிறக்கப்பட்டது. (Image downloaded.)");
+      });
     }).catch(function(){
       setShareStatus("⚠️ படத்தை உருவாக்க முடியவில்லை. (Could not generate the image.)");
     }).finally(function(){ btn.disabled = false; });
