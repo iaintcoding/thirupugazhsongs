@@ -480,28 +480,44 @@
     display:flex; flex-direction:column; align-items:flex-end; gap:.5rem;
     font-family:'Noto Sans Tamil','Inter',system-ui,-apple-system,sans-serif;
   }
-  .peacock-tooltip{
-    max-width:min(168px, 52vw);
-    background:var(--color-bg-card); color:var(--color-text);
-    border:1px solid var(--color-border); border-radius:14px;
-    padding:.4rem .6rem; font-size:.72rem; line-height:1.35; font-weight:500;
-    box-shadow:var(--shadow);
-    opacity:0; transform:translateY(6px) scale(.96);
-    pointer-events:none;
+  /* Wrapper just gives the ring a centre point to wrap around the button —
+     no visual box of its own. */
+  .peacock-btn-wrap{
+    position:relative; width:50px; height:50px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* ---- Circular caption: the Tamil+English text rendered along a ring
+     that surrounds the peacock button, instead of a separate tooltip box.
+     A thin halo (stroke in the page background colour) is painted behind
+     each letter so the words stay readable over the page's background
+     without needing a solid tooltip panel. ---- */
+  .peacock-ring{
+    position:absolute; top:50%; left:50%; width:184px; height:184px;
+    transform:translate(-50%,-50%) scale(.94);
+    opacity:0; pointer-events:none;
     transition:opacity .35s ease, transform .35s ease;
   }
-  .peacock-tooltip .en-tag{ display:block; margin-top:.15rem; font-size:.78em; }
+  .peacock-ring svg{ width:100%; height:100%; overflow:visible; }
+  .peacock-ring-text{
+    font-family:'Noto Sans Tamil','Inter',system-ui,-apple-system,sans-serif;
+    font-size:9.6px; font-weight:700; letter-spacing:.015em;
+    fill:var(--color-maroon-dark);
+    paint-order:stroke fill;
+    stroke:var(--color-bg);
+    stroke-width:3px;
+    stroke-linejoin:round;
+  }
   /* Visible only on the main song-list page, so it never sits over the
      admin dashboard or the song detail/reading view. */
   .peacock-assistant.assistant-hidden{
     display:none;
   }
-  .peacock-assistant.show-tip .peacock-tooltip,
-  .peacock-assistant:hover .peacock-tooltip,
-  .peacock-btn:focus-visible + .peacock-tooltip{
-    opacity:1; transform:translateY(0) scale(1); pointer-events:auto;
+  .peacock-assistant.show-tip .peacock-ring,
+  .peacock-assistant:hover .peacock-ring,
+  .peacock-btn-wrap:focus-within .peacock-ring{
+    opacity:1; transform:translate(-50%,-50%) scale(1);
   }
-  .peacock-assistant.open .peacock-tooltip{ opacity:0; pointer-events:none; }
+  .peacock-assistant.open .peacock-ring{ opacity:0; }
 
   .peacock-btn{
     position:relative; width:50px; height:50px; border-radius:50%;
@@ -605,8 +621,11 @@
 
   @media (max-width:520px){
     .peacock-assistant{ right:.7rem; bottom:1rem; }
+    .peacock-btn-wrap{ width:44px; height:44px; }
     .peacock-btn{ width:44px; height:44px; }
     .peacock-btn svg{ width:26px; height:26px; }
+    .peacock-ring{ width:158px; height:158px; }
+    .peacock-ring-text{ font-size:8.6px; }
     .peacock-overlay{ padding:.6rem; }
     .peacock-cloud-wrap{ margin-bottom:4.6rem; margin-right:0; width:100%; align-items:center; }
     .peacock-cloud{ width:100%; border-radius:28px 28px 28px 28px; }
@@ -1103,48 +1122,56 @@
 
 <!-- ===== Peacock assistant — tap to read the Thiruppugazh origin story ===== -->
 <div class="peacock-assistant" id="peacockAssistant">
-  <div class="peacock-tooltip" id="peacockTooltip">
-    திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் 🦚
-    <span class="en-tag">(Click here to know about Thirupugazh)</span>
+  <div class="peacock-btn-wrap">
+    <!-- Circular caption: same Tamil+English text as before, now flowing
+         in a ring around the button instead of popping up in a box. -->
+    <div class="peacock-ring" id="peacockRing" aria-hidden="true">
+      <svg viewBox="0 0 184 184" xmlns="http://www.w3.org/2000/svg">
+        <path id="peacockRingPath" d="M92,92 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" fill="none"/>
+        <text class="peacock-ring-text">
+          <textPath href="#peacockRingPath" startOffset="0%">திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh) &#8226; திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh) &#8226; </textPath>
+        </text>
+      </svg>
+    </div>
+    <button
+      type="button"
+      class="peacock-btn"
+      id="peacockBtn"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="peacockCloud"
+      aria-label="திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh)"
+    >
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="feather-fan">
+          <path d="M30 34 L6 6" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          <circle cx="6" cy="6" r="6.5" fill="var(--color-peacock-emerald)"/>
+          <circle cx="6" cy="6" r="3.4" fill="var(--color-gold-soft)"/>
+          <circle cx="6" cy="6" r="1.3" fill="var(--color-maroon-dark)"/>
+          <path d="M30 34 L20 2" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          <circle cx="20" cy="2" r="7" fill="var(--color-peacock-blue)"/>
+          <circle cx="20" cy="2" r="3.7" fill="var(--color-gold-soft)"/>
+          <circle cx="20" cy="2" r="1.4" fill="var(--color-maroon-dark)"/>
+          <path d="M30 34 L36 1" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          <circle cx="36" cy="1" r="7.4" fill="var(--color-peacock-emerald)"/>
+          <circle cx="36" cy="1" r="3.9" fill="var(--color-gold-soft)"/>
+          <circle cx="36" cy="1" r="1.5" fill="var(--color-maroon-dark)"/>
+          <path d="M30 34 L52 4" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          <circle cx="52" cy="4" r="6.7" fill="var(--color-peacock-indigo)"/>
+          <circle cx="52" cy="4" r="3.5" fill="var(--color-gold-soft)"/>
+          <circle cx="52" cy="4" r="1.3" fill="var(--color-maroon-dark)"/>
+        </g>
+        <path d="M30 34 C24 30 20 32 18 38 C24 41 20 47 24 52 C29 48 30 50 30 50 C30 50 31 48 36 52 C40 47 36 41 42 38 C40 32 36 30 30 34 Z" fill="var(--color-peacock-blue)"/>
+        <ellipse cx="30" cy="26" rx="7.5" ry="9" fill="var(--color-peacock-emerald)"/>
+        <circle cx="30" cy="16.5" r="6.6" fill="var(--color-peacock-blue)"/>
+        <path d="M30 10 L28 3" stroke="var(--color-peacock-blue)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="27.6" cy="2.4" r="1.8" fill="var(--color-gold-soft)"/>
+        <circle cx="27" cy="16" r="1.5" fill="#fff"/>
+        <circle cx="27.4" cy="16" r=".7" fill="var(--color-maroon-dark)"/>
+        <path d="M22.5 18 Q19 19.5 21 24" stroke="var(--color-gold)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
   </div>
-  <button
-    type="button"
-    class="peacock-btn"
-    id="peacockBtn"
-    aria-haspopup="dialog"
-    aria-expanded="false"
-    aria-controls="peacockCloud"
-    aria-label="திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh)"
-  >
-    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g class="feather-fan">
-        <path d="M30 34 L6 6" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-        <circle cx="6" cy="6" r="6.5" fill="var(--color-peacock-emerald)"/>
-        <circle cx="6" cy="6" r="3.4" fill="var(--color-gold-soft)"/>
-        <circle cx="6" cy="6" r="1.3" fill="var(--color-maroon-dark)"/>
-        <path d="M30 34 L20 2" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-        <circle cx="20" cy="2" r="7" fill="var(--color-peacock-blue)"/>
-        <circle cx="20" cy="2" r="3.7" fill="var(--color-gold-soft)"/>
-        <circle cx="20" cy="2" r="1.4" fill="var(--color-maroon-dark)"/>
-        <path d="M30 34 L36 1" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-        <circle cx="36" cy="1" r="7.4" fill="var(--color-peacock-emerald)"/>
-        <circle cx="36" cy="1" r="3.9" fill="var(--color-gold-soft)"/>
-        <circle cx="36" cy="1" r="1.5" fill="var(--color-maroon-dark)"/>
-        <path d="M30 34 L52 4" stroke="var(--color-gold-soft)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-        <circle cx="52" cy="4" r="6.7" fill="var(--color-peacock-indigo)"/>
-        <circle cx="52" cy="4" r="3.5" fill="var(--color-gold-soft)"/>
-        <circle cx="52" cy="4" r="1.3" fill="var(--color-maroon-dark)"/>
-      </g>
-      <path d="M30 34 C24 30 20 32 18 38 C24 41 20 47 24 52 C29 48 30 50 30 50 C30 50 31 48 36 52 C40 47 36 41 42 38 C40 32 36 30 30 34 Z" fill="var(--color-peacock-blue)"/>
-      <ellipse cx="30" cy="26" rx="7.5" ry="9" fill="var(--color-peacock-emerald)"/>
-      <circle cx="30" cy="16.5" r="6.6" fill="var(--color-peacock-blue)"/>
-      <path d="M30 10 L28 3" stroke="var(--color-peacock-blue)" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="27.6" cy="2.4" r="1.8" fill="var(--color-gold-soft)"/>
-      <circle cx="27" cy="16" r="1.5" fill="#fff"/>
-      <circle cx="27.4" cy="16" r=".7" fill="var(--color-maroon-dark)"/>
-      <path d="M22.5 18 Q19 19.5 21 24" stroke="var(--color-gold)" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-    </svg>
-  </button>
 </div>
 
 <div class="peacock-overlay" id="peacockOverlay" role="presentation">
