@@ -89,7 +89,7 @@
      first visit from the OS preference, then remembered per device. */
   html[data-theme="dark"]{
     --color-bg:#181410;
-    --color-bg-card:#241D18;
+    --color-bg-card:#2A221C;
     --color-maroon:#D96B75;
     --color-maroon-dark:#F0A3AB;
     --color-gold:#E7C066;
@@ -100,11 +100,11 @@
     --color-peacock-indigo:#9298E0;
     --color-peacock-emerald:#4FD8A8;
     --color-text:#F1EDE4;
-    --color-text-soft:#C9C1B4;
-    --color-border:#3A322A;
+    --color-text-soft:#D3CBC0;
+    --color-border:#453B31;
     --shadow: 0 2px 14px rgba(0,0,0,0.45);
-    --bg-overlay-a: rgba(16,13,10,0.92);
-    --bg-overlay-b: rgba(16,13,10,0.88);
+    --bg-overlay-a: rgba(18,15,12,0.88);
+    --bg-overlay-b: rgba(18,15,12,0.82);
     --watermark-opacity: 0.09;
     /* A deep, saturated amber with near-white text gives a much stronger
        (and easier to read for elders / low-vision users) contrast on a
@@ -201,16 +201,17 @@
   }
   .btn:active{transform:scale(.97);}
   .btn:focus-visible{outline:3px solid var(--color-gold-soft); outline-offset:2px;}
-  .btn-primary{background:var(--color-maroon); color:#fff;}
-  .btn-primary:hover{background:var(--color-maroon-dark);}
-  .btn-gold{background:var(--color-gold); color:#fff;}
-  .btn-gold:hover{background:#9c690c;}
-  .btn-teal{background:var(--color-teal); color:#fff;}
-  .btn-teal:hover{background:var(--color-teal-dark);}
+  .btn-primary,.btn-gold,.btn-teal,.btn-danger{ text-shadow:0 1px 1.5px rgba(0,0,0,0.35); }
+  .btn-primary{background:linear-gradient(180deg, var(--color-maroon) 0%, var(--color-maroon-dark) 100%); color:#fff;}
+  .btn-primary:hover{background:linear-gradient(180deg, var(--color-maroon-dark) 0%, #551a20 100%);}
+  .btn-gold{background:linear-gradient(180deg, var(--color-gold) 0%, #9c690c 100%); color:#fff;}
+  .btn-gold:hover{background:linear-gradient(180deg, #9c690c 0%, #7c530a 100%);}
+  .btn-teal{background:linear-gradient(180deg, var(--color-teal) 0%, var(--color-teal-dark) 100%); color:#fff;}
+  .btn-teal:hover{background:linear-gradient(180deg, var(--color-teal-dark) 0%, #063730 100%);}
   .btn-ghost{background:transparent; color:var(--color-maroon-dark); border:1.5px solid var(--color-border);}
   .btn-ghost:hover{background:#F1E4C4;}
-  .btn-danger{background:#A7333F; color:#fff;}
-  .btn-danger:hover{background:#832129;}
+  .btn-danger{background:linear-gradient(180deg, #A7333F 0%, #832129 100%); color:#fff;}
+  .btn-danger:hover{background:linear-gradient(180deg, #832129 0%, #611820 100%);}
   .btn-sm{padding:.4rem .8rem; font-size:.85rem;}
   .btn[disabled]{opacity:.5; cursor:not-allowed;}
 
@@ -248,9 +249,9 @@
   /* Song-picker dropdown under the search box, so visitors can tap a song
      straight from a list instead of typing its exact name. */
   .search-suggestions{
-    position:absolute; top:calc(100% + .3rem); left:0; right:0; z-index:20;
+    position:absolute; top:calc(100% + .3rem); left:0; right:0; z-index:40;
     background:var(--color-bg-card); border:1px solid var(--color-border); border-radius:12px;
-    box-shadow:0 10px 28px rgba(0,0,0,0.18); max-height:320px; overflow-y:auto; padding:.35rem;
+    box-shadow:0 10px 28px rgba(0,0,0,0.22); max-height:320px; overflow-y:auto; padding:.35rem;
   }
   .search-suggestions .sugg-item{
     display:flex; flex-direction:column; gap:.1rem; padding:.55rem .7rem; border-radius:8px; cursor:pointer;
@@ -727,47 +728,88 @@
        a tinted overlay so the converging Vel dots and the gold wordmark
        stay bright and readable on top of it. */
     background-image:
-      radial-gradient(circle at 50% 42%, rgba(44,19,16,0.82) 0%, rgba(24,10,8,0.90) 58%, rgba(12,5,4,0.94) 100%),
+      radial-gradient(circle at 50% 42%, rgba(44,19,16,0.68) 0%, rgba(24,10,8,0.78) 58%, rgba(12,5,4,0.85) 100%),
       var(--site-bg-image);
     background-size:cover, cover;
     background-position:center, center;
     background-repeat:no-repeat, no-repeat;
     overflow:hidden;
-    will-change:transform;
-    transform:translateY(0);
-    /* A slow, deliberate "curtain pull" upward — the whole panel stays
-       fully opaque and simply rises off the top of the screen, revealing
-       the app that has already finished loading underneath. No opacity
-       fade is used here, so nothing ever "shows through"/flashes mid-way
-       the way a cross-fade can. */
-    transition:transform 1.25s cubic-bezier(.65,0,.24,1);
+    will-change:opacity, filter;
+    opacity:1;
+    filter:blur(0px);
+    /* Mystic smoke dissolve — the whole panel stays exactly where it is
+       (no sliding/lifting away) and instead thins into a soft haze, as if
+       it were smoke drifting apart, gradually letting the app underneath
+       show through. Slowed right down so the dissolve reads as unhurried
+       and fluid rather than a hard cut or a wipe. */
+    transition:opacity 3.2s cubic-bezier(.4,0,.2,1), filter 3.2s cubic-bezier(.4,0,.2,1);
   }
-  .splash-screen.splash-hide{ transform:translateY(-100%); pointer-events:none; }
+  .splash-screen.splash-hide{ opacity:0; filter:blur(22px); pointer-events:none; }
   .splash-stage{ position:relative; width:300px; height:300px; max-width:80vw; max-height:80vw; }
-  /* Converging orbs, shaded like little glowing spheres (a nod to the Vel,
-     Lord Muruga's spear) rather than flat dots — a radial highlight gives
-     each one a sense of depth as it flies inward and bursts. */
-  .splash-dot{
-    position:absolute; top:50%; left:50%; width:34px; height:34px; border-radius:50%;
-    margin:-17px 0 0 -17px; opacity:0;
-    animation:splashConverge 1.5s cubic-bezier(.45,0,.2,1) forwards;
+  /* Soft, softly-glowing smoke wisps layered behind the peacock. They stay
+     invisible at rest and only billow outward — growing, drifting upward
+     and softening further — once .splash-hide is applied, reinforcing the
+     "dissolving into smoke" read as the whole splash screen fades. Purely
+     transform/opacity so they stay smooth alongside the panel-level fade. */
+  .smoke-wisp{
+    position:absolute; left:50%; top:50%; border-radius:50%;
+    background:radial-gradient(circle, rgba(230,214,180,.55) 0%, rgba(230,214,180,.22) 45%, rgba(230,214,180,0) 72%);
+    opacity:0; filter:blur(6px);
+    transform:translate(-50%,-50%) scale(.6);
+    transition:opacity 3.2s cubic-bezier(.4,0,.2,1), transform 3.4s cubic-bezier(.4,0,.2,1), filter 3.4s cubic-bezier(.4,0,.2,1);
+    will-change:opacity, transform, filter;
   }
-  .splash-dot::before{
-    content:""; position:absolute; inset:0; border-radius:50%;
-    background:radial-gradient(circle at 32% 28%, #ffffff 0%, var(--sphere-hi) 18%, var(--sphere-mid) 46%, var(--sphere-dark) 78%, rgba(0,0,0,.15) 100%);
-    box-shadow:0 0 18px 2px var(--sphere-glow);
+  .sw1{ width:220px; height:220px; margin-left:-70px; margin-top:-30px; }
+  .sw2{ width:180px; height:180px; margin-left:60px; margin-top:20px; }
+  .sw3{ width:260px; height:260px; margin-top:-60px; }
+  .splash-hide .smoke-wisp{ opacity:.6; filter:blur(26px); }
+  .splash-hide .sw1{ transform:translate(-50%,-50%) translate(-40px,-90px) scale(1.5); }
+  .splash-hide .sw2{ transform:translate(-50%,-50%) translate(50px,-60px) scale(1.7); }
+  .splash-hide .sw3{ transform:translate(-50%,-50%) translate(0,-110px) scale(1.9); }
+  /* ---------- Origami peacock ----------
+     A low-poly, folded-paper peacock built from flat-shaded polygons.
+     Each panel (tail feather, body, neck, head, crest) starts tucked flat
+     against the fold line and slowly unfolds into place — like a sheet of
+     origami opening — before the whole bird lifts and fades as the
+     curtain rises. Only `transform` and `opacity` are animated on every
+     panel, so the whole sequence stays on the GPU compositor and never
+     stutters, even on slower devices. */
+  .splash-peacock{
+    position:absolute; top:50%; left:50%; width:100%; height:100%;
+    transform:translate(-50%,-50%);
+    overflow:visible;
+    transition:transform 2.4s cubic-bezier(.16,1,.3,1), opacity 2.4s cubic-bezier(.16,1,.3,1);
+    transform-origin:50% 65%;
+    will-change:transform, opacity;
   }
-  .splash-dot.d1{ --sphere-hi:#FF9D8E; --sphere-mid:#E0372A; --sphere-dark:#8E1A11; --sphere-glow:rgba(224,55,42,.65); --sx:-120px; --sy:-65px; }
-  .splash-dot.d2{ --sphere-hi:#8FC3F2; --sphere-mid:#2E73C8; --sphere-dark:#153E73; --sphere-glow:rgba(46,115,200,.65); --sx:120px; --sy:-65px; }
-  .splash-dot.d3{ --sphere-hi:#F2C98F; --sphere-mid:#E08A1E; --sphere-dark:#7A4A0C; --sphere-glow:rgba(224,138,30,.65); --sx:-140px; --sy:55px; }
-  .splash-dot.d4{ --sphere-hi:#8EE0B6; --sphere-mid:#1F9D5C; --sphere-dark:#0E4E2C; --sphere-glow:rgba(31,157,92,.65); --sx:140px; --sy:55px; }
-  .splash-dot.d5{ --sphere-hi:#FFFFFF; --sphere-mid:#F2EFE6; --sphere-dark:#BDB6A2; --sphere-glow:rgba(242,239,230,.75); --sx:0px; --sy:-125px; }
-  .splash-dot.d6{ --sphere-hi:#5A5A5A; --sphere-mid:#232323; --sphere-dark:#000000; --sphere-glow:rgba(0,0,0,.6); --sx:0px; --sy:125px; }
-  @keyframes splashConverge{
-    0%{ opacity:0; transform:translate(var(--sx),var(--sy)) scale(.35) rotate(0deg); }
-    16%{ opacity:1; transform:translate(var(--sx),var(--sy)) scale(1) rotate(0deg); }
-    76%{ opacity:1; transform:translate(0,0) scale(1.3) rotate(180deg); }
-    100%{ opacity:0; transform:translate(0,0) scale(.15) rotate(220deg); }
+  .splash-peacock.fly{ transform:translate(-50%,-50%) translateY(-70px) scale(1.16); opacity:0; }
+  .fold-panel{
+    transform-box:view-box;
+    opacity:0;
+    animation-name:foldOpenPanel;
+    animation-duration:1.75s;
+    animation-timing-function:cubic-bezier(.22,1,.36,1);
+    animation-fill-mode:forwards;
+    will-change:transform, opacity;
+  }
+  /* Feather panels rotate open around the base of the tail (a single
+     shared pivot point) from tucked-flat to their fanned resting angle. */
+  .feather{ transform-origin:150px 190px; }
+  @keyframes foldOpenPanel{
+    0%{ opacity:0; transform:rotate(0deg) scale(.1); }
+    60%{ opacity:1; transform:rotate(calc(var(--rot) * 1.06)) scale(1.03); }
+    100%{ opacity:1; transform:rotate(var(--rot)) scale(1); }
+  }
+  /* Body/neck/head/crest panels fold upward from flat rather than
+     rotating from a shared pivot, so they read as separate creased
+     paper facets assembling the bird's centre line. */
+  .po-body{ transform-origin:150px 230px; animation-name:foldOpenBody; animation-duration:1.35s; }
+  .po-neck{ transform-origin:150px 180px; animation-name:foldOpenBody; animation-duration:1.28s; }
+  .po-head{ transform-origin:150px 110px; animation-name:foldOpenBody; animation-duration:1.2s; }
+  .po-crest{ transform-origin:150px 80px; animation-name:foldOpenBody; animation-duration:1.05s; }
+  @keyframes foldOpenBody{
+    0%{ opacity:0; transform:scaleY(.12); }
+    100%{ opacity:1; transform:scaleY(1); }
   }
   /* Word is kept invisible (not just opacity:0, but truly not painted)
      until the actual webfont has finished loading — see the loader script
@@ -776,34 +818,47 @@
      entire lifetime of the element (only opacity changes), so the word
      cannot visibly shift or drift while it appears. */
   .splash-word{
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    font-family:'Noto Serif Tamil',serif; font-weight:700; font-size:clamp(1.7rem,7vw,2.7rem);
+    /* Sits below the artwork, centered, rather than overlapping the
+       peacock — a caption under the image instead of on top of it. */
+    position:absolute; bottom:-2.5rem; left:50%; transform:translateX(-50%);
+    font-family:'Noto Serif Tamil',serif; font-weight:700; font-size:clamp(1.5rem,6vw,2.4rem);
     color:#F2C879; text-shadow:0 0 18px rgba(242,200,121,.65); opacity:0;
     white-space:nowrap; letter-spacing:.02em; visibility:hidden;
-    transition:opacity .75s cubic-bezier(.2,.7,.2,1);
+    transition:opacity 1.3s cubic-bezier(.2,.7,.2,1);
   }
   .splash-word.font-ready{ visibility:visible; }
   .splash-word.word-in{ opacity:1; }
-  .splash-star{
-    position:absolute; top:50%; left:50%; width:6px; height:6px; margin:-3px 0 0 -3px;
-    background:#F2C879; border-radius:50%; opacity:0;
-    animation:splashStarBurst 1s ease-out forwards;
-  }
-  @keyframes splashStarBurst{
-    0%{ opacity:0; transform:translate(0,0) scale(0); }
-    12%{ opacity:1; transform:translate(0,0) scale(1); }
-    100%{ opacity:0; transform:translate(var(--tx),var(--ty)) scale(0); }
-  }
   .splash-progress-wrap{
-    position:absolute; bottom:-3.6rem; left:50%; transform:translateX(-50%);
+    position:absolute; bottom:-5.4rem; left:50%; transform:translateX(-50%);
     width:min(220px,70vw); text-align:center;
+  }
+  /* Small "ஓம்" glyphs that drift gently upward around the peacock for a
+     touch of extra beauty — purely decorative, subtle, and paused for
+     anyone who prefers reduced motion. */
+  .om-float{
+    position:absolute; pointer-events:none;
+    font-family:'Noto Serif Tamil',serif; font-weight:600;
+    color:var(--color-gold-soft); opacity:0;
+    text-shadow:0 0 10px rgba(242,200,121,.5);
+    animation:omDrift 5s ease-in-out infinite;
+    will-change:transform, opacity;
+  }
+  @keyframes omDrift{
+    0%{ opacity:0; transform:translate(0,0) scale(.8) rotate(-6deg); }
+    18%{ opacity:.8; }
+    55%{ opacity:.55; transform:translate(var(--om-dx,10px), -46px) scale(1) rotate(5deg); }
+    88%{ opacity:.12; }
+    100%{ opacity:0; transform:translate(calc(var(--om-dx,10px) * 1.7), -92px) scale(.85) rotate(-4deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .om-float{ animation:none; opacity:0; }
   }
   .splash-bar-track{ width:100%; height:4px; border-radius:999px; background:rgba(255,255,255,.16); overflow:hidden; }
   .splash-bar-fill{ height:100%; width:0%; background:linear-gradient(90deg,#E7C066,#F2EFE6); border-radius:999px; }
   .splash-percent{ margin-top:.5rem; font-family:'Inter',system-ui,sans-serif; font-size:.82rem; letter-spacing:.08em; color:#EFE2C4; }
   @media (prefers-reduced-motion: reduce){
-    .splash-dot, .splash-star{ animation-duration:.01ms !important; animation-delay:0s !important; }
-    .splash-word, .splash-screen{ transition-duration:.01ms !important; }
+    .fold-panel{ animation-duration:.01ms !important; animation-delay:0s !important; }
+    .splash-word, .splash-screen, .splash-peacock, .smoke-wisp{ transition-duration:.01ms !important; }
   }
 </style>
 
@@ -838,14 +893,71 @@
 <!-- ===== Splash screen (self-contained: independent script, does not touch the app below) ===== -->
 <div class="splash-screen" id="splashScreen" role="status" aria-label="Loading Thiruppugazh">
   <div class="splash-stage">
-    <div class="splash-dot d1"></div>
-    <div class="splash-dot d2"></div>
-    <div class="splash-dot d3"></div>
-    <div class="splash-dot d4"></div>
-    <div class="splash-dot d5"></div>
-    <div class="splash-dot d6"></div>
+    <div class="smoke-wisp sw1" aria-hidden="true"></div>
+    <div class="smoke-wisp sw2" aria-hidden="true"></div>
+    <div class="smoke-wisp sw3" aria-hidden="true"></div>
+    <span class="om-float" aria-hidden="true" style="left:18%; top:70%; font-size:1.05rem; --om-dx:-18px; animation-delay:.6s;">ஓம்</span>
+    <span class="om-float" aria-hidden="true" style="left:78%; top:62%; font-size:.85rem; --om-dx:22px; animation-delay:1.6s;">ஓம்</span>
+    <span class="om-float" aria-hidden="true" style="left:30%; top:20%; font-size:.75rem; --om-dx:14px; animation-delay:2.8s;">ஓம்</span>
+    <span class="om-float" aria-hidden="true" style="left:68%; top:16%; font-size:.95rem; --om-dx:-12px; animation-delay:3.6s;">ஓம்</span>
+    <svg class="splash-peacock" id="splashPeacock" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <!-- Tail feathers: identical kite panels, each rotated to its own
+           fanned angle and tinted with the site's peacock palette. They
+           all pivot open from the same base point (150,190). -->
+      <g class="fold-panel feather" style="--rot:-78deg; animation-delay:.45s;">
+        <polygon points="150,190 137,108 150,52 163,108" fill="var(--color-peacock-indigo)"/>
+        <circle cx="150" cy="92" r="10" fill="var(--color-gold-soft)"/>
+        <circle cx="150" cy="92" r="4.5" fill="var(--color-maroon-dark)"/>
+      </g>
+      <g class="fold-panel feather" style="--rot:-52deg; animation-delay:.63s;">
+        <polygon points="150,190 137,102 150,42 163,102" fill="var(--color-peacock-emerald)"/>
+        <circle cx="150" cy="86" r="10" fill="var(--color-gold-soft)"/>
+        <circle cx="150" cy="86" r="4.5" fill="var(--color-maroon-dark)"/>
+      </g>
+      <g class="fold-panel feather" style="--rot:-26deg; animation-delay:.81s;">
+        <polygon points="150,190 137,96 150,34 163,96" fill="var(--color-peacock-blue)"/>
+        <circle cx="150" cy="80" r="11" fill="var(--color-gold-soft)"/>
+        <circle cx="150" cy="80" r="5" fill="var(--color-maroon-dark)"/>
+      </g>
+      <g class="fold-panel feather" style="--rot:0deg; animation-delay:.99s;">
+        <polygon points="150,190 136,92 150,28 164,92" fill="var(--color-peacock-emerald)"/>
+        <circle cx="150" cy="76" r="11" fill="var(--color-gold-soft)"/>
+        <circle cx="150" cy="76" r="5" fill="var(--color-maroon-dark)"/>
+      </g>
+      <g class="fold-panel feather" style="--rot:26deg; animation-delay:1.17s;">
+        <polygon points="150,190 137,96 150,34 163,96" fill="var(--color-peacock-blue)"/>
+        <circle cx="150" cy="80" r="11" fill="var(--color-gold-soft)"/>
+        <circle cx="150" cy="80" r="5" fill="var(--color-maroon-dark)"/>
+      </g>
+      <g class="fold-panel feather" style="--rot:52deg; animation-delay:1.35s;">
+        <polygon points="150,190 137,102 150,42 163,102" fill="var(--color-peacock-emerald)"/>
+        <circle cx="150" cy="86" r="10" fill="var(--color-gold-soft)"/>
+        <circle cx="150" cy="86" r="4.5" fill="var(--color-maroon-dark)"/>
+      </g>
+      <g class="fold-panel feather" style="--rot:78deg; animation-delay:1.53s;">
+        <polygon points="150,190 137,108 150,52 163,108" fill="var(--color-peacock-indigo)"/>
+        <circle cx="150" cy="92" r="10" fill="var(--color-gold-soft)"/>
+        <circle cx="150" cy="92" r="4.5" fill="var(--color-maroon-dark)"/>
+      </g>
+      <!-- Body, neck, head and crest: fold upward into place first, so the
+           bird's centre line is standing before the tail fans out. -->
+      <g class="fold-panel po-body" style="animation-delay:.08s;">
+        <polygon points="150,180 122,225 150,262 178,225" fill="var(--color-maroon-dark)"/>
+      </g>
+      <g class="fold-panel po-neck" style="animation-delay:.21s;">
+        <polygon points="150,180 141,140 150,108 159,140" fill="var(--color-peacock-blue)"/>
+      </g>
+      <g class="fold-panel po-head" style="animation-delay:.33s;">
+        <polygon points="150,110 138,93 150,76 162,93" fill="var(--color-peacock-blue)"/>
+        <circle cx="145" cy="93" r="2.6" fill="var(--color-bg-card)"/>
+      </g>
+      <g class="fold-panel po-crest" style="animation-delay:.45s;">
+        <polygon points="150,80 145,58 150,76" fill="var(--color-gold-soft)"/>
+        <polygon points="150,80 150,55 154,77" fill="var(--color-gold-soft)"/>
+        <polygon points="150,80 155,59 156,78" fill="var(--color-gold-soft)"/>
+      </g>
+    </svg>
     <div class="splash-word">திருப்புகழ்</div>
-    <div class="splash-stars" id="splashStars"></div>
     <div class="splash-progress-wrap">
       <div class="splash-bar-track"><div class="splash-bar-fill" id="splashBarFill"></div></div>
       <div class="splash-percent" id="splashPercent">0%</div>
@@ -856,11 +968,12 @@
 (function(){
   "use strict";
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var curtainMs = reduceMotion ? 10 : 1250; // must match the .splash-screen transform transition duration in CSS
-  var totalMs = reduceMotion ? 300 : 3200;
-  var wordAt = reduceMotion ? 0 : 1150;   // when the spheres finish converging
-  var starBurstAt = reduceMotion ? 0 : 1500; // fire the celebratory burst once the word has formed
-  var hideAt = reduceMotion ? 200 : 3200; // when the curtain starts pulling upward
+  var curtainMs = reduceMotion ? 10 : 3200; // must match the .splash-screen opacity/filter transition duration in CSS (the smoke dissolve)
+  var flyMs = reduceMotion ? 10 : 2400; // must match the .splash-peacock transition duration in CSS
+  var totalMs = reduceMotion ? 300 : 5200;
+  var wordAt = reduceMotion ? 0 : 3350;   // once the origami peacock has finished unfolding
+  var flyAt = reduceMotion ? 0 : 4600; // when the peacock lifts off and fades, in sync with the smoke dissolve
+  var hideAt = reduceMotion ? 200 : 4900; // when the whole panel starts dissolving into smoke
 
   // Reveal the Tamil word only once its webfont is actually ready, so it
   // never silently swaps from a fallback font mid-animation (the cause of
@@ -885,23 +998,16 @@
     : Promise.resolve();
   setTimeout(function(){ fontReadyPromise.then(revealWord); }, wordAt);
 
-  // Celebratory star burst around the formed word.
-  function burstStars(){
-    var container = document.getElementById("splashStars");
-    if(!container) return;
-    var count = reduceMotion ? 0 : 26;
-    for(var i = 0; i < count; i++){
-      var star = document.createElement("span");
-      star.className = "splash-star";
-      var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.3);
-      var dist = 70 + Math.random() * 90;
-      star.style.setProperty("--tx", (Math.cos(angle) * dist).toFixed(1) + "px");
-      star.style.setProperty("--ty", (Math.sin(angle) * dist).toFixed(1) + "px");
-      star.style.animationDelay = (Math.random() * 0.15).toFixed(2) + "s";
-      container.appendChild(star);
-    }
+  // Once the origami peacock has fully unfolded and the wordmark has
+  // settled, let it lift and fade — a gentle "flying off" — timed to
+  // finish right as the curtain rises, so the two motions read as one
+  // continuous, unhurried gesture rather than two separate effects.
+  var peacockEl = document.getElementById("splashPeacock");
+  function flyAway(){
+    if(!peacockEl) return;
+    peacockEl.classList.add("fly");
   }
-  setTimeout(burstStars, starBurstAt);
+  setTimeout(flyAway, flyAt);
 
   // Smooth 0 -> 100% progress, eased so it starts fast and settles in slowly.
   var percentEl = document.getElementById("splashPercent");
@@ -919,9 +1025,9 @@
   }
   requestAnimationFrame(tick);
 
-  // Pull the curtain up and hand off to the app underneath, which has
-  // been loading in the background the whole time and is already fully
-  // rendered and ready the instant it's revealed.
+  // Let the whole panel dissolve into smoke and hand off to the app
+  // underneath, which has been loading in the background the whole time
+  // and is already fully rendered and ready the instant it's revealed.
   setTimeout(function(){
     var splash = document.getElementById("splashScreen");
     if(!splash) return;
@@ -1405,15 +1511,20 @@
   function renderSongList(){
     var grid = $("songGrid");
     var q = currentSearch.trim().toLowerCase();
-    // Ascending order = the order songs were added in (oldest first) —
-    // number songs against this same order so a numeric search ("5")
-    // matches the song a person would count as #5 in the list.
     var allPublished = songs.filter(function(s){ return s.published; }).sort(function(a,b){
       return (a.createdAt||"").localeCompare(b.createdAt||"");
     });
-    var visible = allPublished.filter(function(s, i){
-      return songMatchesQuery(s, q, i + 1);
+    var visible = allPublished.filter(function(s){
+      return songMatchesQuery(s, q);
     });
+    if(q){
+      // Rank so the exact/closest match to what was typed or spoken always
+      // surfaces first, instead of being mixed in with weaker, merely
+      // related matches.
+      visible = visible.slice().sort(function(a, b){
+        return songMatchScore(b, q) - songMatchScore(a, q);
+      });
+    }
     if(visible.length === 0){
       grid.innerHTML =
         '<div class="empty-state" style="grid-column:1/-1;">' +
@@ -1436,10 +1547,22 @@
       card.addEventListener("click", function(){ openDetail(card.getAttribute("data-id")); });
     });
   }
+  var searchDebounceTimer = null;
   $("searchInput").addEventListener("input", function(e){
     currentSearch = e.target.value;
-    renderSongList();
-    renderSearchSuggestions();
+    // Wait for a short pause in typing before filtering — so partial input
+    // (e.g. the "1" on the way to typing "12") doesn't flash its own
+    // results first; once typing pauses, the list updates to match exactly
+    // what's currently in the box.
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(function(){
+      renderSongList();
+      // The matching songs already reappear as cards in the grid below, so
+      // the separate floating suggestion list is no longer shown here — it
+      // used to render directly on top of that grid, which looked like two
+      // overlapping result lists at once.
+      hideSuggestions();
+    }, 380);
   });
 
   /* ---------- Voice search (Web Speech API) ----------
@@ -1493,8 +1616,9 @@
         var input = $("searchInput");
         input.value = transcript;
         currentSearch = transcript;
+        clearTimeout(searchDebounceTimer); // voice result is final — show it immediately, no wait
         renderSongList();
-        renderSearchSuggestions();
+        hideSuggestions();
         input.focus();
       }
     });
@@ -1617,13 +1741,19 @@
     if(!t) return false;
 
     // 1) Cheapest, most common case: a plain substring match either way.
-    if(t.indexOf(qFull) > -1 || qFull.indexOf(t) > -1) return true;
+    // (Guard the reverse case with a minimum length so a very short title
+    // doesn't accidentally match as a coincidental substring buried inside
+    // an unrelated, longer spoken phrase.)
+    if(t.indexOf(qFull) > -1) return true;
+    if(t.length >= 4 && qFull.indexOf(t) > -1) return true;
 
     // 2) Whole-phrase fuzzy match (spaces removed), for short titles that
-    // voice search hears almost — but not quite — correctly.
+    // voice search hears almost — but not quite — correctly. Raised from
+    // the earlier looser threshold so near-miss/related titles no longer
+    // slip in alongside the actual match.
     var tFlat = t.replace(/\s+/g, "");
     var qFlat = qFull.replace(/\s+/g, "");
-    if(qFlat.length >= 3 && textSimilarity(tFlat, qFlat) >= 0.72) return true;
+    if(qFlat.length >= 3 && textSimilarity(tFlat, qFlat) >= 0.85) return true;
 
     // 3) Filler-stripped, word-by-word fuzzy match — handles voice search
     // adding extra words ("...பாடல் காட்டு") around the real title/place.
@@ -1636,29 +1766,74 @@
     qTokens.forEach(function(qt){
       if(qt.length < 2) return; // ignore stray single letters from misheard speech
       var found = tTokens.some(function(tt){
-        if(tt.indexOf(qt) > -1 || qt.indexOf(tt) > -1) return true;
+        if(tt.indexOf(qt) > -1 || (qt.length >= 4 && qt.indexOf(tt) > -1)) return true;
         var minLen = Math.min(qt.length, tt.length);
-        var threshold = minLen <= 3 ? 0.85 : 0.68; // stricter for very short words
+        var threshold = minLen <= 3 ? 0.92 : 0.82; // stricter for very short words
         return textSimilarity(qt, tt) >= threshold;
       });
       if(found) matchedTokens++;
     });
-    // Require most of the meaningful spoken words to line up with the title
-    // (not literally 100%, since one syllable can still be misheard).
-    return matchedTokens / qTokens.length >= 0.6;
+    // Require nearly all of the meaningful spoken words to line up with the
+    // title (raised from the earlier looser ratio) so the result set stays
+    // to the exact song/place searched for, rather than a spread of only
+    // loosely related songs that happen to share a word or two.
+    return matchedTokens / qTokens.length >= 0.85;
   }
 
+  // A song's "number" is whatever number is actually written in its own
+  // title/place text (e.g. a traditional catalogue number like "111"
+  // appearing in the Tamil or English title) — NOT a position computed by
+  // counting through the list, which silently shifts and gives the wrong
+  // song the moment anything is added, reordered, or filtered differently
+  // in one place than another. Pulling the number straight out of the
+  // song's own text is the only way "111" reliably means the same song
+  // every time, everywhere.
+  function numbersInText(text){
+    var s = String(text || "");
+    var matches = s.match(/\d+/g);
+    return matches || [];
+  }
   // Matches a song against the query by title (Tamil/English), place, OR by
-  // its position number in the A-to-Z list (so typing e.g. "5" finds song #5),
-  // so people can search "by title, name, or by number" — including a
-  // phonetically-close voice-search phrase, exactly like Google voice search.
-  function songMatchesQuery(song, q, serialNo){
+  // a number written in one of those fields, so people can search "by
+  // title, name, or by number" — including a phonetically-close
+  // voice-search phrase, like Google voice search. A pure number is
+  // treated as a number lookup ONLY (it never also falls through to fuzzy
+  // text matching), so typing a digit shows that one exact song alone
+  // rather than it plus unrelated text matches.
+  function songMatchesQuery(song, q){
     if(!q) return true;
-    if(/^\d+$/.test(q.trim()) && String(serialNo) === q.trim()) return true;
+    var trimmed = q.trim();
+    if(/^\d+$/.test(trimmed)){
+      var target = parseInt(trimmed, 10);
+      var found = numbersInText(song.titleTamil).concat(numbersInText(song.titleEn), numbersInText(song.place));
+      return found.some(function(n){ return parseInt(n, 10) === target; });
+    }
     if(fuzzyTextMatch(song.titleTamil, q)) return true;
     if(fuzzyTextMatch(song.titleEn, q)) return true;
     if(fuzzyTextMatch(song.place, q)) return true;
     return false;
+  }
+  // How closely a song matches the query, used only to order results so the
+  // exact/best match always appears first — a plain substring or an exact
+  // title match ranks above a looser fuzzy (voice-misheard) match, so the
+  // song actually being searched for isn't buried under related-but-weaker
+  // matches.
+  function songMatchScore(song, q){
+    if(!q) return 0;
+    var trimmed = q.trim();
+    if(/^\d+$/.test(trimmed)) return songMatchesQuery(song, q) ? 100 : 0;
+    var fields = [song.titleTamil, song.titleEn, song.place];
+    var best = 0;
+    fields.forEach(function(field){
+      var t = normalizeSearchText(field);
+      var qFull = normalizeSearchText(q);
+      if(!t || !qFull) return;
+      if(t === qFull) best = Math.max(best, 100);
+      else if(t.indexOf(qFull) === 0) best = Math.max(best, 90); // starts with
+      else if(t.indexOf(qFull) > -1) best = Math.max(best, 80); // contains
+      else if(fuzzyTextMatch(field, q)) best = Math.max(best, 50); // fuzzy/voice match
+    });
+    return best;
   }
   function renderSearchSuggestions(){
     var box = $("searchSuggestions");
@@ -1667,8 +1842,13 @@
     // focused/tapped — only show results once the person has typed something.
     if(!q){ hideSuggestions(); return; }
     var sorted = publishedSongsSorted();
-    var list = sorted.filter(function(s, i){
-      return songMatchesQuery(s, q, i + 1);
+    var list = sorted.filter(function(s){
+      return songMatchesQuery(s, q);
+    });
+    // Rank so the exact/closest match always appears at the top of the
+    // dropdown, instead of mixed in with weaker, merely related matches.
+    list = list.slice().sort(function(a, b){
+      return songMatchScore(b, q) - songMatchScore(a, q);
     }).slice(0, 30);
     if(list.length === 0){
       box.innerHTML = '<div class="sugg-empty">பாடல்கள் இல்லை (No songs found)</div>';
@@ -1691,7 +1871,6 @@
     box.classList.remove("hidden");
     $("searchInput").setAttribute("aria-expanded", "true");
   }
-  $("searchInput").addEventListener("focus", renderSearchSuggestions);
   document.addEventListener("click", function(e){
     if(e.target === $("searchInput") || $("searchSuggestions").contains(e.target)) return;
     hideSuggestions();
@@ -1730,6 +1909,7 @@
     // search that led to this particular song — so clear whatever was typed.
     currentSearch = "";
     $("searchInput").value = "";
+    clearTimeout(searchDebounceTimer);
     hideSuggestions();
     renderSongList();
     showView("list");
