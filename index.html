@@ -114,6 +114,44 @@
     --color-hover-text-soft: #F2E3C4;
     color-scheme: dark;
   }
+
+  /* ---------- Per-collection colour themes ----------
+     Same design language (fonts, radius, shadow, layout, kolam stripe) for
+     every repository — only the primary ("maroon" role) and secondary
+     ("teal" role) hues change, so each sacred text is easy to tell apart
+     at a glance while still feeling like one family of sites. The gold
+     accent and peacock kolam-stripe stay shared across all of them. */
+
+  /* Kandha Sashti Kavacham — a protective "armour" hymn, given a deep
+     emerald/forest-green + steel-blue theme. */
+  html[data-collection="kandhasashti"]{
+    --color-maroon:#1F7A4E;
+    --color-maroon-dark:#155C3B;
+    --color-teal:#155E75;
+    --color-teal-dark:#0F4657;
+  }
+  html[data-collection="kandhasashti"][data-theme="dark"]{
+    --color-maroon:#5FD9A0;
+    --color-maroon-dark:#8FE9BE;
+    --color-teal:#5FC2E0;
+    --color-teal-dark:#8FDBF0;
+  }
+
+  /* Kandhar Anubhuti — a meditative, wisdom-seeking hymn, given an
+     indigo/violet + emerald theme. */
+  html[data-collection="kandharanubhuti"]{
+    --color-maroon:#3B3F8C;
+    --color-maroon-dark:#2B2E66;
+    --color-teal:#1F7A5C;
+    --color-teal-dark:#155C45;
+  }
+  html[data-collection="kandharanubhuti"][data-theme="dark"]{
+    --color-maroon:#9BA0F0;
+    --color-maroon-dark:#C3C7FF;
+    --color-teal:#5FD9A0;
+    --color-teal-dark:#8FE9BE;
+  }
+
   *{box-sizing:border-box;}
   html{font-size:calc(16px * var(--font-scale)); scroll-behavior:smooth;}
   html, body{ transition:background-color .35s ease, color .35s ease; }
@@ -1048,11 +1086,12 @@
         <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUEBAQEAwUEBAQGBQUGCA0ICAcHCBALDAkNExAUExIQEhIUFx0ZFBYcFhISGiMaHB4fISEhFBkkJyQgJh0gISD/2wBDAQUGBggHCA8ICA8gFRIVICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICD/wAARCAEEAQQDASIAAhEBAxEB/8QAHQAAAQQDAQEAAAAAAAAAAAAAAAIDBQYBBAgHCf/EAEQQAAEDAwMCAwYDBgQEBAcAAAECAwQABREGEiExQRNRYQcUIjJxgVKRoRUjQmKCsQgzcsE0Q2PRFlOSoiQlVKOywvD/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAQIDBAX/xAAsEQACAgEEAQMDBAIDAAAAAAAAAQIRAwQSITFBIlFhExQycZGxwYHwodHh/9oADAMBAAIRAxEAPwDjKiiigCiiigCiiigCiiigCiiigCino0WTMkJjxI7kh5fCW2kFSj9AK9K097ENYXltL85DVnjq7yTlwjzCBz+eKpKcY8yZaMXLpHl9FdO2f2BaUht7rvKm3N3HICwygH0A5/WrlC9mug4JHgaWgkjoXkl0/wDvJrneqj4RutPJ9nGISpRwkEnyHNTNt0nqa8JfXbLDPlpYGXVNMKIR9Tiu2GbZBiNpRFt8ZhCRhIbZSkAeQwPU/nWzhWOmc9sVnLVOvSjRab3Zww3p3UDr6mGrHcFvJ+ZtMZZUO/IxTcqyXmFGZlTLTMjMPlQacdYUlK8dcEjnGRXd4CgeuPSseGlQO9KVZ65Gc1P3XwPtvk4BoruadpLS9xGJ2nra/nuqMjP5gVW53sd9nk8r3af91WofPFfW3t9QMlP6VdamPlFHppeGce0V71fP8OsptJXp2/NvkZw1NRsJ8viTkfoK8rv+gtW6YQt28WR9hhCtvjpAW2f6k5FbRywl0zGWOUe0VmiiitTMKKKKAKKKKAKKKKAKKKKAKKKKAKKKKAKKKKAKKKKAKKK9G0D7LLrq1xq4TkrgWXOS8oYW8PJA/wD26fWqTmoK2WjFydIocC3TrrNbhW6I7KkuHCW2klRNe26P9g7i/Bn6wk+EMhRgMHJI8lrB4+g/OvX9OaVsWlIPutkhJYB+d1R3OOH+ZR/t0qezkciuHJqJS4jwjthp0uZEXY9MWDT0cMWS1R4fGCtCfjV9VHk1Mjr3FYRyjI696dAHfOa5TpSSFJwo4xkVGTtQaftk1MKfeIsWQdv7txzBTnpu7Jz2zjNTDYAUkY4Jrzi16ltVusgstyt65l1lzC1dWVN/u0rdeKd7zhG3YQQE9cjAGMHF4qyHwejHCElayAhIJJVwB61UJOqri7b13i2xLfFsifkn3WQtoSB+JtCUklJ7E8q7Co67KkWbS2pdKLcefEeEZUAklTi4RUA43nqVNjcnz2qTTOqNFtXK+xtW268M2mC3Ebeamqf/AHbC0rRsUgHKQCzuTx32nrV4xXkht+C6aflXC5WCPPusBNvkO5V4IUThOfhV8QBTkc7SMjvWxJudqgsiRNucSMyTtDjr6UJJ8gSeTXmVzevf/hNhbqJ9zssidJWw1cEuuOvshAMdt7wx4mxa95GRz8AVwa39NaWca9pcqe5pdFut64eAyphssI3IZKQj/qb/ABQrjoB6U2LsWekNrafYQ+w4h1tYylaCFJUPMEcGs7DjIINeZyHZcfSV0hacEpk3LUC4tsZgqDS0thSfGLecAJ+B49gM1raU1JqeLJbuWon5501LkKjxX30NPlB3lCS66jaUjcMBW0g5HIqNjqxuPVNvOT1rDiUOILbiAtJ4IUMg/anVJ2kjoR1pvG361kXPONW+xzSepmS5Fjps04ZIfioASsk5+NPfnv1rnXV/s21RoxwuXGH48HPwzI+VtH6nqk+hrtIEKHxZH2pC2W3GVsvtpdbWNqkrAUlQ8iD1rbHmlDjwYTwxl8M+f1FdL689hMC4MuXLRyUwp24qVDUvDLvojPyH06fSucrhbp1quD1vuUVyLKZVtcadThSTXoY8sZ9HDPHKD5NWiiitTMKKKKAKKKKAKKKKAKKKKAKKKKAKW22486lppCnHFkJSlIyVE9AB3pTDD8qQiPGZW864dqUNpKlKPkAK6X9mHs4b0tB/at5aQ7eZCUkNqSD7oPIfznue3Qd6xy5VBfJvixOfL4RB6C9i7cUsXjWCEuu43Itp6IOePEOef9I+/lXtqAlKQhCQlKRgJAwAPIU3uyacSDj1rzZSlJ3I7oQUFSHAfixTqcDim0pz1H3p1KTkVQ0HUAEYwKqtzvF1sWqnJ92lxo2mwyEtIykuyHCkYShPzle89Pl2471MyrgHZEyy2uaw1fExfeGkPtlSQCSlKiONydwwcHjNeRXzULOo5SJc6JHQFtR8plp3txC0pz3hJ/hKPFASrKkkpUgjJGK2hC+ykmXi6ajfuFplxrjBctKY1wZZuURbpS81DWkkLWtPCUrVgFSSQlO7JyDVAt93skSfPdegJTZ7/GcSbRbz4jjnCUtpCEgJSUFKyHAfiCwcZqxWPSd/1DChGfLct8FiIIYmFCkypTO7cEpSo5COgCnMqwOEjJJ9KsunbLp9tX7Lgpbec/zZCyVvOnzUtXxH+3pV7jHgrTZR2Wde3tdrmRrMm1OW9tSI8u5vgPKSpAQrxEpCivOASCEjIBrQjex2Y5IEq4aq8Ne/xEtRYg8Jtec7kJUrak/RIr1wq8uax1PP6Vn9RrovtXkp0bRmo4binoftIu6HlDB8WO06g/0n/akqtvtNhueMzqO1XZCefBdhiMpX9QCh+lXUYHQ1kHnJNV3smjzKdfLXcZkeH7Q7fL0/LjbjHko3tJwfhXtfaURtI4OQPXFWOVoqx3VcCTGmPNW5uM1HEWMtJYfYbWFoTnkhO4AnafiwM1PXO3ouMNKPhTIZWHWHFDPhrH9wRlJHcE1CP6Yftr7k/R8hFtkE7lwF8wpH1QP8tR/GjHqDVt3twVosyidxz1NJx5VF2W/M3cvRXmF2+6Rce8wXyN7Weigei0HsocH0PFSuAO2BWbVFxBQDisA4OKcx59PSsFIP1qAJHBzVP117PLFrq3qTNbEe4to2sTUJ+Nv0I/iT6Hz4xVwIIIHSj4c9alNp2iGk1TOINXaIv+jLo5Eu8Nfg7sNS20ksvDGRtVjr6dRVZruvVOl7Tq7T7tlvLa1sLIWhbasLZWAQFp9Rk9eCDiuPdbaIu+h74qDcW98dwqMWUn5JCBjkeRGRkdj9jXfhz7vTLs8/Li2croq1FFFdZzhRRRQBRRRQBRRRQBRRXqfsj0Oi+3NV+ujActsJWG219H3eoB80jqfsPOqykoq2XhFzlSLv7JPZ63aIbGqLuyv9pvJ3Rmlgp93QeNxH4iPPoD5mvXAPX7UgKJJ5yTSknvmvJlJyds9RJJUhSR61sIAIx0poDpxmloOD61UkeT0IHanGiScdTTSd2aRMmMW21ybhJfQwzHbU4txYyEYHXHf6d+lEgVb2gM2qTHj+JJlxbjHVsQ/CVh0IdG0sgDlZcHAQMHjdlIGaVpvQkOPIjXW729lp9gD3S3owpuLjopZHDjvmronokcZprR9rkz541LdULU+kK93beOfd93zKPm8r+NXRIwgdDi+p65rVycVtRVJPk17tdoNltr10uT/gxmiN69pUeSAOByeT2qs6b9o9l1JqC4WhoJjqYI93Wt0H3kc5IA6Y2569D58VP3y1tXuxyra4tCfHTtSpQKglXY4BGceWaoi9GvwHNJvXdq3vxrM+1DLkff4j6FrwgrBAACV7Dt57888xFRa57Jd3weoEYPpWQB51TnfaVpxGs1abU6supVtXKBSWUnbk5Oeg6Z8/vVyUnyHPcVVprslO+jBBABB+1GRnkfag8Y5rIJzjtVSRQJPajJz0oyDxnFZSSOhH1oCF1BYf2uwzLhPiFeYWVwpgHKFd0L/E2ropP3HIpen70m/Wj3lUdUSWytTEuKo/Ew8n5kH07g9wQal8ndVXnoNk13BuyMoh3rECYP4Q+ASw59SApsn/AE1ZcqivRZscYyOaTjGRThHOaTtJPBxVCxjFYIB46VCrvypji2NOQjdVpO1Ukr8OK2R1Bdwd59EBX2pQtV8k/FcdROMA9WbayllI9N6wpZ+vFWr3IsmfDWflSSPQZqoa8smm9R6ZeteoJkSJjKo77zqUqYdxhKhyCevKe9Sp0pZXOZTUqcruZcx53P2KsfpUZe7HZY/7HgQbTEjGZcWUrU2ykKKEZdVzjPPhgH60VXwQ+VTOOdQWC5aYv0my3ZnwpUcgKAOUqBGQoHuCKiq679rvs+GstO+/W9gG9wElTO0fE+jqWj/ceufOuSH2Ho0hyPIaW080ooWhYwpKgcEEdjXpYcqmuezzcuNwdDdFFFbmQUUUUAUUUUBLacsM3UuoItogpJcfWApeOG091H0Arry0WqFZLNGtNvb2RoqAhHmrzUfUnJP1rzP2MaZ/Zun3dQyEj3i4/CzkcoaB6/1H9AK9XT8vU152ee6VeEejhhtjfljiTtGcZp0HJx0zTAJzzTiOOtc5uOpCt3Wn0gGmQoHHNOpH2FQDYSRjBqm3BlesdUqtAdUiwWV1KphQcGXKAyloH8KOCr+Ygdqm7/cHrTYX5MVIVNcKY8VJ6KecUEIz6AnJ9Aa2rPao9ks8e2xiVhoHe6r5nlk5W4o9ypRJP1q64Vkd8Ei2hDLaG2m0obQAlKEjASPKm7j70bRM9xITL8FfhE9AvacfrTyRmnE8deCKqWOcWPelW5jUTmoJP/iJi5JJiOuFKJSSQApJSOFdSo5/FnHU+7XdM1Vkt0KWWvfpMyK24WMhAUHA4spzzgBCjUXqeJY7PYZq2WUMTbofc2cJUtRU4RuDaBnAxlSgkc4yc1tPSrrN1EzcDpu5G3QmllkFTSHXHVnBWW1LBwEDAHX41cCtpS3UzNKiMvGkLXEusR+GrBuN4YkqheEjatwcuKCsbgnwwtRTnGee+Kvu4g9znvVZsLybzNevklQTIZKozMJWQuADgqDgPR1WAT2CQkAkZJsYJznPNZyb6ZZC8gjHSsE9gawojjPesA84qhYVj+LOaWnr5UgmsjPWhA4oYxioLWcZUzQ91ShGXmGTJZ8w40Q4k/mmp0KJ4yKQ+2l2K8yoZS42pBHoQRUp0wYYktSoDM4KCW3mkv5JwAlSd3X6Gq62hzVv797ezp7/AJTIylVxH41nqGvJP8Y5PBAMZbd910hpHTq8+FMgIfmnOCqO0lIKP61FCT/Luq8DA4AAA4AAwBUvgjs1pMiHa7YuTIUmPCit5OxHwtoHkEjgD06VEXXU0G0322wpEuIWJhLSgl0F1pw4KFKA6Nnpk9CU9jUPcpM9OpZljuMu5O210JmMNQIpcdfbUdq2VOD5EBQx2JC/mrUsNnlPRrjo6ShizW9tPiBhDSFypEV0q27l8oBTgoJAUrgcg1ZRVWyLPQcdjmoKTiTru3MDlMGG9KX6KcKW0foHK37KxcI9oZi3JxLshjLXi7sl1CSQhavJRTgkeeaj9OETnblqI5KLi8ERs/8A07QKGz/Ud6/ooVSqssThzj0rl327aK/Y+ohqiChZh3Rwl/uGnscj+rk/XNdGXS4yrcPFQhuZ7063GiMJUG/3h3bitwkgJwM9OAk9SajJkGB7QPZ94M2IlDVwaKkJWdwbWCQlQUOoyMgjqD61bHJwe4zyQU1Xk4horbuVvlWq6SrbNbLUmM4ppxJ7KBwa1K9ZO+UeWFFFFSAqb0rYlak1PEs4cLYfJ3KAyQAMmoSvaPYnp1XjTNTyUYQE+7xj5k/OfsBj7mssstsWzo08bmm1aXL/APT22LHYixWYkZAbYYbS0hI7JSMD9K2EnHUdaaRxxmlYzXmHoDp6DHApxGSPpTSRxz1p1CsHHlUAcGPr3rYb8xyKYR61sIx36edAQ1wxM1dYoAO5EUPXB0Z+Xanw28/1LV/6anySo4FQVtHi6tv0vGUNpjw0q8ilBcUPzcFTnGamXsEPo+UJNJly2LfAkTpSiGI6C4vAycDsPMnoPU1lGcDPWoLV1xjW6328SlZbdnsFxpIKlLaQvetW0ZJCQkKV5AUSth8IdZ9ytOy+akkMs3SSNoLislhJ/wCQyOpxxnaMqOSewDVvurM7V631odjqEX3ViKpJLu0r3qedSP8AKBwkJC8KPJxzikXSzvrbnXK1zHVSpmVOSo4SuQlnZ8DUdRO1IzznIzk9yCIfRca66K0ItzUSy6644AxERgrClE7QpQyVOKUeSScDA5xV+KvyV5uiw3RpFt1Va70ykIE5Ytswj/mBQJYUfMpWNoPksip84Bz38qgtWeJ+wGUNAKfXPhpbGf4/eEdPsDU+pQycDPlVH0iyAHIx1FY6/wD90rKSSMY4rIwODVCQRx15pfGcj70kjoaVkVIMpAA4rXukpFvss6a4QER47jpJ/lQTWwDz/eoLUu2eYGnB8QuLoVIA/gjNELcJ8gSEI/rqUuSGR+noirbdbNCfRscGnWmk5P8AEhwFwfX401biQPrVRvLknUsiKvS4QZcB8uNXdz/hmjjC0JA5eCh8JCfhHB3ZAreb1E/DbSjUVnmW9xICVSGW1SY6z5hbYJSPRQBFWabITJCVbfeLzbro1ILLsPxELG3cHmlj4kHy+JKFA9in1rd2IDvihCfE27N+BnGc4z5Z7VBjWOm1HYzPcfX08NqK8tZPlgIzmkvSb5dB4cdlWnoKuDNmBPvCweMNtkkIP8yzkfhqKfkWYvD7t2mK0xbVrBWB+0ZDZ/4Zk/wA/wDmrHAHZJKj2zC6h1a/YNQwLJDhJYioLQ2J273kKBCEthRCUNhQCFOKPwkjApnUL8eBaW7TpqP74yx7y/MiocX4kxbSkBbSlj4ytRXlR6naB0Na+mtPt6msqZVziCHa1JKI7EZAjh5tSgp5p1vK/g8RAxylRwcgZq6SSt9ENvpGbdZHNUONvvLbRpkT3H12sqC0+Mncle1xIwtoufEAMDlec5xXoOEoQG0pCUJGEpSMAAdAB2rKUtNNIaabQ02gBKUISEpSB0AA4A9KST1wayk7LJUc4f4hbFIbvVs1EhOYrzPuyyEgbFpUVDJHXIUevlivDK7Q9pmnk6k9nN0hJRukMtGTH8wtHxYH1GR964vr0NM/RXsefnjU79wooorqOcK6o9nNv/Zvs4s7eSVOtmQoK4wVkq/tiuXI7K5EpqO2MrdWEJHmScV2THYRFisxWkhKWUJbCR2CRj/auPUvpHXply2bIwSMinE4+tND6/enMd+/pXGdo6O2OR5U4MbsnmmG1AKwqn0nnnkGoA4nIPFPJPc80zjBwlWUjpnqKdR057UBG6eUSLypXCjdpOfzTj9MVNjjBqAtqhD1Td7e6oD3wpuMcZ+YFKW3AP8ASpCSf9YqeSvtUy7CNa6XaLZbYudKJVghDbScbnVn5UJz3Pn0ABJ4FVyx3Fh64quzrrL9wkJCXpch8MsR288sMBXxKA7kABSuSewb1Var/fdTQIFsLcaGiI77xMdCsNb1BJCMYJWpKSngghKlcjOa34Ps+0xEYablQEXJTQG33lA2DHk2MJH3BPqautqjyVttkkvVOnWXBFjT0TXgdgj29BkrT9Q3kAfXFaFriO3bVr12vDiQ9bkpEa2pVu913Zw45j4fEUnokE7Rz5YsK0qiQhHtUNltSuEISkNtIP4lBPYeQ5PT1qIlTo2nIiYjG653ea4ShoYC5UhQ5KscITjBJ6JSPpmq+Cf1HZrguOrbdbWjlu2//MJOOgUQpDCT6kla/ogedTuMjPSo6y2tVrgqTIeEmfJcL8uSBjxXSADgdkgAJSOyQPWpFXJqH7EoUCUkDtTmAKaAx0OR5U4OmcVUkqupbvIsGprHOcLq7Y+3IYmIQcpaSAlYeI77cHP8pJ7VakOIcbQ42tK0LAUlaCCFA9CCOCKhdSRpK4cS5QoxkyrXIEpDCeryNpS42PVSFKx6gVXgzb5ikNaCnTWHH0+KpuG/4cOMFfxOoUlQQrr+7QAonqB1rSrSK3RbLveoFjiIkzXFbnFbGWWk73ZC+yG0DlR/t3wKgIGmbjdblLvOrVhPvYShNqYXlttlPKW3Vj/M5JUUjCSo87sDEvZdNxbO4Jj8l+6XZaPDduMxW91Q/Cns2j+VOPXNTJ5PXBqt1whVikBKEJQhIQhI2pSkYCQOgA7Cqnrvxptug6ehyGmpdze+H3hW1lSGxuWHCCCRgjCUnJIHYGrVn16UzLhwp8f3edDYls5z4b7aXE588EVEXTsl8nltjZ1zDTGj2LUJuEFtx5lrxcllxMdQKUJUVEnxdziNxzwgHtUlc4LM2PB1Op5N0j3F5QbgT3FeAVPgIYCknKUFvKwSOxOMqxU7ftJJukuFJgvxIaojQabQ7F8RDWFhaVthKkltYKR0OCOCMVMxbPAiafj2NbKZcRloNFMhAWHO5KgRgknJrVzXZWii6b0/c2ZMm6R7z+0bpapioe11QRGkIS2lPUAqC9ikp3kqOWwDVxsUGZb7fITNDSHpMt6UWmVlaGQ4rdsSogZ7nOByTUlGjRYUdMaJGajsJ+VtpAQlP0A4pRwOtZylZKVGMg5BpOR9awpWDRxjIHNUJEqGQfLHSuMfabbYVo9qF+gW6MY0VuRuba7JCkhXHpknHpiuzs8/7Vyx7e7f7r7SxMSjCZ0Rt0nzUnKD/wDiK6NNX1L+Dn1C9NnlFFFFemeeWDRMUTdeWSOTgKltk/QHP+1dYlRKyU85NcwezAJPtMs+4qGFrI2nHOxX6V0+MdhXBqPyO/Tr0igR34zToOByeaY3YGBTwyR1HFcx0j6CnHPNOAgelaqV/FnP2NPjKuTwKgDwVkY5p5JHQnmtdBIOKeCdx55oBi5WxNzZb8N8xpcZfixpSU5UyvGOndJHCk9x9iNVvULcRSY+omU2mVnG9RJjO+qHemP5VYUPXrUqhYzg5Bp8LCkFHVKuCD0P1FSn4YEszIz7aVMS2Hkq6Ft1KgfyNNyrra7eN066RIw/6r6U/oTk1qL05px5ZW9YLa4tXVSoqMn74rZh2ey24hUC0QoyvxNR0JI+4GacDk0Hr3JuaUNaciPSkk5VLcSphhI7fGoZV/Qkn1HWt6z2Rq2LXLkPmZcXU7VyFJ2hCc52Npydqc8nklR5USakd6lEgkn1NKzxzwaX4Qoc3dgM1gdcUkH0paRz15qpIrAAxQpxDTSnnHEttIBUpSyAEgdSSegrTuVyi2mIJMtSjvUG22m07nHlnohCf4lHy+5wATUczapV2dTM1IElsHezakK3MteSnD/zV/8AsT2B+arJeWQZTMn6iym1OuQLSofFcNuHZA8mAflT/wBUj/SD81Rl+0xb7VZXrrp+M/EkwVNy3Go0hxIlIbUFLC07sLUUhXxHJJ6k1cFL6daWgj+IBQPBB7jyqVKuhQ0y+1JZbkx3A6y8gONrH8SSMg/kadOMZxzVd0kPdbVJsxVlVoluwgCeQ2Dva/8AtrT+VWIDJx3NVap0AHWhQIquXTULngzmrElD64ba1yZyxujxdqSSP+o5x8g4H8RHQ7WmYjkHTEFEl1x6Y82mRKecOVOvLAUtR+5xgcAAAUapWxZL5wawo0lRwRSuvGKgGCcjjpSc/F14oPw9B+VYHIwKgGMDOc4rGfi471lXTGKR3zQGeN3TmvAv8RkFZTYLkANg8VhRxznhQ/3r33ODmvHv8QbS3NA290Bza1cE7sfLy2oDPr5fetMTqaZlm5gzmKiiivXPMLx7KSke0q3FSCr4XcYHQ7Dg10ungjB58q5c9nD/ALv7SLKorKQp/wAMn/UkjH611AMZwetcGo/M9DTv0D53JPI6+VZQcKPkabSVJ9frShx61zHQPjbjI5p1Bzz28q109OOtPIPOTycUA8M7sinUqJHemQTyRS0lRxmoA9nPwkGnEZBwRTQUcgZpxPrQkeBwPOlAkc5zTfSlpx3PWoA7noaUDnikjHU9KWMHigFDPcVHXC8IhSEQYkdc+5up3NxGiAQn8a1HhtH8x+wJ4rXk3KXOmu2iwlHjtHbKmrTuah/ygfxu46I6DqrsDIW22Q7U043F3LddV4j7zqt7r6vxLV3Pl2HQACrVXZBrW60OtSzdru+iZdVJKApIIajIPVtoHkA91H4ld8DAExx3OKQTjzrHJ561Ddki9w8s04lVMc5pY6VAIFhxuBr68B5xLbEu3sTipRACS2VNLJP+nYT9Kjp12dvC22A1J9xlp3RoEU7JU9H/AJjijjwGD5nClDy+UxntCfZh36ySJJQph5iSyphw4bkFJbcSlw9mwRvV5pQR3pmzzrxAeustbi1OPNMtMtuAeNImP5KFPeRSgJUG0/C2kkcnJrdR43FL8G+2q4SNFy4khUZCblOFrhRoaNrLLIX4agjgE8JdUSeuOgq+LI3HAwnsPIVV7PDZcujDEVRXbdPtmIyo/wDOklOHV+u0ZT/qWvyqzK9TWUmSjHIpJORnvSgc0npnNVJMeo5+lGT3PFAODx0rGeSCOKgCc/nQTn0NHU4ApOOc5BNAYJIPrXkX+IBDytAQlpz4SZ6N/OOdi8fXvXrpP5149/iBnKZ0Pb4AaJEiaFleeE7EK4x67v0q0L3KvdfyZZfwZzNRRRXsnmEpp2UqFqi1y0nBalNrznH8QrrZW0OEeZrjYEg5Bwa63scxU7TtsmLwpT0ZtSiDnnaM/rXFqVymd2mva/8Af96JUHarrmlBR6UhJIAxz9acQc/MeOwrkOofSc9KWlWMd89qZTjBxzTqTgdMUA8ODjtTyQcDB69qYT05FOg+RqAOAHJA7U6kjPOc96aB755p1PI61BIoEinRgHmmgk9M06Oep4oB1OTgY4qEelzL3LetlnfVFiMLLcu4p6hQ6tM9iv8AEvojoMq6F0ffmzkaft8hbDi0eLMkN8KjsHgBJ7OLIIT5AKV2FS8SNGhRGocNhEeOykIbaQMBKR2q3RBrPvWzS2mn5CGAxBgNFYbb6q9BnqpSjjJ5JPNUmI7Kskl7WMm4qmPh8xtQRUqKkQ0qwpAbHYM7xnHzBSz2qwa2cDVrtrrygmKi6RVyM/KUheUg+m8IBqlabu0ESo7ZYDTcthES5LUcomIebK1PEH+Nt5akn+VY9K1guLKt8nr/AFwUkEHoQcg0rPNV/RSn3PZ/YHJS1KdMFrJXwSNvw5/pxU6VAnmsWqZdCuCevNL++KaxyMU5z0NQDzv2ppT42mXVzIcNIluhTsxWG8BAXtPCupQB0I7Hg1X2b2pRS5bJzb7rynN1xU+2y2wpf+Y4146kqdeVwPFKQlIGEpxxVh9o8I3e96WtYtqrmht56c/FQrap1pGxKgORk4WeAcnFLu1wstsh+4xbYjTcJ4fHIcjIYkuj8DDXzFR6b1YCRyMnp0RfpRk+2Fptd2/ZDDUJi4yIbQ8JpMTULSAMHnHhthJOc5+InJOTUjYIbN7jyHmJ+qIaWHVMEu3LxEuqHzFCgVBYB4yOMjHnWlATOutqTGTCRpXSEVHxIKvDflI7gnjwmz3Vncrz5zUsz41+jNxbeldt062gIDjaS0uYgDAQ0OC21jjdwVDhOBzVGWRHe6Xa6TVRNPasu7cWOvZKuDy2nUFQ6ttAt/God1Z2p6cngW6HFTChtRBJkSQ2MeLJcLjiznOVKPXrTjKGmI7caOyhhhpIQhttISlKR0AHYVkKSRhVZuVlkgI9aTnB60HPQ9qSenIqpJkg560bRRkisbjnFCDJ4Oetc8f4iLrvu9msqBjwWVSVnPUqO1PHoEn866E3YyTXJ3trmPSfatcWHHNyIqGmmwD8o8NKiPzUa2wJPIrMNQ6gecUUUV6p5wV0N7I7kJWh0wi8lTsN5adoPxJQo5GfvmueavXssvqbNrRph9zZGnp93XnoFH5D+fH3rHNHdE6NPNRlT8nSAJA+E/nS088ZplPcHinRwBk15p6A8g9MU+jBG0nP+1MIV+Yp5ByM4oB9PHBAp1ABB4wag7zMv0NtEi1W6LPZQP3za1LDvXqgJBCsDt18s9KxG1C8iMxLuMRtuC9t2T4j/jMjJwN2UpUgZ4yRgHg4qadEWWHaodUn8qUVJbaU64sJQgFSiegAGSfyrzW7yNE2W7mcxcmX3Xl7ZESLLcW8jJ/zGtiiUqB6p6KHqOZO1a/skebKt0q9PS2mQlTUt2K6F8k5bcwgZUng7sDIUM8jm303VobkXqO61JjtyI7qXWXEhSHEK3JUD0II6isvyGYUN+bJUEMx21OrJ/CkZP6CvNbReLJbpdzRpu8R1+7OKmJgh4BuYyr4lISk/I6g7gCMZG3IIORatZvKf9md6kxCVB23qdbOOqSkKz+VRtp0L4Id7Wtk0ZZzIvS1P364n32RCYwpwFYG1JPRCUo2pGfLgHNecXX2y6suMk/s0x7VGzkJbbDi8eq1D+wFa2iPZ7ctavrvd2lusW1bhKpJO56UrPxbc9s8FR+gBxx71ZNKaa0+wEWq0RmSBy8tIW4fUrVk1s9kH7szW6Xwjw+H7U9R7HIOqrexeLQ8kofS42GlqQeuFpwkn6/mKvumNDaBvkBi7Wm43G5W0OKWmG/J+FpZACkLAAVnAAIJ5AHUVuXLUsee7FNxub0G0TEuOR40RSEvuMpwEvLyCohxZCUISBwck9QIC2XOJaVsXXSjCpQjpSi5qK2opuSMkfBHKtxdSfhSoD4iCPizmj5Xp4C4fPJ7EMJASAAkAAADAA8hQTz6VqwJ8S6W+PcILyX40hAW2sdx/sexHY8VsHnpXKzYcScilpJz6U0nrwaZn3GNarZKuUxW2PFbU64fQDOB6noPU0QPMdZwXNS+0dEViZFjvWxltiMicwtUeU8vLi2vESRsXt2cDk9ulK07JkRtTKsCdJWDTl+2laHpHiPqfHdTasZUPTcOh8iKzpl+fe9PTrfLdszkq5PrnvR5brjTzRcIUhxBTkOJACChacY24PIqY1Ja2Jujo0S/aktrOpIafFi3FLyWSHUnKVAE5G7A3DpnmuluvSzKvJZEWBt+QmVfJrl4fQrehDqQhhpXmlocZ9Vbj61MqXnk96rGidUt6p041Lc2JmsgIlNpPG7HCx/KrqPuO1WNR3HpiueVp0zRUKzz1pBwOorAGDkcnyrBOe1VJM5NK46Z4pvPbnNZz65x2NAZwD0OcUknnnpQVD6UgkHpUEDM+ZGt1skz5j6WI8dtTjji+iAB1Nce+0m/23U/tKvd8s7am4Ep4FkLBCilKUpCiD0J25x2ziva/bvqNFv0lH0+2pQkXJe9WOnhIOTn6qx+Vcz116bAt6zt8pNfHNX/AB/JxaidvaFFFFeicgUpC1NuJWhRSpJyCOoNJooDqrSN8b1BpeHcQ4lTpQEPY6hwAbv+/wB6sXUda549leqWbHe3LbOeKIk8pSCflQ50BPlnOM10GOD9K8vJDZKj14yU4qS8mZUuNAhuTZr6WWGuVuKzgDPfFaNvuN5vTIuFoagtW5eQ0qUFrce/mwg4bB7A5V3IHSpRCsDdnH6VSNQRLZc9QtWePCTGaW+hq4XBgeGpC1JKkMjBAK1YGSQSkKHc8RFJiTJuLqi5XffDsNqSZrLimpMmQrMWKtJII3Dl08ZATjgjJFQg05Hd95N2krudyevaY6G1fu4y+ULcV7uPg5RvJJycYOc1Z9MMsQ4txgwmvCgRpzjUZsfKhISncB6byutyNZ47Oopl7W4px59KUoQr5WcJCVFPqoJTk+SQKnco3RWr7Hbq4xYNOSXbSxGguAJaZ2IS2hClqCEqOMDAKs/atfS7DS5CrlEacagNsCLDWsnfKG/e5IVnk71YwTyQM9xUjcIUO7Wx+2z2Q9FkJ2uIJxkZB/uBW4lWAB0GOgqm7ii9clS1H+yJ9+eausBi4iE2hESCpAUqVKdSojjqQlOOTwncpR6Ct2DpGXarSxGtl7dQ4lhLb0aVmTEeO3CvgUdyAeflUOvSpmNbrdGuku5sRUCbLCQ6+eVkAAAAnoMAcDit4LJ+tTv8Ijb7lN0vcpWmY8fS+qI6LeULLNulJXvjvt8lLe/AwtI4wrBIx1OavS0h5hxhedq0lCsHBwRg/wB605cWJcYTkK4RmpUZ0bVtOpCkq+oNV5i3ah0zsRZHl3y1A/8AATHtr7A8mnVcKA/Cv7GnEufI6MtaRmyYMKHen7fLZtbBahpRH5dWGyhtx3dn5QfkTxnJ54FVJGn0CJbGoNqukK/wti3HXoyRHi7G0IKvFKSFtpShZShJJUV54PIvTWtLEXxHuD7tnk92rk0WMHyCj8J+oVUs1drS8nczdYLiPNMlsj9DVlKS7IpM8r09raQLm5d7fYXWLRcvGlPsB0FLhQoBb0cHGFgKSVoJwrkpOQa9YtlygXe3tXC2S25cR4ZQ60cg+nofQ8iqRebboCIy++JltjLcIU5HTKQQ8gLDi2EpKtrYcUkbtoGajbTAgi1ty9PxLyq+yQXpMy1D3WOtayVFCi6A0UJztGEngcVMkpcrghWuD1VIyeOaraVp1VdWlN/FYLe8FhY+WdIQeMebbZ5z0UsDsnmPgae1PPbI1ZqVb8RQwbfEQlsKH4XXUpSVjzCQkH6Vb0BthpthltLbTaQhCEJ2pSB0AA6CsnUS/ZX39LqjlbdtYtkyCpanE265sb0MqUcqLSwCpAJJO3BGScY6UqJDnW3JjaHtKHD1XDlNoJ/9TaT+tWFLic+tK8Tvmm5iimXNvUbF2j3+1aULchlPgyGW5rKveo5OSnHHxpJKknzJB4NXBKittLmxTe4A7VjCk5HQjzpZV5c02pZ+o86huwkKBJ7j71hSs96T2zmsgjbwKqSZ5xzWMAcmsBQHGOfKgYJxnigMHrntSSpKQVLUEpHJUeABSlDB46V5v7V9bu6RsLDMJlt+XOUtr95ylCdvJI7/ADDHbio5fC7Kykoq2eJ+1fVto1dqiLLtDEhtEaN7u8t5QIdWHFncgA8J2lIHfivPqKK9jFjWOO1Hkybk7YUUUVoQFFFFAHQ10b7M9Wp1HYkwZb266QkhK8nl1HRK/XyP5965yqQs14nWG8R7pbnfDkMKyM8hQ7pI7gjg1lkhvVGuLI4OzoC6z1Sm7xdplgkXGPB8QRW5YDURCEDBcO45WpRzztPGAMcmpvTECxvaPatLEtqahIBkuMufEHj8RVkHIIV0PbAx0qFlamturPZdcpzDzbClR1JdacWAW3AAdmT1zjjzzU7Z4s125s3ty5RZMZ6EGkJajFpS0EhaFH4iCRk9h8xxXE7qnwd67tck5aYX7MtqIZlOS1pUtan3AApxSllRJxxnmpBKjwCBitVKiDx0rQvCf/g/eH7nLhQ2QVPpiJO9wcY+JIKgB/LyfOse2adI3415gyrtMtTTuJcPbvbUMEgpCtyfMfEAfI/apAKxwRXmttkQxrO0/s2TMXDnOOSQuc04XCpLBT8Dih8SFJAyCSQUDz49G3jJ6feplGiIux8Y+pFLCz25rWSsBXel7vI1QsbKV8YJpwKPnWoFD70sLIOOn1oDbKgtotOJC21cFCgCD9jUa5p7Tr6yt7T9scUepVDbOf8A21tpV2z9qVv4x0pbQoxGt9ricRLdEj45BaYQjH5CtwuFXVRP1rXSRjrWSc8E8ilgeKzjg0kEFWDTSVc470o8juDUAXx0/WlEDsefOmgeKMqyACPXNAObsYzRk44NJODkZpJOPT1oBzJxg0A9qQFeYz60fTmgFHPH6UcEHIpOT1FJccQxHcfecS222krWtZwlKQMkk9gBUA0b7e4en7FLvNwURHio3q29VHoEj1JwK481dqF7U2qp92W8+tl51RZQ8RltvPwpwOBgY6VYvadr93WV88CGtaLPEJTHQePFPdxQ8z2HYfevP69HBh2+qXZ5+bLudLoKKKK6zmCiiigCiiigCiiigJvTOoH9N32PcG2kSGkLBdYcAKXByO/Q4Jwe2a9etcySiwIusabLuVnUhRaZtr3gmA6pRVscx8WxII55288EEGvBqn9L6ruelLoJkBe5pWA9HUfgdT5HyPkeorLJDdyjbHk2un0dMW2WW9LIkquKLstiOXHJSFApcUElR5SOnbpnHXmnLZqJpyMV3JkWt9EdMoh15JQppX8aV8DAPBzgg48xVKiqsWqUm/2WEt9DjPgyWIj3u8lhzJIXgFIV1IOTzgHzFS2mNO2g2uI/cLI5+0Yo8FXvxW4UFJ6oCyQEngjHAz6VwuKV2d6bdUR6bpHXqWPebLaxKhhxxmKwJfhKkSV8LdS0c7UAbsqwOqleWfSAo7R4gG7HIByM/WtJLMVMpctMZlMlY2reDYC1DyKupp/fuPc1STTLRVGxuA4z1pxKgEkpPIrU8TIwRj1pSV+XT+9ULG0F5JAB4606Fev2rWCsjPQ0sKyPI+VQDYSsfSnN3p9a1EnbndzTqFZ5yaAf3UpKicA01uGOxrIXgHufOoJHuRxWck0zvIPJ4pYUMZoQLB6nOaUDnimgeetZCucpI56jyoB1J5weM96zjk96byP+1G4j6UJFk4NZ3fakbwTz1rUuFxgWm3u3C4y24sVkZW64cAf9z6Dk0qwbm7YCpRAT1JJwBXPXtW9qkO+QFaa04XjHDp97ln4Q+B0QgdduRkk4zxxgcwPtD9qdw1S89a7WpUOypWQAnhcjHdZ8v5ennmvNK7MWmtqU/wBv+zizZl+MQooorvOIKKKKAKKKKAKKKKAKKKKAKKKKAkLReblYrki4WuUqO+jjI5Ch3BHQj0Ne9aP9pFr1E23DnrRb7mcJ8NRwh0+aCe/of1rnWsgkHIOKyyY1Ps1x5XB/B2LvJGCMUrxODxgiuddL+1C92NLcSfm5QQcYcV+8QP5Vf7GvZbDrKwahaSYE5AeI5ju/A4n7Hr9s1wzxSh2d8MsZ9FnT8gJ70pCwE8dqZSpSetLTgjPQ1ibD5VxkHg07vBA5x61qpURjgU4FggBVAbCV5JBH3paThWM1rg44HCaXnjG7gVANkE9O9KPHqaaCuhBpW4E4HNCB4EYB71kK5NMjJHrRnnPNAPA/D1rKTj7U2DgAZrPHeoA4VdM1ndnFRtyvFts8fxrnLbjp527jyr6DvXiGq/bbLlIdh6XjqhIPw+9OgFw+qR0H61eEJTdRE/RHfLo9c1RrjT+k2sXOan3lQ+COj4ln1IHQVzPrDXV71lMC7g6G4rRJZjNZCEevqfU1W5UuTNkrkzJDkh5w5U44oqUo+pNM16GLAocvs4cuo3LbFUv+QoooroOQKKKKAKKKKAKKKKAKKKKAKKKKAKKKKAKKKKAKUlSkLC0KKVA5BBwRSaKAu9o9qGqbUlppyQicwjgokJySP9XWvR7F7X7HPKWbow5bHccrJC2/z6j8q8BorGWGEjojnmnb5OtrbqKx3YZt12iyvNKHBuH2PNSu7AweRXH9vuEq2TUTIbnhvIzg4B61PD2haxSCE3x5OTngJ/7VzS08t3p6O6GfA8dzk1L2SVfvu/o6kSvsD8NKCgTnHFczte1TWzWwG6ocCfxx2zn68c1tJ9r+sg0EF+Io/iMZOT/tVft5mf3GM6TCyec9KczwCnvXNSfbDrJOcuw1ZGOYw49aYk+1vW76cN3FuNxjLTCQf1Bp9vMn6+Ors6fDgHynmtSbdbdbW/Hnz48RodVPOBI/U1y257R9bPNLbc1DJIX1I2g/mB6VXZlwm3B4vTZTkhZJUS4rPJ6mrLTSvkiWoxbbjd/p/d/0dO3P2p6QgMuLauSJy0p3BDB5V6AmvMrr7cb5K3ottuYgoz8KiorVj16fpXktFax00F3yZvVtU4Kq/wA3+/BuXC5z7rMcl3CU5IdcUVFS1E9fLyrToorpSrhHFKTk7YUUUVJAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUAUUUUB//Z" alt="">
       </span>
       <div class="brand-text">
-        <h1>திருப்புகழ்</h1>
-        <p>திருப்புகழ் பாடல்கள் மற்றும் பொருள் </p>
+        <h1 id="brandTitle">திருப்புகழ்</h1>
+        <p id="brandSubtitle">திருப்புகழ் பாடல்கள் மற்றும் பொருள் </p>
       </div>
     </div>
     <div class="header-controls">
+      <button type="button" class="theme-toggle" id="libraryBtn" title="தொகுப்புகள் (Collections)" aria-label="View all collections">📚</button>
       <div class="fontctl" role="group" aria-label="Adjust text size">
         <button type="button" id="fontSmallBtn" title="Normal text size">A</button>
         <button type="button" id="fontMedBtn" title="Large text size">A+</button>
@@ -1065,13 +1104,22 @@
 
 <main>
 
-  <!-- VIEW: PUBLIC SONG LIST -->
-  <section id="view-list">
-    <div class="intro-note">
-      🙏 <strong>வணக்கம், பக்தர்களே.</strong> முனிவர் அருணகிரிநாதர் அருளிய திருப்புகழ் பாடல்களை தமிழில் படியுங்கள், அவற்றின் பொருளையும் தெரிந்துகொள்ளுங்கள். கீழே உள்ள பாடல்களில் ஒன்றைத் தொட்டு முழுமையாகப் படிக்கலாம். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.
-      <div class="en-tag" style="margin-top:.5rem;">(Greetings, devotees. Read the Thiruppugazh songs composed by Saint Arunagirinathar in Tamil, and learn their meaning. Tap any song below to read it in full. Use the A / A+ / A++ buttons above to make the text larger.)</div>
+  <!-- VIEW: COLLECTIONS HOME (table of contents across all divine-text repositories) -->
+  <section id="view-toc" class="hidden">
+    <div class="intro-note" style="border-left-color:var(--color-gold);">
+      அருணகிரிநாதர் மற்றும் பிற அருள்நூல் தொகுப்புகள். கீழே ஒரு தொகுப்பைத் தேர்ந்தெடுக்கவும்.
+      <span class="en-tag">(A library of sacred Murugan texts. Choose a collection below to begin.)</span>
     </div>
-    <div class="search-row" style="position:relative;">
+    <div id="collectionGrid" class="song-grid" role="list" aria-label="Collections"></div>
+  </section>
+
+  <!-- VIEW: PUBLIC SONG LIST -->
+  <section id="view-list" class="hidden">
+    <div class="intro-note">
+      🙏 <span id="introMainText"><strong>வணக்கம், பக்தர்களே.</strong> முனிவர் அருணகிரிநாதர் அருளிய திருப்புகழ் பாடல்களை தமிழில் படியுங்கள், அவற்றின் பொருளையும் தெரிந்துகொள்ளுங்கள். கீழே உள்ள பாடல்களில் ஒன்றைத் தொட்டு முழுமையாகப் படிக்கலாம். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.</span>
+      <div class="en-tag" id="introEnText" style="margin-top:.5rem;">(Greetings, devotees. Read the Thiruppugazh songs composed by Saint Arunagirinathar in Tamil, and learn their meaning. Tap any song below to read it in full. Use the A / A+ / A++ buttons above to make the text larger.)</div>
+    </div>
+    <div class="search-row" id="searchRow" style="position:relative;">
       <label for="searchInput" class="visually-hidden">Search songs by name or place</label>
       <input type="search" id="searchInput" role="combobox" aria-expanded="false" aria-controls="searchSuggestions" autocomplete="off" placeholder="பாடல் பெயர் அல்லது தலம் மூலம் தேடுங்கள்... (Search by song name or place...)">
       <button type="button" id="voiceSearchBtn" class="mic-btn" hidden aria-label="குரல் மூலம் தேடுங்கள் (Search by voice)" title="குரல் மூலம் தேடுங்கள் (Search by voice)">
@@ -1089,7 +1137,7 @@
   <!-- VIEW: SONG DETAIL -->
   <section id="view-detail" class="hidden">
     <div class="detail-toolbar">
-      <button type="button" class="btn btn-ghost btn-sm" id="backToListBtn">&larr; எல்லா பாடல்களுக்கும் திரும்பு <span class="en-tag">(Back to all songs)</span></button>
+      <button type="button" class="btn btn-ghost btn-sm" id="backToListBtn">&larr; <span id="backToListLabel">எல்லா பாடல்களுக்கும் திரும்பு</span> <span class="en-tag" id="backToListLabelEn">(Back to all songs)</span></button>
       <div style="display:flex; gap:.5rem;">
         <button type="button" class="btn btn-teal btn-sm" id="listenBtn">🔊 கேளுங்கள் <span class="en-tag">(Listen)</span></button>
         <button type="button" class="btn btn-share btn-sm" id="shareBtn" aria-expanded="false" aria-controls="shareDrawer">📤 பகிர் <span class="en-tag">(Share)</span></button>
@@ -1148,7 +1196,7 @@
   <!-- VIEW: ADMIN PANEL -->
   <section id="view-admin" class="hidden">
     <div class="detail-toolbar">
-      <h2 style="margin:0;">நிர்வாகர் பலகை <span class="en-tag">(Admin Panel)</span></h2>
+      <h2 style="margin:0;">நிர்வாகர் பலகை <span class="en-tag">(Admin Panel)</span> — <span id="adminCollectionLabel" style="color:var(--color-teal);"></span></h2>
       <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
         <button type="button" class="btn btn-teal btn-sm" id="openGuideBtn">📘 வழிகாட்டி <span class="en-tag">(Guide)</span></button>
         <button type="button" class="btn btn-ghost btn-sm" id="exportBtn">⬇ காப்பு ஏற்றுமதி (JSON) <span class="en-tag">(Export backup)</span></button>
@@ -1364,6 +1412,133 @@
   var db = firebase.firestore();
   var songsRef = db.collection("songs");
 
+  /* ---------- Collections (repository of divine texts) ----------
+     The site now hosts more than one sacred text, each running through
+     the exact same list/search/detail/share/admin workflow already built
+     above — only the Firestore collection it reads from, its header text,
+     and its colour theme change per collection. Adding a new text later
+     means adding one more entry here; nothing else in this file needs to
+     change. */
+  var COLLECTIONS = {
+    thirupugazh: {
+      id: "thirupugazh",
+      firestoreCollection: "songs",
+      titleTamil: "திருப்புகழ்",
+      titleEn: "Thirupugazh Songs",
+      subtitleTamil: "திருப்புகழ் பாடல்கள் மற்றும் பொருள்",
+      subtitleEn: "Songs by Saint Arunagirinathar, with meanings",
+      cardBlurbTamil: "அருணகிரிநாதர் அருளிய ஆயிரக்கணக்கான பாடல்கள்.",
+      cardBlurbEn: "Thousands of hymns to Lord Murugan, with Tamil and English meanings.",
+      icon: "🦚",
+      pageTitle: "திருப்புகழ் — பாடல்கள் மற்றும் பொருள்",
+      singleContentMode: false,
+      greetingMainHtml: '<strong>வணக்கம், பக்தர்களே.</strong> முனிவர் அருணகிரிநாதர் அருளிய திருப்புகழ் பாடல்களை தமிழில் படியுங்கள், அவற்றின் பொருளையும் தெரிந்துகொள்ளுங்கள். கீழே உள்ள பாடல்களில் ஒன்றைத் தொட்டு முழுமையாகப் படிக்கலாம். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.',
+      greetingEnText: "(Greetings, devotees. Read the Thiruppugazh songs composed by Saint Arunagirinathar in Tamil, and learn their meaning. Tap any song below to read it in full. Use the A / A+ / A++ buttons above to make the text larger.)"
+    },
+    kandhasashti: {
+      id: "kandhasashti",
+      firestoreCollection: "songs_kandhasashti",
+      titleTamil: "கந்தர் சஷ்டி கவசம்",
+      titleEn: "Kandha Sashti Kavacham",
+      subtitleTamil: "தேவராய சுவாமிகள் அருளிய காப்புப் பனுவல்",
+      subtitleEn: "The protective armour-hymn by Sri Devaraya Swamigal",
+      cardBlurbTamil: "சூரபத்மனை வென்ற வேலனை போற்றும் ஒரே ஒரு முழுமையான காவல் பனுவல்.",
+      cardBlurbEn: "One single, complete hymn of protection praising Murugan's victory over Soorapadman.",
+      icon: "🛡️",
+      pageTitle: "கந்தர் சஷ்டி கவசம் — Kandha Sashti Kavacham",
+      // This is one single, complete text (not a browsable collection of many
+      // songs), so the public side skips the search/grid step entirely and
+      // opens straight into the reading view — simpler for senior devotees
+      // who found tapping into a list, then back out to a top-level menu,
+      // confusing. The admin Add/Edit/Publish workflow underneath is
+      // untouched: it is the very same form, fields, and Firestore schema
+      // used for every other collection.
+      singleContentMode: true,
+      greetingMainHtml: '<strong>வணக்கம், பக்தர்களே.</strong> தேவராய சுவாமிகள் அருளிய கந்தர் சஷ்டி கவசத்தை தமிழில் கீழே படிக்கலாம், அதன் பொருளையும் தெரிந்துகொள்ளலாம். இது ஒரே ஒரு முழுமையான காப்புப் பனுவல் என்பதால், இப்பக்கமே நேரடியாகத் திறக்கும். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.',
+      greetingEnText: "(Greetings, devotees. Read the Kandha Sashti Kavacham composed by Sri Devaraya Swamigal in Tamil below, along with its meaning. As this is one single, complete protective hymn, it opens directly on this page. Use the A / A+ / A++ buttons above to make the text larger.)"
+    },
+    kandharanubhuti: {
+      id: "kandharanubhuti",
+      firestoreCollection: "songs_kandharanubhuti",
+      titleTamil: "கந்தர் அநுபூதி",
+      titleEn: "Kandhar Anubhuti",
+      subtitleTamil: "அருணகிரிநாதர் அருளிய 51 செய்யுட்கள்",
+      subtitleEn: "51 verses of divine experience by Saint Arunagirinathar",
+      cardBlurbTamil: "மாயையை வெல்ல அருள் வேண்டும் ஞானப் பாடல்கள்.",
+      cardBlurbEn: "Verses seeking Murugan's grace and wisdom to overcome illusion (maya).",
+      icon: "🪷",
+      pageTitle: "கந்தர் அநுபூதி — Kandhar Anubhuti",
+      // A full multi-verse work like Thirupugazh, so it keeps the exact same
+      // browsable list + search + detail schema — only the greeting text
+      // below is written fresh for this text, never copied from Thirupugazh.
+      singleContentMode: false,
+      greetingMainHtml: '<strong>வணக்கம், பக்தர்களே.</strong> முனிவர் அருணகிரிநாதர் அருளிய கந்தர் அநுபூதி செய்யுட்களை தமிழில் படியுங்கள், அவற்றின் பொருளையும் தெரிந்துகொள்ளுங்கள். கீழே உள்ள செய்யுட்களில் ஒன்றைத் தொட்டு முழுமையாகப் படிக்கலாம். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.',
+      greetingEnText: "(Greetings, devotees. Read the Kandhar Anubhuti verses composed by Saint Arunagirinathar in Tamil, and learn their meaning. Tap any verse below to read it in full. Use the A / A+ / A++ buttons above to make the text larger.)"
+    }
+  };
+  // Order shown in the collections table of contents.
+  var COLLECTION_ORDER = ["thirupugazh","kandhasashti","kandharanubhuti"];
+  var COLLECTION_KEY = "thirupugazh_collection_v1";
+  var currentCollection = COLLECTIONS.thirupugazh;
+
+  function applyCollection(coll, opts){
+    currentCollection = coll;
+    songsRef = db.collection(coll.firestoreCollection);
+    localStorage.setItem(COLLECTION_KEY, coll.id);
+    document.documentElement.setAttribute("data-collection", coll.id);
+    document.title = coll.pageTitle;
+    var titleEl = $("brandTitle"), subEl = $("brandSubtitle");
+    if(titleEl) titleEl.textContent = coll.titleTamil;
+    if(subEl) subEl.textContent = coll.subtitleTamil + " ";
+    var adminLbl = $("adminCollectionLabel");
+    if(adminLbl) adminLbl.textContent = coll.titleTamil + " (" + coll.titleEn + ")";
+    var splashLbl = document.querySelector(".splash-screen");
+    if(splashLbl) splashLbl.setAttribute("aria-label", "Loading " + coll.titleEn);
+    // Each collection gets its own greeting to devotees — never the
+    // Thirupugazh wording reused — plus, for a one-time / single-hymn
+    // collection, the search bar is hidden since there is nothing to
+    // search through.
+    var introMain = $("introMainText"), introEn = $("introEnText");
+    if(introMain) introMain.innerHTML = coll.greetingMainHtml;
+    if(introEn) introEn.textContent = coll.greetingEnText;
+    var searchRow = $("searchRow");
+    if(searchRow) searchRow.classList.toggle("hidden", !!coll.singleContentMode);
+    var backLabel = $("backToListLabel"), backLabelEn = $("backToListLabelEn");
+    if(coll.singleContentMode){
+      if(backLabel) backLabel.textContent = "தொகுப்புகளுக்குத் திரும்பு";
+      if(backLabelEn) backLabelEn.textContent = "(Back to all collections)";
+    } else {
+      if(backLabel) backLabel.textContent = "எல்லா பாடல்களுக்கும் திரும்பு";
+      if(backLabelEn) backLabelEn.textContent = "(Back to all songs)";
+    }
+    if(!opts || !opts.skipReload){
+      songs = [];
+      currentSearch = "";
+      var si = $("searchInput"); if(si) si.value = "";
+      startListening();
+    }
+  }
+
+  function renderCollectionGrid(){
+    var grid = $("collectionGrid");
+    if(!grid) return;
+    grid.innerHTML = COLLECTION_ORDER.map(function(id){
+      var c = COLLECTIONS[id];
+      return '' +
+        '<button type="button" class="song-card" role="listitem" data-collection-id="' + c.id + '" style="align-items:flex-start;">' +
+          '<div class="tamil-title">' + c.icon + '&nbsp; ' + escapeHtml(c.titleTamil) + '</div>' +
+          '<div class="en-title">' + escapeHtml(c.titleEn) + '</div>' +
+          '<div class="excerpt">' + escapeHtml(c.cardBlurbTamil) + '<br><span class="en-tag">' + escapeHtml(c.cardBlurbEn) + '</span></div>' +
+        '</button>';
+    }).join("");
+    Array.prototype.forEach.call(grid.querySelectorAll("[data-collection-id]"), function(card){
+      card.addEventListener("click", function(){
+        applyCollection(COLLECTIONS[card.getAttribute("data-collection-id")]);
+        showView("list");
+      });
+    });
+  }
+
   // Security feature: keep the admin session in memory only, so any page
   // reload (including a hard refresh) signs the admin out and requires
   // re-entering the passcode. Must be set before any sign-in call.
@@ -1491,12 +1666,13 @@
 
   /* ---------- View switching ---------- */
   function showView(name){
-    ["view-list","view-detail","view-admin"].forEach(function(id){
+    ["view-toc","view-list","view-detail","view-admin"].forEach(function(id){
       $(id).classList.toggle("hidden", id !== ("view-" + name));
     });
     // The floating peacock assistant belongs on the main song-list page
-    // only — keep it out of the way on the detail/reading view and the
-    // admin dashboard so it never covers other controls.
+    // only — keep it out of the way on the detail/reading view, the
+    // collections home, and the admin dashboard so it never covers other
+    // controls.
     var assistant = document.getElementById("peacockAssistant");
     if(assistant){ assistant.classList.toggle("assistant-hidden", name !== "list"); }
     window.scrollTo({top:0, behavior:"smooth"});
@@ -1505,10 +1681,28 @@
   $("brandHome").addEventListener("keydown", function(e){
     if(e.key === "Enter" || e.key === " "){ e.preventDefault(); showView("list"); }
   });
+  $("libraryBtn").addEventListener("click", function(){
+    renderCollectionGrid();
+    showView("toc");
+  });
+
+  /* ---------- Collections: bring up the saved / default repository ----------
+     Existing bookmarks and returning visitors land straight on the
+     Thirupugazh song list exactly as before (nothing changes for them);
+     only a brand-new visitor sees the collections table of contents first,
+     so they can pick which sacred text to read. */
+  (function initCollection(){
+    var savedId = localStorage.getItem(COLLECTION_KEY);
+    var coll = COLLECTIONS[savedId] || COLLECTIONS.thirupugazh;
+    applyCollection(coll, {skipReload:true});
+    renderCollectionGrid();
+    showView(savedId ? "list" : "toc");
+  })();
 
   /* ---------- Public song list ---------- */
   var currentSearch = "";
   function renderSongList(){
+    if(currentCollection.singleContentMode){ renderSingleContentView(); return; }
     var grid = $("songGrid");
     var q = currentSearch.trim().toLowerCase();
     var allPublished = songs.filter(function(s){ return s.published; }).sort(function(a,b){
@@ -1546,6 +1740,35 @@
     Array.prototype.forEach.call(grid.querySelectorAll(".song-card"), function(card){
       card.addEventListener("click", function(){ openDetail(card.getAttribute("data-id")); });
     });
+  }
+  /* ---------- Single-content collections (e.g. Kandha Sashti Kavacham) ----------
+     A one-time, single-hymn collection has nothing to search or browse, so
+     instead of the song-grid used for multi-song collections, the one
+     published entry is opened straight into the familiar reading (detail)
+     view — the exact same view, template, and share/print tools used
+     everywhere else. This only changes what the public sees; the admin's
+     Add / Edit / Publish form and Firestore schema underneath are the
+     same ones used for every collection. */
+  function renderSingleContentView(){
+    var grid = $("songGrid");
+    var visible = (isAuthed() ? songs : songs.filter(function(s){ return s.published; }))
+      .slice().sort(function(a,b){ return (a.createdAt||"").localeCompare(b.createdAt||""); });
+    if(visible.length === 0){
+      grid.innerHTML =
+        '<div class="empty-state" style="grid-column:1/-1;">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8 15c1.2 1 2.6 1.5 4 1.5s2.8-.5 4-1.5"/></svg>' +
+          '<p>இந்தப் பகுதி இன்னும் சேர்க்கப்படவில்லை. விரைவில் பார்வையிடவும் 🙏 (This content has not been added yet. Please check back soon.)</p>' +
+        '</div>';
+      return;
+    }
+    grid.innerHTML = "";
+    // Only jump straight into the reading view when the visitor is already
+    // sitting on this collection's list screen (i.e. just arrived here from
+    // the collections home) — never while the admin has the admin panel
+    // open, so a background data sync can't yank them out of it.
+    var listSection = $("view-list");
+    var listIsActive = listSection && !listSection.classList.contains("hidden");
+    if(listIsActive){ openDetail(visible[0].id); }
   }
   var searchDebounceTimer = null;
   $("searchInput").addEventListener("input", function(e){
@@ -1905,6 +2128,14 @@
   }
   $("backToListBtn").addEventListener("click", function(){
     closeShareDrawer();
+    // A single-content collection (e.g. Kandha Sashti Kavacham) has no list
+    // to go back to, so its "back" button returns to the collections home
+    // instead — the one and only extra tap a senior devotee ever needs.
+    if(currentCollection.singleContentMode){
+      renderCollectionGrid();
+      showView("toc");
+      return;
+    }
     // Going back always returns to the regular, unfiltered list — not the
     // search that led to this particular song — so clear whatever was typed.
     currentSearch = "";
