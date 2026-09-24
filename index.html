@@ -88,24 +88,28 @@
      Toggled by adding data-theme="dark" on <html>. Chosen automatically on
      first visit from the OS preference, then remembered per device. */
   html[data-theme="dark"]{
-    --color-bg:#181410;
-    --color-bg-card:#2A221C;
-    --color-maroon:#D96B75;
-    --color-maroon-dark:#F0A3AB;
-    --color-gold:#E7C066;
-    --color-gold-soft:#F2D999;
-    --color-teal:#4FC3A8;
-    --color-teal-dark:#7DE0C6;
-    --color-peacock-blue:#4FB2D8;
-    --color-peacock-indigo:#9298E0;
-    --color-peacock-emerald:#4FD8A8;
-    --color-text:#F1EDE4;
-    --color-text-soft:#D3CBC0;
-    --color-border:#453B31;
-    --shadow: 0 2px 14px rgba(0,0,0,0.45);
-    --bg-overlay-a: rgba(18,15,12,0.88);
-    --bg-overlay-b: rgba(18,15,12,0.82);
-    --watermark-opacity: 0.09;
+    /* Balanced dark palette: a soft warm charcoal (not near-black) paired
+       with slightly muted accent hues, so the contrast jump between text/
+       buttons and the background is gentler on the eyes for elders and
+       long reading sessions — while staying clearly "dark mode". */
+    --color-bg:#211C17;
+    --color-bg-card:#332B23;
+    --color-maroon:#CE717A;
+    --color-maroon-dark:#E3A6AC;
+    --color-gold:#D9AF5F;
+    --color-gold-soft:#E8CC8E;
+    --color-teal:#48AE96;
+    --color-teal-dark:#72C7AF;
+    --color-peacock-blue:#4CA2C4;
+    --color-peacock-indigo:#8489C9;
+    --color-peacock-emerald:#4CC098;
+    --color-text:#EFEAE1;
+    --color-text-soft:#CFC7BB;
+    --color-border:#4A4038;
+    --shadow: 0 2px 12px rgba(0,0,0,0.35);
+    --bg-overlay-a: rgba(24,20,16,0.86);
+    --bg-overlay-b: rgba(24,20,16,0.80);
+    --watermark-opacity: 0.08;
     /* A deep, saturated amber with near-white text gives a much stronger
        (and easier to read for elders / low-vision users) contrast on a
        dark background than the previous pale-gold-on-pale-text hover. */
@@ -114,42 +118,73 @@
     --color-hover-text-soft: #F2E3C4;
     color-scheme: dark;
   }
+  /* Button text sits on bright gradient fills even in dark mode, so its
+     drop-shadow is kept gentle here — a strong shadow plus an already
+     saturated button colour is what read as "harsh" against a dark page. */
+  html[data-theme="dark"] .btn-primary,
+  html[data-theme="dark"] .btn-gold,
+  html[data-theme="dark"] .btn-teal,
+  html[data-theme="dark"] .btn-danger{
+    text-shadow:0 1px 1px rgba(0,0,0,0.28);
+  }
 
   /* ---------- Per-collection colour themes ----------
      Same design language (fonts, radius, shadow, layout, kolam stripe) for
-     every repository — only the primary ("maroon" role) and secondary
-     ("teal" role) hues change, so each sacred text is easy to tell apart
-     at a glance while still feeling like one family of sites. The gold
-     accent and peacock kolam-stripe stay shared across all of them. */
+     every repository — only the primary ("maroon" role), secondary ("teal"
+     role) and the floating assistant's peacock-feather hues change, so
+     each sacred text is easy to tell apart at a glance while still feeling
+     like one family of sites. Each of the 3 main topics is anchored to a
+     clearly distinct base hue family — Thirupugazh: red, Kandha Sashti
+     Kavacham: green, Kandhar Anubhuti: blue — and the assistant bot for
+     each collection is retinted to match (via the peacock-* variables
+     below), so the text, buttons AND the bot are all uniquely themed per
+     topic, not just the buttons. The gold accent and peacock kolam-stripe
+     stay shared across all of them for the common "one family" feel. */
 
-  /* Kandha Sashti Kavacham — a protective "armour" hymn, given a deep
-     emerald/forest-green + steel-blue theme. */
+  /* Thirupugazh — the RED / maroon theme; this is simply the :root default
+     above (maroon + teal), kept as-is so nothing about the original app
+     changes for this collection. No override block is needed here. */
+
+  /* Kandha Sashti Kavacham — a protective "armour" hymn, given the GREEN
+     theme (deep emerald/forest-green primary + steel-blue secondary). The
+     floating assistant's feathers are retinted to this same green/blue
+     pairing (instead of the default red-app's blue/indigo/emerald) so the
+     bot itself is visibly distinct on this collection. */
   html[data-collection="kandhasashti"]{
     --color-maroon:#1F7A4E;
     --color-maroon-dark:#155C3B;
     --color-teal:#155E75;
     --color-teal-dark:#0F4657;
+    --color-peacock-emerald: var(--color-maroon);
+    --color-peacock-blue: var(--color-teal);
+    --color-peacock-indigo: var(--color-teal-dark);
   }
   html[data-collection="kandhasashti"][data-theme="dark"]{
-    --color-maroon:#5FD9A0;
-    --color-maroon-dark:#8FE9BE;
-    --color-teal:#5FC2E0;
-    --color-teal-dark:#8FDBF0;
+    --color-maroon:#54BF90;
+    --color-maroon-dark:#83D2AC;
+    --color-teal:#55ABCC;
+    --color-teal-dark:#82C6DE;
   }
 
-  /* Kandhar Anubhuti — a meditative, wisdom-seeking hymn, given an
-     indigo/violet + emerald theme. */
+  /* Kandhar Anubhuti — a meditative, wisdom-seeking hymn, given the BLUE
+     theme (steel/azure blue primary + emerald-green secondary — the
+     reverse pairing of Kandha Sashti Kavacham's green+blue, so the two
+     stay clearly distinguishable from each other too). The assistant's
+     feathers are retinted to this blue/green pairing. */
   html[data-collection="kandharanubhuti"]{
-    --color-maroon:#3B3F8C;
-    --color-maroon-dark:#2B2E66;
+    --color-maroon:#1D5FA8;
+    --color-maroon-dark:#154272;
     --color-teal:#1F7A5C;
     --color-teal-dark:#155C45;
+    --color-peacock-blue: var(--color-maroon);
+    --color-peacock-emerald: var(--color-teal);
+    --color-peacock-indigo: var(--color-maroon-dark);
   }
   html[data-collection="kandharanubhuti"][data-theme="dark"]{
-    --color-maroon:#9BA0F0;
-    --color-maroon-dark:#C3C7FF;
-    --color-teal:#5FD9A0;
-    --color-teal-dark:#8FE9BE;
+    --color-maroon:#4E90D2;
+    --color-maroon-dark:#7FB3E8;
+    --color-teal:#54BF90;
+    --color-teal-dark:#83D2AC;
   }
 
   *{box-sizing:border-box;}
@@ -329,6 +364,33 @@
   .song-card .views{ font-size:.8rem; color:var(--color-text-soft); }
   .song-card .excerpt{ font-size:.92rem; color:var(--color-text-soft); margin-top:.3rem;
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+  /* ---------- Table of Contents (collections home) ----------
+     A clearer, larger, more "obviously tappable" layout than a plain list,
+     aimed at non-technical / senior visitors: a big page title, a bigger
+     icon badge per topic, and an explicit "tap to open" cue on every card
+     so nobody has to guess that the card itself is the button. */
+  .toc-title{
+    font-size:1.55rem; text-align:center; margin-bottom:.25rem;
+  }
+  .toc-subtitle{
+    text-align:center; color:var(--color-text-soft); font-size:.95rem; margin-bottom:1.4rem;
+  }
+  .toc-card{ padding:1.3rem 1.3rem 1.5rem; gap:.5rem; }
+  .toc-card:hover, .toc-card:focus-visible{ transform:translateY(-3px); box-shadow:0 8px 22px rgba(0,0,0,0.16); }
+  .toc-icon-badge{
+    width:3.4rem; height:3.4rem; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg, var(--color-maroon), var(--color-maroon-dark));
+    color:var(--color-gold-soft); font-size:1.6rem; box-shadow: inset 0 0 0 2px rgba(231,192,102,0.5);
+    margin-bottom:.3rem;
+  }
+  .toc-icon-badge svg{ width:1.7rem; height:1.7rem; }
+  .toc-card .tamil-title{ font-size:1.32rem; }
+  .toc-cta{
+    margin-top:.5rem; display:inline-flex; align-items:center; gap:.3rem;
+    font-size:.86rem; font-weight:700; color:var(--color-teal);
+  }
 
   .empty-state{
     text-align:center; padding:3rem 1.5rem; background:var(--color-bg-card);
@@ -1106,9 +1168,10 @@
 
   <!-- VIEW: COLLECTIONS HOME (table of contents across all divine-text repositories) -->
   <section id="view-toc" class="hidden">
-    <div class="intro-note" style="border-left-color:var(--color-gold);">
-      அருணகிரிநாதர் மற்றும் பிற அருள்நூல் தொகுப்புகள். கீழே ஒரு தொகுப்பைத் தேர்ந்தெடுக்கவும்.
-      <span class="en-tag">(A library of sacred Murugan texts. Choose a collection below to begin.)</span>
+    <h2 class="toc-title">முருகப் பெருமான் பக்தி நூல்கள் (தமிழ்) <span class="en-tag" style="display:block; font-size:.68em; font-weight:500; margin-top:.15rem;">(Lord Muruga Devotional Contents in Tamil)</span></h2>
+    <div class="intro-note" style="border-left-color:var(--color-gold); text-align:center;">
+      கீழே உள்ள மூன்று நூல்களில் ஒன்றைத் தொட்டுத் திறக்கவும்.
+      <span class="en-tag">(Below are three sacred texts. Simply tap any one card to open it.)</span>
     </div>
     <div id="collectionGrid" class="song-grid" role="list" aria-label="Collections"></div>
   </section>
@@ -1311,7 +1374,7 @@
       <svg viewBox="0 0 184 184" xmlns="http://www.w3.org/2000/svg">
         <path id="peacockRingPath" d="M92,92 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" fill="none"/>
         <text class="peacock-ring-text">
-          <textPath href="#peacockRingPath" startOffset="0%">திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh) &#8226; திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh) &#8226; </textPath>
+          <textPath id="peacockRingTextPath" href="#peacockRingPath" startOffset="0%">திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh) &#8226; திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh) &#8226; </textPath>
         </text>
       </svg>
     </div>
@@ -1362,6 +1425,7 @@
       <button type="button" class="peacock-cloud-close" id="peacockCloseBtn" aria-label="மூடு (Close)">✕</button>
       <div class="peacock-cloud-content">
         <h3 id="peacockCloudTitle">திருப்புகழ் தோற்றம்: ஒரு ஆன்மீக இசைப் பெட்டகம்</h3>
+        <div id="peacockCloudBody">
         <p>திருப்புகழ் என்பது தமிழ் பக்தியிலக்கிய வரலாற்றில் தனித்துவமான இடம் பெற்ற ஒரு அருள் பொங்கும் பொக்கிஷமாகும். அருணகிரிநாதர் பெருமானால் அருளப்பட்ட இந்நூல், முருகப் பெருமானின் புகழைப் பாடும் இணையற்ற நூலாகும்.</p>
 
         <h4>தோற்றப் பின்னணி:</h4>
@@ -1371,6 +1435,7 @@
         <p>முருகப் பெருமான் தனது வேலால் அருணகிரிநாதரின் நாக்கில் 'ஓம்' என்ற பிரணவ மந்திரத்தை எழுதி, கவிபாடும் ஆற்றலையும் ஞானத்தையும் அருளினார். மேலும், "முத்தைத் தரு பத்தித் திருநகை..." என்ற முதல் பாடலின் அடியைக் கொடுத்து, "இந்தப் பாடலைப் பாடி என் புகழைப் பரப்பு" என்று கட்டளையிட்டார்.</p>
 
         <p>இவ்வாறு இறைவனின் திருவருளாலும், அருணகிரிநாதரின் இணையற்ற தமிழ்ப் புலமையாலும் உருவானதே புகழ்பெற்ற 'திருப்புகழ்' ஆகும். சந்த நயங்கள் நிறைந்த இந்நூல், தமிழ் இலக்கியத்திற்குப் பெருமை சேர்க்கும் ஒப்பற்ற இசைக் குவியலாகும்.</p>
+        </div>
       </div>
       <div class="peacock-cloud-tail1" aria-hidden="true"></div>
       <div class="peacock-cloud-tail2" aria-hidden="true"></div>
@@ -1430,8 +1495,21 @@
       cardBlurbTamil: "அருணகிரிநாதர் அருளிய ஆயிரக்கணக்கான பாடல்கள்.",
       cardBlurbEn: "Thousands of hymns to Lord Murugan, with Tamil and English meanings.",
       icon: "🦚",
+      iconHtml: "🦚",
       pageTitle: "திருப்புகழ் — பாடல்கள் மற்றும் பொருள்",
       singleContentMode: false,
+      // Content shown in the floating peacock assistant's popup when this
+      // collection is active — kept unique per collection (see the fix for
+      // "same Thirupugazh snippet on every topic").
+      assistantRingText: "திருப்புகழ் தோற்றம் அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Thirupugazh)",
+      assistantTitle: "திருப்புகழ் தோற்றம்: ஒரு ஆன்மீக இசைப் பெட்டகம்",
+      assistantHtml:
+        '<p>திருப்புகழ் என்பது தமிழ் பக்தியிலக்கிய வரலாற்றில் தனித்துவமான இடம் பெற்ற ஒரு அருள் பொங்கும் பொக்கிஷமாகும். அருணகிரிநாதர் பெருமானால் அருளப்பட்ட இந்நூல், முருகப் பெருமானின் புகழைப் பாடும் இணையற்ற நூலாகும்.</p>' +
+        '<h4>தோற்றப் பின்னணி:</h4>' +
+        '<p>திருவண்ணாமலையில் அவதரித்த அருணகிரிநாதர், தனது ஆரம்ப காலத்தில் புலன்வழிக் வாழ்க்கையில் ஈடுபட்டு, அதிலிருந்து விடுபடத் துணிந்து திருவண்ணாமலை கோபுரத்தின் உச்சியிலிருந்து கீழே குதித்து உயிரை மாய்க்க முயன்றார். அப்போது முருகப் பெருமான் நேரில் தோன்றி அவரைத் தாங்கித் தடுத்து ஆட்கொண்டார்.</p>' +
+        '<h4>காப்புச் சொற்களும் ஞானமும்:</h4>' +
+        '<p>முருகப் பெருமான் தனது வேலால் அருணகிரிநாதரின் நாக்கில் \'ஓம்\' என்ற பிரணவ மந்திரத்தை எழுதி, கவிபாடும் ஆற்றலையும் ஞானத்தையும் அருளினார். மேலும், "முத்தைத் தரு பத்தித் திருநகை..." என்ற முதல் பாடலின் அடியைக் கொடுத்து, "இந்தப் பாடலைப் பாடி என் புகழைப் பரப்பு" என்று கட்டளையிட்டார்.</p>' +
+        '<p>இவ்வாறு இறைவனின் திருவருளாலும், அருணகிரிநாதரின் இணையற்ற தமிழ்ப் புலமையாலும் உருவானதே புகழ்பெற்ற \'திருப்புகழ்\' ஆகும். சந்த நயங்கள் நிறைந்த இந்நூல், தமிழ் இலக்கியத்திற்குப் பெருமை சேர்க்கும் ஒப்பற்ற இசைக் குவியலாகும்.</p>',
       greetingMainHtml: '<strong>வணக்கம், பக்தர்களே.</strong> முனிவர் அருணகிரிநாதர் அருளிய திருப்புகழ் பாடல்களை தமிழில் படியுங்கள், அவற்றின் பொருளையும் தெரிந்துகொள்ளுங்கள். கீழே உள்ள பாடல்களில் ஒன்றைத் தொட்டு முழுமையாகப் படிக்கலாம். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.',
       greetingEnText: "(Greetings, devotees. Read the Thiruppugazh songs composed by Saint Arunagirinathar in Tamil, and learn their meaning. Tap any song below to read it in full. Use the A / A+ / A++ buttons above to make the text larger.)"
     },
@@ -1445,6 +1523,10 @@
       cardBlurbTamil: "சூரபத்மனை வென்ற வேலனை போற்றும் ஒரே ஒரு முழுமையான காவல் பனுவல்.",
       cardBlurbEn: "One single, complete hymn of protection praising Murugan's victory over Soorapadman.",
       icon: "🛡️",
+      // A simplified Vel (Lord Muruga's spear) — this text is one single
+      // protective "armour" hymn, so its Table-of-Contents card carries the
+      // Vel rather than the generic peacock/lotus marks used elsewhere.
+      iconHtml: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2 L15.4 8.4 L12 11.8 L8.6 8.4 Z" fill="currentColor"/><line x1="12" y1="11.8" x2="12" y2="21.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><line x1="7.8" y1="17" x2="16.2" y2="17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
       pageTitle: "கந்தர் சஷ்டி கவசம் — Kandha Sashti Kavacham",
       // This is one single, complete text (not a browsable collection of many
       // songs), so the public side skips the search/grid step entirely and
@@ -1455,7 +1537,16 @@
       // used for every other collection.
       singleContentMode: true,
       greetingMainHtml: '<strong>வணக்கம், பக்தர்களே.</strong> தேவராய சுவாமிகள் அருளிய கந்தர் சஷ்டி கவசத்தை தமிழில் கீழே படிக்கலாம், அதன் பொருளையும் தெரிந்துகொள்ளலாம். இது ஒரே ஒரு முழுமையான காப்புப் பனுவல் என்பதால், இப்பக்கமே நேரடியாகத் திறக்கும். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.',
-      greetingEnText: "(Greetings, devotees. Read the Kandha Sashti Kavacham composed by Sri Devaraya Swamigal in Tamil below, along with its meaning. As this is one single, complete protective hymn, it opens directly on this page. Use the A / A+ / A++ buttons above to make the text larger.)"
+      greetingEnText: "(Greetings, devotees. Read the Kandha Sashti Kavacham composed by Sri Devaraya Swamigal in Tamil below, along with its meaning. As this is one single, complete protective hymn, it opens directly on this page. Use the A / A+ / A++ buttons above to make the text larger.)",
+      assistantRingText: "கந்தர் சஷ்டி கவசம் வரலாறு அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Kandha Sashti Kavacham)",
+      assistantTitle: "கந்தர் சஷ்டி கவசம்: வேலனின் காவல் பனுவல்",
+      assistantHtml:
+        '<p>கந்தர் சஷ்டி கவசம் என்பது தேவராய சுவாமிகளால் அருளப்பட்ட ஒரு காப்புப் பனுவலாகும். இது சூரபத்மனை வென்ற முருகப் பெருமானின் வீரத்தையும், அவரது வேலாயுதத்தின் அருளையும் போற்றிப் பாடும் ஒப்பற்ற காவல் மந்திரமாகும்.</p>' +
+        '<h4>காவல் நோக்கம்:</h4>' +
+        '<p>பக்தர்களைப் பகை, பயம், நோய் என்னும் தீமைகளிலிருந்து காக்கும் நோக்கத்துடன் இயற்றப்பட்ட இந்நூல், ஷஷ்டி திதியில் விரதமிருந்து பாராயணம் செய்தால் சிறப்பு பலன் தரும் என பக்தர்கள் நம்புகின்றனர்.</p>' +
+        '<h4>வேலின் சின்னம்:</h4>' +
+        '<p>முருகப் பெருமானின் வேல் அறியாமை என்னும் இருளைக் கிழித்து ஞானம் தரும் ஆயுதமாகக் கருதப்படுகிறது. அதனால்தான் இக்கவசத்தை உச்சரிப்பவர்கள் தங்களைச் சுற்றி ஒரு "வேல் காவல்" அமைவதாக உணர்கின்றனர் என பக்தி மரபு கூறுகிறது.</p>' +
+        '<p>ஒரே ஒரு முழுமையான பனுவலாக இருப்பதால், இதை தினமும் ஒரு முறையாவது பாராயணம் செய்வது சிறந்தது என பெரியோர் அறிவுறுத்துவர்.</p>'
     },
     kandharanubhuti: {
       id: "kandharanubhuti",
@@ -1467,16 +1558,27 @@
       cardBlurbTamil: "மாயையை வெல்ல அருள் வேண்டும் ஞானப் பாடல்கள்.",
       cardBlurbEn: "Verses seeking Murugan's grace and wisdom to overcome illusion (maya).",
       icon: "🪷",
+      // The Tamil letter for the sacred syllable Om — fitting for this
+      // text's theme of inner wisdom/experience (ஞானம்), and visually
+      // distinct at a glance from the Vel used for the Kavacham card.
+      iconHtml: '<span lang="ta" style="font-family:\'Noto Serif Tamil\',serif; font-weight:700; line-height:1;">ௐ</span>',
       pageTitle: "கந்தர் அநுபூதி — Kandhar Anubhuti",
       // A full multi-verse work like Thirupugazh, so it keeps the exact same
       // browsable list + search + detail schema — only the greeting text
       // below is written fresh for this text, never copied from Thirupugazh.
       singleContentMode: false,
       greetingMainHtml: '<strong>வணக்கம், பக்தர்களே.</strong> முனிவர் அருணகிரிநாதர் அருளிய கந்தர் அநுபூதி செய்யுட்களை தமிழில் படியுங்கள், அவற்றின் பொருளையும் தெரிந்துகொள்ளுங்கள். கீழே உள்ள செய்யுட்களில் ஒன்றைத் தொட்டு முழுமையாகப் படிக்கலாம். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.',
-      greetingEnText: "(Greetings, devotees. Read the Kandhar Anubhuti verses composed by Saint Arunagirinathar in Tamil, and learn their meaning. Tap any verse below to read it in full. Use the A / A+ / A++ buttons above to make the text larger.)"
+      greetingEnText: "(Greetings, devotees. Read the Kandhar Anubhuti verses composed by Saint Arunagirinathar in Tamil, and learn their meaning. Tap any verse below to read it in full. Use the A / A+ / A++ buttons above to make the text larger.)",
+      assistantRingText: "கந்தர் அநுபூதி பின்னணி அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Kandhar Anubhuti)",
+      assistantTitle: "கந்தர் அநுபூதி: ஞானம் தேடும் 51 செய்யுட்கள்",
+      assistantHtml:
+        '<p>கந்தர் அநுபூதி என்பது அருணகிரிநாதர் அருளிய 51 செய்யுட்களைக் கொண்ட ஒரு ஞானப் பனுவலாகும். திருப்புகழ் பாடல்களைப் போலவே முருகப் பெருமான் மீதான அன்பையும் சரணாகதியையும் பேசினாலும், இது மாயையை வெல்லும் அக அனுபவத்தை (அநுபூதி) மையமாகக் கொண்டது.</p>' +
+        '<h4>பொருள் சிறப்பு:</h4>' +
+        '<p>ஒவ்வொரு செய்யுளும் "ஓம்" என்ற பிரணவப் பொருளுடன் தொடங்கி, மனதை அடக்கி இறைவனை அடையும் வழியைச் சுட்டிக் காட்டுகிறது. அகங்காரம், மாயை போன்ற தடைகளை நீக்கி ஞானம் பெற வேண்டும் என்ற வேண்டுகோளாக இச்செய்யுட்கள் அமைந்துள்ளன.</p>' +
+        '<h4>பாராயண பலன்:</h4>' +
+        '<p>இச்செய்யுட்களை தினமும் ஓதுவது மனத் தெளிவையும், இறை நெருக்கத்தையும் தரும் என பக்தி மரபில் போற்றப்படுகிறது.</p>'
     }
   };
-  // Order shown in the collections table of contents.
   var COLLECTION_ORDER = ["thirupugazh","kandhasashti","kandharanubhuti"];
   var COLLECTION_KEY = "thirupugazh_collection_v1";
   var currentCollection = COLLECTIONS.thirupugazh;
@@ -1503,6 +1605,20 @@
     if(introEn) introEn.textContent = coll.greetingEnText;
     var searchRow = $("searchRow");
     if(searchRow) searchRow.classList.toggle("hidden", !!coll.singleContentMode);
+    // Keep the floating peacock assistant in sync with whichever collection
+    // is active — previously it always showed the Thirupugazh origin-story
+    // snippet no matter which text was open; now each collection supplies
+    // its own ring caption, popup title, and popup body (see COLLECTIONS).
+    var ringTextPath = document.getElementById("peacockRingTextPath");
+    if(ringTextPath && coll.assistantRingText){
+      ringTextPath.textContent = coll.assistantRingText + " \u2022 " + coll.assistantRingText + " \u2022 ";
+    }
+    var peacockBtnEl = $("peacockBtn");
+    if(peacockBtnEl && coll.assistantRingText) peacockBtnEl.setAttribute("aria-label", coll.assistantRingText);
+    var cloudTitleEl = $("peacockCloudTitle");
+    if(cloudTitleEl && coll.assistantTitle) cloudTitleEl.textContent = coll.assistantTitle;
+    var cloudBodyEl = $("peacockCloudBody");
+    if(cloudBodyEl && coll.assistantHtml) cloudBodyEl.innerHTML = coll.assistantHtml;
     var backLabel = $("backToListLabel"), backLabelEn = $("backToListLabelEn");
     if(coll.singleContentMode){
       if(backLabel) backLabel.textContent = "தொகுப்புகளுக்குத் திரும்பு";
@@ -1515,6 +1631,25 @@
       songs = [];
       currentSearch = "";
       var si = $("searchInput"); if(si) si.value = "";
+      // Fixes the "flash of the previous collection's content": Firestore
+      // data for the newly chosen collection only arrives asynchronously
+      // (see startListening's onSnapshot below), so without this the old
+      // collection's song grid / reading view would still be sitting on
+      // screen — briefly showing e.g. Thirupugazh songs right after picking
+      // Kandha Sashti Kavacham. Clearing to a themed "loading" placeholder
+      // here (synchronously, before the network reply) means visitors only
+      // ever see either nothing-yet or the correct collection, never a
+      // flash of the wrong one.
+      var grid = $("songGrid");
+      if(grid){
+        grid.innerHTML =
+          '<div class="empty-state" style="grid-column:1/-1;">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>' +
+            '<p>ஏற்றுகிறது… <span class="en-tag">(Loading ' + escapeHtml(coll.titleEn) + '…)</span></p>' +
+          '</div>';
+      }
+      var card = $("detailCard");
+      if(card) card.innerHTML = "";
       startListening();
     }
   }
@@ -1525,10 +1660,12 @@
     grid.innerHTML = COLLECTION_ORDER.map(function(id){
       var c = COLLECTIONS[id];
       return '' +
-        '<button type="button" class="song-card" role="listitem" data-collection-id="' + c.id + '" style="align-items:flex-start;">' +
-          '<div class="tamil-title">' + c.icon + '&nbsp; ' + escapeHtml(c.titleTamil) + '</div>' +
+        '<button type="button" class="song-card toc-card" role="listitem" data-collection-id="' + c.id + '" style="align-items:flex-start;">' +
+          '<div class="toc-icon-badge" aria-hidden="true">' + (c.iconHtml || c.icon) + '</div>' +
+          '<div class="tamil-title">' + escapeHtml(c.titleTamil) + '</div>' +
           '<div class="en-title">' + escapeHtml(c.titleEn) + '</div>' +
           '<div class="excerpt">' + escapeHtml(c.cardBlurbTamil) + '<br><span class="en-tag">' + escapeHtml(c.cardBlurbEn) + '</span></div>' +
+          '<span class="toc-cta">👉 திறக்க தொடவும் <span class="en-tag" style="color:inherit;">(Tap to open)</span></span>' +
         '</button>';
     }).join("");
     Array.prototype.forEach.call(grid.querySelectorAll("[data-collection-id]"), function(card){
@@ -1669,34 +1806,56 @@
     ["view-toc","view-list","view-detail","view-admin"].forEach(function(id){
       $(id).classList.toggle("hidden", id !== ("view-" + name));
     });
-    // The floating peacock assistant belongs on the main song-list page
-    // only — keep it out of the way on the detail/reading view, the
-    // collections home, and the admin dashboard so it never covers other
-    // controls.
+    // The floating peacock assistant belongs on the main reading page only
+    // — keep it out of the way on the collections home and the admin
+    // dashboard so it never covers other controls. It normally hides on
+    // the detail/reading view too, EXCEPT for a single-content collection
+    // (e.g. Kandha Sashti Kavacham), whose only public page *is* the detail
+    // view (it has no separate list step) — so it must show there, with
+    // that collection's own snippet, or the assistant would never appear
+    // for that text at all.
     var assistant = document.getElementById("peacockAssistant");
-    if(assistant){ assistant.classList.toggle("assistant-hidden", name !== "list"); }
+    if(assistant){
+      var showAssistant = (name === "list") ||
+        (name === "detail" && currentCollection && currentCollection.singleContentMode);
+      assistant.classList.toggle("assistant-hidden", !showAssistant);
+    }
     window.scrollTo({top:0, behavior:"smooth"});
   }
   $("brandHome").addEventListener("click", function(){ showView("list"); });
   $("brandHome").addEventListener("keydown", function(e){
     if(e.key === "Enter" || e.key === " "){ e.preventDefault(); showView("list"); }
   });
-  $("libraryBtn").addEventListener("click", function(){
+  // The header normally shows whichever collection is currently active
+  // (e.g. "திருப்புகழ்"), which is confusing while a visitor is still on
+  // the Table of Contents choosing a text — it looks like Thirupugazh is
+  // already selected. So the header gets this neutral, overarching title
+  // (matching the ToC page's own heading) and a neutral colour theme
+  // whenever the Table of Contents itself is showing.
+  function showTocHome(){
+    document.documentElement.removeAttribute("data-collection");
+    document.title = "முருகப் பெருமான் பக்தி நூல்கள் | Lord Muruga Devotional Contents";
+    var titleEl = $("brandTitle"), subEl = $("brandSubtitle");
+    if(titleEl) titleEl.textContent = "முருகப் பெருமான் பக்தி நூல்கள்";
+    if(subEl) subEl.textContent = "Lord Muruga Devotional Contents in Tamil ";
     renderCollectionGrid();
     showView("toc");
-  });
+  }
+  $("libraryBtn").addEventListener("click", showTocHome);
 
-  /* ---------- Collections: bring up the saved / default repository ----------
-     Existing bookmarks and returning visitors land straight on the
-     Thirupugazh song list exactly as before (nothing changes for them);
-     only a brand-new visitor sees the collections table of contents first,
-     so they can pick which sacred text to read. */
+  /* ---------- Collections: always land on the Table of Contents first ----------
+     After the splash screen, the app's default first page is always the
+     Main Table of Contents ("முருகப் பெருமான் பக்தி நூல்கள் — Lord Muruga
+     Devotional Contents in Tamil") — every visitor, new or returning,
+     chooses a text from here each time; nothing is auto-opened from a
+     remembered previous visit. Picking a card still remembers that choice
+     (see applyCollection/localStorage below) purely so the admin panel and
+     other in-page conveniences keep working as before. */
   (function initCollection(){
     var savedId = localStorage.getItem(COLLECTION_KEY);
-    var coll = COLLECTIONS[savedId] || COLLECTIONS.thirupugazh;
-    applyCollection(coll, {skipReload:true});
-    renderCollectionGrid();
-    showView(savedId ? "list" : "toc");
+    currentCollection = COLLECTIONS[savedId] || COLLECTIONS.thirupugazh;
+    songsRef = db.collection(currentCollection.firestoreCollection);
+    showTocHome();
   })();
 
   /* ---------- Public song list ---------- */
@@ -2132,8 +2291,7 @@
     // to go back to, so its "back" button returns to the collections home
     // instead — the one and only extra tap a senior devotee ever needs.
     if(currentCollection.singleContentMode){
-      renderCollectionGrid();
-      showView("toc");
+      showTocHome();
       return;
     }
     // Going back always returns to the regular, unfiltered list — not the
