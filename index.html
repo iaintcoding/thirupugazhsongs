@@ -920,16 +920,27 @@
   .splash-word{
     /* Sits below the artwork, centered, rather than overlapping the
        peacock — a caption under the image instead of on top of it. */
-    position:absolute; bottom:-2.5rem; left:50%; transform:translateX(-50%);
-    font-family:'Noto Serif Tamil',serif; font-weight:700; font-size:clamp(1.5rem,6vw,2.4rem);
-    color:#F2C879; text-shadow:0 0 18px rgba(242,200,121,.65); opacity:0;
-    white-space:nowrap; letter-spacing:.02em; visibility:hidden;
+    position:absolute; top:100%; margin-top:.85rem; left:50%; transform:translateX(-50%);
+    width:max-content; max-width:90vw; text-align:center;
+    font-family:'Noto Serif Tamil',serif; font-weight:700; font-size:clamp(1.05rem,4.2vw,1.8rem);
+    line-height:1.3; opacity:0;
+    /* Peacock-feather palette gradient across the text (emerald → blue →
+       indigo → gold), instead of a single flat gold tone. */
+    background:linear-gradient(90deg,
+      var(--color-peacock-emerald) 0%,
+      var(--color-peacock-blue) 35%,
+      var(--color-peacock-indigo) 65%,
+      var(--color-gold-soft) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 14px rgba(242,200,121,.5));
+    letter-spacing:.02em; visibility:hidden;
     transition:opacity 1.3s cubic-bezier(.2,.7,.2,1);
   }
   .splash-word.font-ready{ visibility:visible; }
   .splash-word.word-in{ opacity:1; }
   .splash-progress-wrap{
-    position:absolute; bottom:-5.4rem; left:50%; transform:translateX(-50%);
+    position:absolute; bottom:-7.6rem; left:50%; transform:translateX(-50%);
     width:min(220px,70vw); text-align:center;
   }
   /* Small "ஓம்" glyphs that drift gently upward around the peacock for a
@@ -1057,7 +1068,7 @@
         <polygon points="150,80 155,59 156,78" fill="var(--color-gold-soft)"/>
       </g>
     </svg>
-    <div class="splash-word">திருப்புகழ்</div>
+    <div class="splash-word">முருகப் பெருமான் பக்தி நூல்கள்</div>
     <div class="splash-progress-wrap">
       <div class="splash-bar-track"><div class="splash-bar-fill" id="splashBarFill"></div></div>
       <div class="splash-percent" id="splashPercent">0%</div>
@@ -1199,6 +1210,18 @@
 
   <!-- VIEW: SONG DETAIL -->
   <section id="view-detail" class="hidden">
+    <!-- Single-content collections (e.g. Kandha Sashti Kavacham) have no
+         separate browsing/list step — this page IS their home — so the
+         same welcoming introduction shown at the top of the list page for
+         browsable collections (Thirupugazh, Kandhar Anubhuti) is shown here
+         instead, right above the reading view. Populated in applyCollection
+         alongside the list page's own intro-note, and stays hidden for
+         ordinary multi-song collections since they already show theirs on
+         the list page. -->
+    <div class="intro-note" id="detailIntroNote" hidden>
+      🙏 <span id="detailIntroMainText"></span>
+      <div class="en-tag" id="detailIntroEnText" style="margin-top:.5rem;"></div>
+    </div>
     <div class="detail-toolbar">
       <button type="button" class="btn btn-ghost btn-sm" id="backToListBtn">&larr; <span id="backToListLabel">எல்லா பாடல்களுக்கும் திரும்பு</span> <span class="en-tag" id="backToListLabelEn">(Back to all songs)</span></button>
       <div style="display:flex; gap:.5rem;">
@@ -1603,6 +1626,16 @@
     var introMain = $("introMainText"), introEn = $("introEnText");
     if(introMain) introMain.innerHTML = coll.greetingMainHtml;
     if(introEn) introEn.textContent = coll.greetingEnText;
+    // Mirror the same greeting into the detail view's own intro-note (only
+    // ever shown there for singleContentMode collections — see its markup
+    // in view-detail) so a text like Kandha Sashti Kavacham, whose only
+    // public page is the reading view itself, still greets visitors the
+    // same way Thirupugazh/Kandhar Anubhuti do on their list page.
+    var detailIntroMain = $("detailIntroMainText"), detailIntroEn = $("detailIntroEnText");
+    if(detailIntroMain) detailIntroMain.innerHTML = coll.greetingMainHtml;
+    if(detailIntroEn) detailIntroEn.textContent = coll.greetingEnText;
+    var detailIntroNote = $("detailIntroNote");
+    if(detailIntroNote) detailIntroNote.hidden = !coll.singleContentMode;
     var searchRow = $("searchRow");
     if(searchRow) searchRow.classList.toggle("hidden", !!coll.singleContentMode);
     // Keep the floating peacock assistant in sync with whichever collection
@@ -1822,9 +1855,22 @@
     }
     window.scrollTo({top:0, behavior:"smooth"});
   }
-  $("brandHome").addEventListener("click", function(){ showView("list"); });
+  // Clicking the site logo/title should return to whatever counts as "home"
+  // for the collection currently open. For a normal, browsable collection
+  // that's simply its song grid (already rendered, so showView is enough).
+  // But a "single content" collection (e.g. Kandha Sashti Kavacham) has no
+  // grid at all — view-list is just its static greeting card with nothing
+  // else in it — so switching to "list" without also re-rendering left a
+  // permanently blank page (the greeting showed, but the actual hymn text
+  // never reappeared). Re-running renderSongList() here makes it reopen the
+  // reading view immediately, exactly like it does on first arriving.
+  function goToCollectionHome(){
+    showView("list");
+    renderSongList();
+  }
+  $("brandHome").addEventListener("click", goToCollectionHome);
   $("brandHome").addEventListener("keydown", function(e){
-    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); showView("list"); }
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); goToCollectionHome(); }
   });
   // The header normally shows whichever collection is currently active
   // (e.g. "திருப்புகழ்"), which is confusing while a visitor is still on
@@ -1927,7 +1973,32 @@
     // open, so a background data sync can't yank them out of it.
     var listSection = $("view-list");
     var listIsActive = listSection && !listSection.classList.contains("hidden");
-    if(listIsActive){ openDetail(visible[0].id); }
+    if(!listIsActive) return;
+    // A "single content" collection is meant to read as ONE unbroken text
+    // (e.g. Kandha Sashti Kavacham's காப்பு invocation followed by its
+    // துதி verses), but nothing stops the admin from having entered it as
+    // more than one Firestore entry. Previously only the very first entry
+    // (visible[0]) was ever opened here, so anything added after it — like
+    // "துதிப்போர்க்கு வல்வினை போம்..." — silently never appeared. Merge
+    // every published entry, in creation order, into one combined reading
+    // view so the whole text always shows, however many entries it's
+    // stored as.
+    if(visible.length === 1){
+      openDetail(visible[0].id);
+      return;
+    }
+    var mergedSong = {
+      id: visible[0].id,
+      titleTamil: currentCollection.titleTamil,
+      titleEn: currentCollection.titleEn,
+      place: visible[0].place,
+      published: true,
+      views: visible.reduce(function(sum, s){ return sum + (s.views || 0); }, 0),
+      lyrics: visible.map(function(s){ return (s.lyrics || "").trim(); }).filter(Boolean).join("\n\n"),
+      translit: visible.map(function(s){ return (s.translit || "").trim(); }).filter(Boolean).join("\n\n"),
+      meaning: visible.map(function(s){ return (s.meaning || "").trim(); }).filter(Boolean).join("\n\n")
+    };
+    openDetail(mergedSong.id, mergedSong);
   }
   var searchDebounceTimer = null;
   $("searchInput").addEventListener("input", function(e){
@@ -2263,10 +2334,17 @@
 
   /* ---------- Song detail ---------- */
   var activeSongId = null;
-  function openDetail(id){
-    var song = songs.find(function(s){ return s.id === id; });
+  // Holds the exact object currently rendered in the detail view. Normally
+  // this is just the matching entry from `songs`, but for a single-content
+  // collection (see renderSingleContentView) it can be a combined object
+  // merging more than one Firestore entry — so listen/share/print always
+  // act on everything that's actually on screen, not just the first entry.
+  var activeDetailSong = null;
+  function openDetail(id, songOverride){
+    var song = songOverride || songs.find(function(s){ return s.id === id; });
     if(!song) return;
     activeSongId = id;
+    activeDetailSong = song;
     recordSongView(id);
     var card = $("detailCard");
     card.innerHTML =
@@ -2306,7 +2384,7 @@
   $("printBtn").addEventListener("click", function(){ window.print(); });
   $("listenBtn").addEventListener("click", function(){
     if(!activeSongId) return;
-    var song = songs.find(function(s){ return s.id === activeSongId; });
+    var song = activeDetailSong || songs.find(function(s){ return s.id === activeSongId; });
     if(!song) return;
     if(!("speechSynthesis" in window)){
       showToast("மன்னிக்கவும், இந்த உலாவி எழுத்தை உரக்கப் படிக்க முடியாது. (Sorry, this browser cannot read text aloud.)");
@@ -2369,7 +2447,7 @@
   }
 
   function currentShareSong(){
-    return songs.find(function(s){ return s.id === activeSongId; });
+    return activeDetailSong || songs.find(function(s){ return s.id === activeSongId; });
   }
 
   function setShareStatus(msg){
@@ -2600,7 +2678,7 @@
 
   $("logoutBtn").addEventListener("click", function(){
     auth.signOut().then(function(){
-      showView("list");
+      goToCollectionHome();
       showToast("நீங்கள் வெளியேறிவிட்டீர்கள். (You have logged out.)");
     });
   });
