@@ -392,6 +392,85 @@
     font-size:.86rem; font-weight:700; color:var(--color-teal);
   }
 
+  /* ---------- Table of Contents page: its own colour scheme ----------
+     Kept separate from the maroon/gold theme used inside each topic, and
+     separate from the palette of every individual topic card below, so the
+     "front door" page always looks calm and distinct from whichever topic
+     a visitor later opens. */
+  :root{
+    --toc-page-bg-a:#EEF2FB;
+    --toc-page-bg-b:#F8F3E8;
+    --toc-page-border:#C9D2EE;
+    --toc-page-accent:#3B3F8C;
+    --toc-page-accent-dark:#262A63;
+  }
+  html[data-theme="dark"]{
+    --toc-page-bg-a:#1D2038;
+    --toc-page-bg-b:#241E17;
+    --toc-page-border:#3E4270;
+    --toc-page-accent:#9EA2E6;
+    --toc-page-accent-dark:#D6D8F7;
+  }
+  #view-toc{
+    background:linear-gradient(160deg, var(--toc-page-bg-a), var(--toc-page-bg-b));
+    border:1px solid var(--toc-page-border); border-radius:1.4rem;
+    padding:1.6rem 1.1rem 2rem; margin-bottom:1rem;
+  }
+  #view-toc .toc-title{ color:var(--toc-page-accent-dark); }
+  #view-toc .intro-note{
+    background:transparent; border-left-color:var(--toc-page-accent);
+    color:var(--color-text);
+  }
+
+  /* ---------- Per-topic colour palettes for the Table of Contents cards ----------
+     Each topic already has its own two-colour brand palette (a "maroon"
+     role colour + a "teal" role colour) plus a lightened dark-mode version
+     of that same palette — see the html[data-collection="..."] rules
+     earlier in this file, which is exactly "2 different colour themes,
+     multi-colour palette" per topic (its light theme and its dark theme).
+     Those variables only switch on once a topic is opened, though, so the
+     Table of Contents cards below repeat each topic's own two colours
+     directly, so every card already looks like its topic before it is
+     even opened — and still not the same as the Table of Contents page's
+     own indigo colour scheme above. */
+
+  /* திருப்புகழ் (Thirupugazh) — its own red/maroon + teal palette (the
+     site's default colours, since this is the site's main/original text). */
+  .toc-card[data-collection-id="thirupugazh"]{ border-top:4px solid #0E6B5C; }
+  .toc-card[data-collection-id="thirupugazh"] .toc-icon-badge{
+    background:linear-gradient(160deg, #8C2F39, #6B222A);
+  }
+  .toc-card[data-collection-id="thirupugazh"] .toc-cta{ color:#0E6B5C; }
+  html[data-theme="dark"] .toc-card[data-collection-id="thirupugazh"]{ border-top-color:#48AE96; }
+  html[data-theme="dark"] .toc-card[data-collection-id="thirupugazh"] .toc-cta{ color:#6FCBB4; }
+  html[data-theme="dark"] .toc-card[data-collection-id="thirupugazh"] .toc-icon-badge{
+    background:linear-gradient(160deg, #CE717A, #E3A6AC); color:#3A2410;
+  }
+
+  /* கந்தர் சஷ்டி கவசம் (Kandha Sashti Kavacham) — its own green/teal palette. */
+  .toc-card[data-collection-id="kandhasashti"]{ border-top:4px solid #155E75; }
+  .toc-card[data-collection-id="kandhasashti"] .toc-icon-badge{
+    background:linear-gradient(160deg, #1F7A4E, #155C3B);
+  }
+  .toc-card[data-collection-id="kandhasashti"] .toc-cta{ color:#155E75; }
+  html[data-theme="dark"] .toc-card[data-collection-id="kandhasashti"]{ border-top-color:#55ABCC; }
+  html[data-theme="dark"] .toc-card[data-collection-id="kandhasashti"] .toc-cta{ color:#7FC3DC; }
+  html[data-theme="dark"] .toc-card[data-collection-id="kandhasashti"] .toc-icon-badge{
+    background:linear-gradient(160deg, #54BF90, #83D2AC); color:#0C2A1C;
+  }
+
+  /* கந்தர் அநுபூதி (Kandhar Anubhuti) — its own blue/teal palette. */
+  .toc-card[data-collection-id="kandharanubhuti"]{ border-top:4px solid #1F7A5C; }
+  .toc-card[data-collection-id="kandharanubhuti"] .toc-icon-badge{
+    background:linear-gradient(160deg, #1D5FA8, #154272);
+  }
+  .toc-card[data-collection-id="kandharanubhuti"] .toc-cta{ color:#1F7A5C; }
+  html[data-theme="dark"] .toc-card[data-collection-id="kandharanubhuti"]{ border-top-color:#54BF90; }
+  html[data-theme="dark"] .toc-card[data-collection-id="kandharanubhuti"] .toc-cta{ color:#83D2AC; }
+  html[data-theme="dark"] .toc-card[data-collection-id="kandharanubhuti"] .toc-icon-badge{
+    background:linear-gradient(160deg, #4E90D2, #7FB3E8); color:#0E2A47;
+  }
+
   .empty-state{
     text-align:center; padding:3rem 1.5rem; background:var(--color-bg-card);
     border:1px dashed var(--color-border); border-radius:var(--radius); color:var(--color-text-soft);
@@ -816,6 +895,72 @@
   }
   .theme-toggle:hover, .theme-toggle:focus-visible{ background:var(--color-gold-soft); outline:none; }
   .theme-toggle:active{ transform:scale(.93); }
+  /* Bigger, higher-contrast circle so the sun/moon icon stays easy to see
+     and to tap for visitors who are not comfortable with small icon-only
+     controls (older phones / senior citizens / low vision). */
+  .theme-toggle{ width:2.9rem; height:2.9rem; font-size:1.35rem; }
+  html[data-theme="dark"] .theme-toggle{
+    background:var(--color-bg-card); border-color:var(--color-gold);
+    color:var(--color-gold-soft);
+    box-shadow:0 0 0 2px rgba(217,175,95,0.25);
+  }
+
+  /* ---------- "Contents" button (replaces the plain 📚 icon-only button) ----------
+     Non-technical / senior visitors could not tell what a small book emoji
+     did on its own, so this button now always shows a plain-language label
+     ("தொகுப்புகள் / Contents") next to the icon, and is sized like a real
+     button rather than a tiny icon, so its purpose and its tap target are
+     both obvious at a glance. */
+  .toc-nav-btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    height:2.9rem; padding:0 1rem 0 .7rem; border-radius:999px;
+    border:1.5px solid var(--color-gold); background:var(--color-gold-soft);
+    color:var(--color-maroon-dark); cursor:pointer; white-space:nowrap;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .toc-nav-btn-icon{ font-size:1.4rem; line-height:1; }
+  .toc-nav-btn-label{
+    font-family:'Noto Sans Tamil','Inter',sans-serif; font-weight:700;
+    font-size:.82rem; line-height:1.15; text-align:left;
+  }
+  .toc-nav-btn-label .en-tag{ font-size:.72rem; font-weight:600; opacity:.9; }
+  .toc-nav-btn:hover, .toc-nav-btn:focus-visible{ background:var(--color-gold); color:#fff; outline:none; }
+  .toc-nav-btn:active{ transform:scale(.96); }
+  html[data-theme="dark"] .toc-nav-btn{
+    background:var(--color-maroon); color:#FFF6E2; border-color:var(--color-gold);
+  }
+  html[data-theme="dark"] .toc-nav-btn:hover, html[data-theme="dark"] .toc-nav-btn:focus-visible{
+    background:var(--color-maroon-dark); color:#FFF6E2;
+  }
+  @media (max-width:420px){
+    .toc-nav-btn{ padding:0 .7rem 0 .55rem; }
+    .toc-nav-btn-label{ font-size:.7rem; }
+  }
+
+  /* ---------- Dark-mode fix: hover states that used to go "light-on-light" ----------
+     A few hover/focus states below were written with one fixed light colour
+     (a tan/gold highlight) while leaving the icon/text colour unchanged.
+     In light mode that text colour is a dark maroon, so it read fine — but
+     in dark mode that same text colour variable turns pale pink/gold, which
+     landed on top of the same light highlight and became very hard to read
+     for anyone, especially senior visitors relying on the icon buttons
+     (voice search, font size, dark/light toggle, ghost buttons such as
+     "Copy text"). These rules only apply in dark mode and only swap the
+     colour, so light mode is completely unchanged. */
+  html[data-theme="dark"] .fontctl button:hover,
+  html[data-theme="dark"] .fontctl button:focus-visible{
+    background:var(--color-hover-bg); color:var(--color-hover-text);
+  }
+  html[data-theme="dark"] .theme-toggle:hover,
+  html[data-theme="dark"] .theme-toggle:focus-visible{
+    background:var(--color-hover-bg); color:var(--color-hover-text);
+  }
+  html[data-theme="dark"] .mic-btn:hover{
+    background:var(--color-hover-bg); color:var(--color-hover-text);
+  }
+  html[data-theme="dark"] .btn-ghost:hover{
+    background:var(--color-hover-bg); color:var(--color-hover-text);
+  }
 </style>
 
 <!-- ===== Splash screen (self-contained: does not touch any existing styles) ===== -->
@@ -1164,7 +1309,10 @@
       </div>
     </div>
     <div class="header-controls">
-      <button type="button" class="theme-toggle" id="libraryBtn" title="தொகுப்புகள் (Collections)" aria-label="View all collections">📚</button>
+      <button type="button" class="toc-nav-btn" id="libraryBtn" title="தொகுப்புகள் பட்டியலுக்குச் செல்ல (Go to list of all books)" aria-label="தொகுப்புகள் - Contents - go to the list of all books">
+        <span class="toc-nav-btn-icon" aria-hidden="true">📖</span>
+        <span class="toc-nav-btn-label">தொகுப்புகள்<span class="en-tag" style="display:block; color:inherit;">Contents</span></span>
+      </button>
       <div class="fontctl" role="group" aria-label="Adjust text size">
         <button type="button" id="fontSmallBtn" title="Normal text size">A</button>
         <button type="button" id="fontMedBtn" title="Large text size">A+</button>
