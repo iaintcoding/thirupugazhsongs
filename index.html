@@ -1931,13 +1931,10 @@
   });
   recordSiteVisit();
 
-  var viewedThisSession = {};
   function recordSongView(id){
-    // One increment per song per browser tab session, so re-opening the
-    // same song repeatedly (e.g. flipping back and forth) does not inflate
-    // its count.
-    if(viewedThisSession[id]) return;
-    viewedThisSession[id] = true;
+    // Every open counts: no per-session flag, no dedup of any kind — each
+    // click, standard refresh, or hard refresh increments the song's global
+    // "views" field in Firestore straight away.
     songsRef.doc(id).update({
       views: firebase.firestore.FieldValue.increment(1)
     }).catch(function(err){
