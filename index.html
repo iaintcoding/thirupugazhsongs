@@ -963,6 +963,197 @@
   }
 </style>
 
+<!-- ===== Accent theme customizer (self-contained; does not touch app/Firebase logic) =====
+     Lets each visitor pick their own THREE-colour palette for the site
+     (like Chrome's "Customize" colour picker), independent of the built-in
+     per-collection theme. Nothing here changes any existing variable's
+     default value — it only ever *overrides*, once a visitor deliberately
+     picks a swatch: --color-maroon / -maroon-dark (colour 1 — primary
+     buttons/headings), --color-teal / -teal-dark (colour 2 — secondary
+     buttons/links), and, newly, --color-bg-card / --color-text /
+     --color-text-soft / --color-peacock-blue / -indigo / -emerald (colour
+     3 — card backgrounds, body text, label text and the floating bot).
+     "Reset to default" removes every override. Every shade actually used
+     on screen (light-mode tint, dark-mode tint, text-safe darkened/
+     lightened versions, etc.) is derived automatically from the 3 chosen
+     colours (see the script block near the end of <body>) so contrast
+     stays balanced and readable in both light and dark mode, whatever
+     colours were picked. -->
+<style>
+  .accent-picker-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:2.9rem; height:2.9rem; border-radius:50%;
+    border:1.5px solid var(--color-border); background:var(--color-bg-card);
+    color:var(--color-maroon-dark); cursor:pointer; font-size:1.3rem; padding:0;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .accent-picker-btn:hover, .accent-picker-btn:focus-visible{ background:var(--color-gold-soft); outline:none; }
+  .accent-picker-btn:active{ transform:scale(.93); }
+  html[data-theme="dark"] .accent-picker-btn{
+    background:var(--color-bg-card); border-color:var(--color-gold); color:var(--color-gold-soft);
+    box-shadow:0 0 0 2px rgba(217,175,95,0.25);
+  }
+  html[data-theme="dark"] .accent-picker-btn:hover, html[data-theme="dark"] .accent-picker-btn:focus-visible{
+    background:var(--color-hover-bg); color:var(--color-hover-text);
+  }
+
+  /* ---- Floating, movable, resizable panel (no dimming overlay, page stays visible and usable) ---- */
+  .accent-overlay{
+    position:fixed; inset:0; z-index:10000; pointer-events:none; background:none;
+    visibility:hidden; opacity:0; transition:opacity .2s ease, visibility 0s linear .2s;
+  }
+  .accent-overlay.open{ visibility:visible; opacity:1; transition:opacity .2s ease; }
+  .accent-panel{
+    position:fixed; pointer-events:auto; display:flex; flex-direction:column;
+    left:auto; top:80px; right:16px; width:390px; height:min(74vh,640px);
+    min-width:280px; min-height:240px; max-width:100vw; max-height:100vh;
+    background:var(--color-bg-card); color:var(--color-text);
+    border:1.5px solid var(--color-border); border-radius:18px; overflow:hidden;
+    box-shadow:0 18px 50px rgba(0,0,0,0.35);
+  }
+  .accent-panel.minimized{ height:auto !important; min-height:0; }
+  .accent-panel.minimized .accent-body, .accent-panel.minimized .accent-resize{ display:none; }
+  .accent-panel.dragging, .accent-panel.resizing{ user-select:none; -webkit-user-select:none; }
+  .accent-head{
+    display:flex; align-items:center; gap:.5rem; padding:.7rem .8rem .7rem 1rem;
+    cursor:grab; touch-action:none; border-bottom:1px solid var(--color-border);
+    background:linear-gradient(180deg, var(--color-bg-card), var(--color-bg));
+    flex:0 0 auto;
+  }
+  .accent-panel.dragging .accent-head{ cursor:grabbing; }
+  .accent-grip{ color:var(--color-text-soft); font-size:1.1rem; letter-spacing:-2px; line-height:1; }
+  #accentPanelTitle{
+    font-family:'Fraunces','Noto Serif Tamil',serif; color:var(--color-maroon-dark);
+    margin:0; font-size:1rem; line-height:1.25; flex:1 1 auto; min-width:0;
+  }
+  .accent-head-btn{
+    flex:0 0 auto; width:2rem; height:2rem; border-radius:50%;
+    border:1.5px solid var(--color-border); background:transparent; color:var(--color-text);
+    cursor:pointer; font-size:.95rem; line-height:1; padding:0;
+  }
+  .accent-head-btn:hover, .accent-head-btn:focus-visible{ background:var(--color-gold-soft); color:#3A2410; outline:none; }
+  .accent-body{ flex:1 1 auto; overflow-y:auto; padding:.8rem 1rem 1rem; min-height:0; }
+  .accent-resize{
+    position:absolute; right:0; bottom:0; width:22px; height:22px; cursor:nwse-resize; touch-action:none;
+    background:linear-gradient(135deg, transparent 0 50%, var(--color-text-soft) 50% 56%, transparent 56% 66%, var(--color-text-soft) 66% 72%, transparent 72% 82%, var(--color-text-soft) 82% 88%, transparent 88%);
+    border-bottom-right-radius:16px; opacity:.6;
+  }
+  .accent-resize:hover{ opacity:1; }
+
+  .accent-panel-hint{ color:var(--color-text-soft); font-size:.78rem; line-height:1.5; margin:0 0 .7rem; }
+  .accent-panel-hint .en-tag{ display:block; margin-top:.15rem; }
+
+  /* Current palette strip */
+  .ch-current{ display:flex; align-items:center; gap:.6rem; margin-bottom:.7rem; font-size:.75rem; color:var(--color-text-soft); }
+  .ch-strip{ display:flex; flex:1; height:1.6rem; border-radius:10px; overflow:hidden; border:1px solid var(--color-border); }
+  .ch-strip span{ flex:1; }
+
+  /* Color Hunt-style toolbar: New / Random / Saved + tag chips + Create */
+  .ch-tabs{ display:flex; gap:.35rem; flex-wrap:wrap; margin-bottom:.5rem; }
+  .ch-tab{
+    padding:.32rem .75rem; border-radius:999px; border:1.5px solid var(--color-border);
+    background:transparent; color:var(--color-text); font-size:.78rem; font-weight:600; cursor:pointer;
+  }
+  .ch-tab:hover, .ch-tab:focus-visible{ background:var(--color-gold-soft); color:#3A2410; outline:none; }
+  .ch-tab.active{ background:var(--color-maroon); border-color:var(--color-maroon); color:#fff; }
+  html[data-theme="dark"] .ch-tab.active{ color:#111; }
+  .ch-tags{ display:flex; gap:.35rem; overflow-x:auto; padding-bottom:.45rem; margin-bottom:.6rem; scrollbar-width:thin; }
+  .ch-tag{
+    flex:0 0 auto; padding:.22rem .65rem; border-radius:999px; border:1px solid var(--color-border);
+    background:transparent; color:var(--color-text-soft); font-size:.72rem; cursor:pointer; white-space:nowrap;
+  }
+  .ch-tag:hover, .ch-tag:focus-visible{ background:var(--color-gold-soft); color:#3A2410; outline:none; }
+  .ch-tag.active{ background:var(--color-teal); border-color:var(--color-teal); color:#fff; }
+  html[data-theme="dark"] .ch-tag.active{ color:#111; }
+
+  .accent-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(118px, 1fr)); gap:.75rem; margin-bottom:.9rem; }
+  .ch-empty{ grid-column:1/-1; text-align:center; color:var(--color-text-soft); font-size:.82rem; padding:1.2rem .5rem; }
+  .ch-card{
+    border:2px solid transparent; border-radius:14px; background:var(--color-bg);
+    padding:5px; box-shadow:var(--shadow); transition:transform .12s ease, border-color .12s ease;
+  }
+  .ch-card:hover{ transform:translateY(-2px); }
+  .ch-card.selected{ border-color:var(--color-maroon); }
+  .ch-swatches{ display:flex; flex-direction:column; height:118px; border-radius:10px; overflow:hidden; cursor:pointer; }
+  .ch-swatch{
+    flex:1; display:flex; align-items:center; justify-content:center; border:0; padding:0; margin:0;
+    font:600 .7rem/1 'Inter',system-ui,sans-serif; letter-spacing:.04em; text-transform:uppercase;
+    color:transparent; cursor:copy; transition:color .12s ease;
+  }
+  .ch-swatch:hover, .ch-swatch:focus-visible{ outline:none; color:var(--ch-ink,#fff); }
+  .ch-card-foot{ display:flex; align-items:center; justify-content:space-between; gap:.3rem; padding:.35rem .2rem .1rem; }
+  .ch-heart{ border:0; background:transparent; cursor:pointer; font-size:1.05rem; line-height:1; padding:.15rem .25rem; color:var(--color-text-soft); }
+  .ch-heart.liked{ color:#E0435A; }
+  .ch-apply{
+    border:1.5px solid var(--color-border); background:transparent; color:var(--color-maroon-dark);
+    border-radius:999px; font-size:.72rem; font-weight:700; padding:.22rem .65rem; cursor:pointer;
+  }
+  .ch-apply:hover, .ch-apply:focus-visible{ background:var(--color-maroon); color:#fff; outline:none; }
+  html[data-theme="dark"] .ch-apply:hover, html[data-theme="dark"] .ch-apply:focus-visible{ color:#111; }
+  .ch-card.selected .ch-apply{ background:var(--color-maroon); color:#fff; border-color:var(--color-maroon); }
+  html[data-theme="dark"] .ch-card.selected .ch-apply{ color:#111; }
+
+  /* Create (4 colour pickers, like colorhunt.co/create) */
+  .accent-custom-row{ margin-bottom:.9rem; padding:.75rem; border:1.5px dashed var(--color-border); border-radius:14px; }
+  .accent-custom-row.hidden{ display:none; }
+  .ch-create-cols{ display:grid; grid-template-columns:repeat(auto-fit, minmax(74px, 1fr)); gap:.6rem; }
+  .ch-create-cols label{ display:flex; flex-direction:column; gap:.3rem; font-size:.72rem; color:var(--color-text-soft); }
+  .ch-create-cols input[type="color"]{ width:100%; height:2.3rem; border:1.5px solid var(--color-border); border-radius:8px; padding:0; cursor:pointer; background:none; }
+  .ch-create-cols input[type="text"]{
+    width:100%; padding:.25rem .3rem; border:1.5px solid var(--color-border); border-radius:8px;
+    background:var(--color-bg); color:var(--color-text); font:600 .74rem 'Inter',system-ui,sans-serif; text-transform:uppercase;
+  }
+  .ch-create-actions{ display:flex; gap:.5rem; margin-top:.6rem; flex-wrap:wrap; }
+
+  .accent-reset-btn{
+    display:block; width:100%; text-align:center; padding:.6rem 1rem; border-radius:999px;
+    border:1.5px solid var(--color-border); background:transparent; color:var(--color-text-soft);
+    cursor:pointer; font-size:.82rem;
+  }
+  .accent-reset-btn:hover, .accent-reset-btn:focus-visible{ background:var(--color-gold-soft); color:#3A2410; outline:none; }
+  .accent-reset-btn .en-tag{ display:block; font-size:.72rem; margin-top:.1rem; }
+  .ch-toast{
+    position:absolute; left:50%; bottom:1.4rem; transform:translateX(-50%); background:var(--color-text); color:var(--color-bg);
+    padding:.3rem .8rem; border-radius:999px; font-size:.75rem; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .ch-toast.show{ opacity:.95; }
+
+  @media (max-width:520px){
+    .accent-panel{ width:calc(100vw - 16px); right:8px; top:64px; height:min(70vh,560px); }
+  }
+
+  /* ---------------------------------------------------------------------
+     Whole-page theming: active ONLY while a visitor has picked a palette
+     (html[data-accent]). These rules swap the handful of hard-coded shades
+     used by existing components for the palette-derived variables, so every
+     component (buttons, cards, pills, contents page, share card, bot...)
+     follows the selection. Without a pick nothing here applies.
+     --------------------------------------------------------------------- */
+  html[data-accent] .btn-primary:hover{ background:linear-gradient(180deg, var(--color-maroon-dark) 0%, color-mix(in srgb, var(--color-maroon-dark) 68%, #000) 100%); }
+  html[data-accent] .btn-gold{ background:linear-gradient(180deg, var(--color-gold) 0%, color-mix(in srgb, var(--color-gold) 72%, #000) 100%); }
+  html[data-accent] .btn-gold:hover{ background:linear-gradient(180deg, color-mix(in srgb, var(--color-gold) 82%, #000) 0%, color-mix(in srgb, var(--color-gold) 58%, #000) 100%); }
+  html[data-accent] .btn-teal:hover{ background:linear-gradient(180deg, var(--color-teal-dark) 0%, color-mix(in srgb, var(--color-teal-dark) 68%, #000) 100%); }
+  html[data-accent] .btn-ghost:hover, html[data-accent] .mic-btn:hover{ background:var(--color-hover-bg); }
+  html[data-accent] .brand-mark, html[data-accent] .toc-icon-badge{ box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--color-gold-soft) 55%, transparent); }
+  html[data-accent] .toc-card[data-collection-id]{ border-top-color:var(--color-teal); }
+  html[data-accent] .toc-card[data-collection-id] .toc-icon-badge{ background:linear-gradient(160deg, var(--color-maroon), var(--color-maroon-dark)); color:#fff; }
+  html[data-accent][data-theme="dark"] .toc-card[data-collection-id] .toc-icon-badge{ color:#14100c; }
+  html[data-accent] .toc-card[data-collection-id] .toc-cta{ color:var(--color-teal); }
+  html[data-accent] .detail-header .place{ background:color-mix(in srgb, var(--color-gold-soft) 60%, var(--color-bg-card)); color:var(--color-text); }
+  html[data-accent] .status-published{ background:color-mix(in srgb, var(--color-teal) 18%, var(--color-bg-card)); color:var(--color-text); }
+  html[data-accent] .status-draft{ background:color-mix(in srgb, var(--color-gold) 20%, var(--color-bg-card)); color:var(--color-text-soft); }
+  html[data-accent] .share-card{
+    background:
+      radial-gradient(circle at 14% 8%, color-mix(in srgb, var(--color-gold-soft) 38%, transparent), transparent 42%),
+      radial-gradient(circle at 92% 88%, color-mix(in srgb, var(--color-teal) 40%, transparent), transparent 46%),
+      linear-gradient(160deg, var(--color-teal-dark) 0%, var(--color-peacock-indigo) 55%, var(--color-maroon-dark) 100%);
+  }
+  html[data-accent] .peacock-btn{ box-shadow:0 6px 18px color-mix(in srgb, var(--color-teal-dark) 45%, transparent), 0 0 0 4px var(--color-bg); }
+  html[data-accent] .peacock-btn:hover{ box-shadow:0 8px 22px color-mix(in srgb, var(--color-teal-dark) 55%, transparent), 0 0 0 4px var(--color-bg); }
+  html[data-accent] ::selection{ background:var(--color-gold-soft); color:#2a1c0c; }
+  html[data-accent]{ accent-color:var(--color-maroon); }
+</style>
+
 <!-- ===== Splash screen (self-contained: does not touch any existing styles) ===== -->
 <style>
   body.splash-active{ overflow:hidden; }
@@ -1319,6 +1510,7 @@
         <button type="button" id="fontLargeBtn" title="Extra large text size">A++</button>
       </div>
       <button type="button" class="theme-toggle" id="themeToggleBtn" title="Toggle dark / light mode" aria-label="Toggle dark or light mode">🌙</button>
+      <button type="button" class="accent-picker-btn" id="accentPickerBtn" title="தோற்றத்தைத் தனிப்பயனாக்கு (Customize appearance)" aria-label="தோற்றத்தைத் தனிப்பயனாக்கு - Customize appearance" aria-haspopup="dialog" aria-expanded="false">🎨</button>
     </div>
   </div>
 </header>
@@ -1611,6 +1803,42 @@
       <div class="peacock-cloud-tail1" aria-hidden="true"></div>
       <div class="peacock-cloud-tail2" aria-hidden="true"></div>
     </div>
+  </div>
+</div>
+
+<!-- ===== Accent theme customizer markup (self-contained; does not touch app/Firebase logic) ===== -->
+<div class="accent-overlay" id="accentOverlay" role="presentation">
+  <div class="accent-panel" id="accentPanel" role="dialog" aria-modal="false" aria-labelledby="accentPanelTitle" tabindex="-1">
+    <div class="accent-head" id="accentHead" title="Drag to move">
+      <span class="accent-grip" aria-hidden="true">⋮⋮</span>
+      <h3 id="accentPanelTitle">தோற்றத்தைத் தனிப்பயனாக்கு<span class="en-tag" style="display:block; font-weight:600; font-size:.72em; margin-top:.1rem;">(Customize appearance)</span></h3>
+      <button type="button" class="accent-head-btn" id="accentMinBtn" aria-label="சுருக்கு (Minimize)" title="Minimize / Expand">–</button>
+      <button type="button" class="accent-head-btn" id="accentPanelCloseBtn" aria-label="மூடு (Close)" title="Close">✕</button>
+    </div>
+    <div class="accent-body" id="accentBody">
+      <p class="accent-panel-hint">4 நிறத் தொகுப்பைத் தேர்ந்தெடுங்கள் — முழுப் பக்கமும் உடனே மாறும்.<span class="en-tag">(Pick a 4-colour palette, Color Hunt style — the whole page updates instantly. Drag the title bar to move this window and the corner handle to resize it. Click a colour to copy its hex code.)</span></p>
+      <div class="ch-current"><span>Current</span><div class="ch-strip" id="chStrip" aria-hidden="true"></div></div>
+      <div class="ch-tabs" id="chTabs" role="tablist">
+        <button type="button" class="ch-tab active" data-view="new">New</button>
+        <button type="button" class="ch-tab" data-view="random">Random</button>
+        <button type="button" class="ch-tab" data-view="saved">♥ Collection</button>
+        <button type="button" class="ch-tab" data-view="create">＋ Create</button>
+      </div>
+      <div class="accent-custom-row hidden" id="accentCustomRow">
+        <div class="ch-create-cols">
+          <label>Colour 1 <input type="color" id="accentC1" value="#222831"><input type="text" id="accentT1" maxlength="7" value="#222831" aria-label="Colour 1 hex"></label>
+          <label>Colour 2 <input type="color" id="accentC2" value="#393E46"><input type="text" id="accentT2" maxlength="7" value="#393E46" aria-label="Colour 2 hex"></label>
+          <label>Colour 3 <input type="color" id="accentC3" value="#00ADB5"><input type="text" id="accentT3" maxlength="7" value="#00ADB5" aria-label="Colour 3 hex"></label>
+          <label>Colour 4 <input type="color" id="accentC4" value="#EEEEEE"><input type="text" id="accentT4" maxlength="7" value="#EEEEEE" aria-label="Colour 4 hex"></label>
+        </div>
+        <div class="ch-create-actions"><button type="button" class="ch-apply" id="accentSaveCustom">♥ Save to collection</button></div>
+      </div>
+      <div class="ch-tags" id="chTags" aria-label="Filter by tag"></div>
+      <div class="accent-grid" id="accentGrid" aria-label="Colour palettes"></div>
+      <button type="button" class="accent-reset-btn" id="accentResetBtn">இயல்புநிலைக்குத் திரும்பு <span class="en-tag">(Reset to default)</span></button>
+    </div>
+    <div class="ch-toast" id="chToast" role="status" aria-live="polite"></div>
+    <div class="accent-resize" id="accentResize" aria-hidden="true" title="Drag to resize"></div>
   </div>
 </div>
 
@@ -3228,6 +3456,413 @@
     if(!overlay.classList.contains("open")){ wrap.classList.add("show-tip"); }
   }, 900);
   window.setTimeout(function(){ wrap.classList.remove("show-tip"); }, 6500);
+})();
+</script>
+
+<!-- ===== Accent theme customizer behaviour (self-contained; does not touch app/Firebase logic) =====
+     Adds a Chrome-style "pick your own colours" panel, now with a THREE
+     colour palette per swatch. Selecting a swatch (or the custom picker)
+     stores the choice in localStorage and overrides:
+       colour 1 -> --color-maroon / --color-maroon-dark   (primary buttons/headings)
+       colour 2 -> --color-teal   / --color-teal-dark     (secondary buttons/links)
+       colour 3 -> --color-bg-card, --color-text, --color-text-soft,
+                   --color-peacock-blue / -indigo / -emerald
+                   (card backgrounds, body text, label text, floating bot)
+     via inline styles on <html>, so every button, link, card, text colour
+     and the peacock assistant all follow the visitor's 3-colour pick.
+     Nothing is changed for a visitor who never opens the panel: no stored
+     choice means no override, and the original per-collection colours and
+     light/dark toggle behave exactly as before. -->
+<script>
+(function(){
+  "use strict";
+  var STORAGE_KEY = "thirupugazh_accent_v2";      // per-visitor (per browser/device) choice
+  var UI_KEY = "thirupugazh_accent_ui_v1";        // panel position/size
+  var LIKES_KEY = "thirupugazh_accent_likes_v1";  // each visitor's own saved palettes
+  var html = document.documentElement;
+
+  var btn = document.getElementById("accentPickerBtn");
+  var overlay = document.getElementById("accentOverlay");
+  var panel = document.getElementById("accentPanel");
+  var head = document.getElementById("accentHead");
+  var closeBtn = document.getElementById("accentPanelCloseBtn");
+  var minBtn = document.getElementById("accentMinBtn");
+  var resizeH = document.getElementById("accentResize");
+  var grid = document.getElementById("accentGrid");
+  var tagsEl = document.getElementById("chTags");
+  var tabsEl = document.getElementById("chTabs");
+  var strip = document.getElementById("chStrip");
+  var toast = document.getElementById("chToast");
+  var customRow = document.getElementById("accentCustomRow");
+  var pick = [1,2,3,4].map(function(n){ return document.getElementById("accentC"+n); });
+  var txt = [1,2,3,4].map(function(n){ return document.getElementById("accentT"+n); });
+  var saveCustomBtn = document.getElementById("accentSaveCustom");
+  var resetBtn = document.getElementById("accentResetBtn");
+  if(!btn || !overlay || !panel || !grid) return;
+
+  /* ---------- Colour Hunt-style 4-colour palettes: [c1,c2,c3,c4,"tags"] ---------- */
+  var RAW = [
+    ["222831","393E46","00ADB5","EEEEEE","dark cold blue teal night"],
+    ["F9F5F6","F8E8EE","FDCEDF","F2BED1","pastel pink light wedding"],
+    ["2C3639","3F4E4F","A27B5C","DCD7C9","earth coffee brown dark"],
+    ["FFF7E9","FFD9A0","F28C38","A63D2F","warm fall orange red sunset"],
+    ["F8EDE3","BDD2B6","A2B29F","798777","sage green nature light"],
+    ["E3F4F4","D2E9E9","C4DFDF","F8F6F4","cold light blue sky pastel"],
+    ["1B262C","0F4C75","3282B8","BBE1FA","blue navy night sea cold"],
+    ["FFF4E0","FFB562","F79540","5E3023","warm orange food coffee"],
+    ["F5EFE6","E8DFCA","AEBDCA","7895B2","vintage blue cream"],
+    ["FBF0F0","E7B10A","898121","4C4B16","vintage gold retro"],
+    ["FFF5E4","FFE3E1","FFD1D1","FF9494","pink peach warm kids happy"],
+    ["EEF2E6","3D8D7A","B3D8A8","FBFFE4","green mint nature spring"],
+    ["1A1A2E","16213E","0F3460","E94560","night dark red navy space"],
+    ["FEFBF3","F8F0E5","EADBC8","DAC0A3","cream beige skin coffee"],
+    ["FCF8E8","94B49F","ECB390","DF7861","retro peach sage earth"],
+    ["FFFBF5","F7EFE5","C3ACD0","674188","purple light pastel"],
+    ["F4F9F9","CCF2F4","A4EBF3","AAAAAA","sky blue cold light"],
+    ["2D4059","EA5455","F07B3F","FFD460","warm sunset navy retro"],
+    ["FFEFEF","FFC4C4","EE6983","850E35","pink maroon wedding red"],
+    ["0B2447","19376D","576CBC","A5D7E8","navy blue night cold sea"],
+    ["FFFAE6","F5E8C7","DEBACE","BE8C63","cream vintage skin"],
+    ["F1F1F1","D3D3D3","8E8E8E","2B2B2B","grey black white light dark"],
+    ["EDEDED","FFC7A7","FEE2AD","F8FAB4","pastel summer happy yellow"],
+    ["F6F1F1","AFD3E2","19A7CE","146C94","blue sea summer cold"],
+    ["FFF8F3","F7E6D0","E9B384","7C4A34","earth brown coffee cream"],
+    ["0D1117","161B22","30363D","58A6FF","dark night space blue"],
+    ["FAF0E6","FFDAB3","C8AE7D","765827","beige gold brown fall"],
+    ["F0ECE5","B6BBC4","31304D","161A30","grey navy dark night"],
+    ["FFFBEB","FFE382","FFC436","F9D949","yellow gold happy summer"],
+    ["DDF2FD","9BBEC8","427D9D","164863","blue sky sea cold winter"],
+    ["F2EE9D","C0DBB2","65B741","2C6E49","green spring nature happy"],
+    ["FFF2F2","A9B5DF","7886C7","2D336B","blue purple pastel navy"],
+    ["FFE7E7","FFCDCD","E4A5A5","B47B84","pink skin wedding pastel"],
+    ["F8F4EA","E4D0B5","C2A38D","8B5E3C","cream earth coffee vintage"],
+    ["FFFFDD","D6E8DB","90AACB","4E6C50","spring green nature light"],
+    ["03001C","301E67","5B8FB9","B6EADA","night space purple blue mint"],
+    ["FDF6EC","F4A259","5B8E7D","BC4B51","retro warm green red vintage"],
+    ["FAF6F0","F4EAD5","E8C07D","9C6644","gold cream fall vintage"],
+    ["E8F9FD","59CE8F","FF1E00","1A1A1A","neon rainbow happy"],
+    ["FFEFD5","FFD3B6","FFAAA5","FF8B94","pastel peach pink kids happy"],
+    ["2B2A4C","B31312","EA906C","EEE2DE","dark red warm halloween"],
+    ["FFF3E2","FFE8C8","9E7676","594545","brown coffee skin cream"],
+    ["F0F5F9","C9D6DF","52616B","1E2022","grey cold dark winter"],
+    ["FBF8F1","F7ECDE","E9DAC1","54BAB9","cream teal vintage sea"],
+    ["FFF6E9","FFBB5C","C63D2F","E25E3E","orange red fall warm halloween"],
+    ["ECF4D6","9AD0C2","2D9596","265073","teal green sea cold"],
+    ["FCF5ED","CE5A67","F4BF96","1F1717","red warm food dark"],
+    ["FBFFF1","3066BE","B4C5E4","090C9B","blue kids sky"],
+    ["FFFDF9","FFE5CA","FFB4B4","B33F62","pink maroon warm wedding"],
+    ["1F2544","474F7A","81689D","FFD0EC","night purple pink space"],
+    ["F3EEEA","EBE3D5","B0A695","776B5D","earth beige brown vintage"],
+    ["F5F5DC","C8B6A6","A4907C","8D7B68","beige coffee earth skin"],
+    ["FFFBE9","E3CAA5","CEAB93","AD8B73","coffee cream skin earth vintage"],
+    ["FFFFFF","E8AA42","CC704B","6B240C","gold orange fall brown"],
+    ["F7FBFC","D6E6F2","B9D7EA","769FCD","blue pastel sky winter light"],
+    ["0A1929","1E3A5F","2E7D9A","F7D08A","navy sea sunset dark gold"],
+    ["FFF1DB","D4BDAC","536493","BF4342","retro vintage navy red"],
+    ["EAE0DA","D9C5B2","5D534A","2F2A26","earth brown grey dark coffee"],
+    ["FDFDFD","F6E6CB","B7C4CF","EEE3CB","vintage cream grey light"],
+    ["FFEADB","C3E5AE","FFA07A","7FB5B5","summer happy peach mint"],
+    ["F7F7F7","EEEEEE","76ABAE","31363F","dark cold teal grey"],
+    ["FFF8EA","9E7676","815B5B","594545","brown vintage cream coffee"],
+    ["FCFFE7","EBF4FA","2A3990","EB455F","blue red retro kids"],
+    ["B9E9FC","E2F6CA","FFF3B0","FFD6A5","pastel rainbow summer happy"],
+    ["F4EEFF","DCD6F7","A6B1E1","424874","purple pastel light winter"],
+    ["2E4F4F","0E8388","CBE4DE","2C3333","teal green dark sea"],
+    ["FBE8A6","F4976C","303C6C","B4DFE5","retro sunset navy sky"],
+    ["FFE3D8","E49BA6","A45C7C","4A2545","pink purple sunset dark"]
+  ];
+  var PALETTES = RAW.map(function(r, i){
+    return { id:"p"+i, colors:[r[0],r[1],r[2],r[3]].map(function(h){ return "#"+h.toUpperCase(); }), tags:r[4].split(" ") };
+  });
+  var TAGS = ["blue","teal","green","sage","yellow","beige","brown","orange","peach","red","maroon","pink","purple","navy","grey","pastel","vintage","retro","neon","gold","light","dark","warm","cold","summer","fall","winter","spring","happy","nature","earth","night","space","rainbow","sunset","sky","sea","kids","skin","food","cream","coffee","wedding","halloween"];
+
+  /* ---------- Colour helpers ---------- */
+  function isHex(s){ return /^#[0-9a-fA-F]{6}$/.test(s); }
+  function hexToRgb(hex){ var n = parseInt(hex.replace("#",""),16); return { r:(n>>16)&255, g:(n>>8)&255, b:n&255 }; }
+  function rgbToHex(r,g,b){ function h(v){ v=Math.max(0,Math.min(255,Math.round(v))); var s=v.toString(16); return s.length===1?"0"+s:s; } return "#"+h(r)+h(g)+h(b); }
+  function rgbToHsl(r,g,b){
+    r/=255; g/=255; b/=255;
+    var max=Math.max(r,g,b), min=Math.min(r,g,b), h=0, s=0, l=(max+min)/2;
+    if(max!==min){ var d=max-min; s = l>0.5 ? d/(2-max-min) : d/(max+min);
+      if(max===r) h=(g-b)/d+(g<b?6:0); else if(max===g) h=(b-r)/d+2; else h=(r-g)/d+4; h/=6; }
+    return { h:h, s:s, l:l };
+  }
+  function hslToRgb(h,s,l){
+    function f(p,q,t){ if(t<0)t+=1; if(t>1)t-=1; if(t<1/6)return p+(q-p)*6*t; if(t<1/2)return q; if(t<2/3)return p+(q-p)*(2/3-t)*6; return p; }
+    var r,g,b; if(s===0){ r=g=b=l; } else { var q=l<0.5?l*(1+s):l+s-l*s, p=2*l-q; r=f(p,q,h+1/3); g=f(p,q,h); b=f(p,q,h-1/3); }
+    return { r:r*255, g:g*255, b:b*255 };
+  }
+  function hexToHsl(hex){ var c=hexToRgb(hex); return rgbToHsl(c.r,c.g,c.b); }
+  function hsl(h,s,l){ var c=hslToRgb(h,clamp(s,0,1),clamp(l,0,1)); return rgbToHex(c.r,c.g,c.b); }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  function rgba(hex,a){ var c=hexToRgb(hex); return "rgba("+c.r+","+c.g+","+c.b+","+a+")"; }
+  function inkFor(hex){ var c=hexToRgb(hex); return (0.299*c.r+0.587*c.g+0.114*c.b) > 150 ? "#1c1c1c" : "#ffffff"; }
+
+  /* ---------- Turn 4 palette colours into every role the page uses ----------
+     Lightest -> page/card surfaces, darkest -> text, the two mid colours ->
+     primary (buttons/headings) and secondary (links/second buttons). Light and
+     dark mode each get their own contrast-safe shades from the same 4 colours. */
+  function computeVars(cols, isDark){
+    var s = cols.map(function(h){ var c=hexToHsl(h); c.hex=h; return c; }).sort(function(a,b){ return b.l-a.l; });
+    var A=s[0], B=s[1], C=s[2], D=s[3];
+    var mids = [B,C].sort(function(a,b){ return b.s-a.s; });
+    var P = mids[0], S = mids[1];
+    var v = {};
+    if(!isDark){
+      var pri = hsl(P.h, clamp(P.s,0.3,0.85), Math.min(P.l,0.36));
+      var sec = hsl(S.h, clamp(S.s,0.25,0.8), Math.min(S.l,0.34));
+      var bg = hsl(A.h, clamp(A.s*0.6,0.06,0.5), 0.945);
+      v.bg = bg;
+      v.bgCard = hsl(A.h, clamp(A.s*0.5,0.05,0.4), 0.982);
+      v.text = hsl(D.h, clamp(D.s*0.4,0.1,0.35), 0.15);
+      v.textSoft = hsl(D.h, clamp(D.s*0.35,0.08,0.3), 0.32);
+      v.maroon = pri; v.maroonDark = hsl(P.h, clamp(P.s,0.3,0.85), Math.min(P.l,0.36)*0.72);
+      v.teal = sec;   v.tealDark = hsl(S.h, clamp(S.s,0.25,0.8), Math.min(S.l,0.34)*0.7);
+      v.gold = hsl(S.h, clamp(S.s,0.35,0.85), 0.4);
+      v.goldSoft = hsl(B.h, clamp(B.s,0.35,0.85), 0.8);
+      v.border = hsl(A.h, clamp(A.s*0.5,0.06,0.4), 0.83);
+      v.hoverBg = v.goldSoft; v.hoverText = hsl(D.h,0.4,0.14); v.hoverTextSoft = hsl(D.h,0.35,0.24);
+      v.overlayA = rgba(bg,0.90); v.overlayB = rgba(bg,0.84);
+      v.tocA = hsl(A.h, clamp(A.s*0.7,0.08,0.5), 0.945); v.tocB = hsl(B.h, clamp(B.s*0.6,0.08,0.5), 0.93);
+      v.tocBorder = hsl(B.h, clamp(B.s*0.5,0.08,0.4), 0.82);
+      v.tocAccent = pri; v.tocAccentDark = v.maroonDark;
+      v.indigo = hsl(D.h, clamp(D.s,0.25,0.7), 0.3);
+    } else {
+      var priD = hsl(P.h, clamp(P.s*0.9,0.35,0.75), clamp(P.l+(1-P.l)*0.45,0.5,0.75));
+      var secD = hsl(S.h, clamp(S.s*0.9,0.35,0.75), clamp(S.l+(1-S.l)*0.45,0.5,0.75));
+      var bgD = hsl(D.h, clamp(D.s*0.5,0.1,0.4), 0.105);
+      v.bg = bgD;
+      v.bgCard = hsl(D.h, clamp(D.s*0.5,0.1,0.4), 0.16);
+      v.text = hsl(A.h, clamp(A.s*0.4,0.1,0.3), 0.92);
+      v.textSoft = hsl(A.h, clamp(A.s*0.35,0.08,0.28), 0.76);
+      v.maroon = priD; v.maroonDark = hsl(P.h, clamp(P.s*0.8,0.3,0.7), 0.82);
+      v.teal = secD;   v.tealDark = hsl(S.h, clamp(S.s*0.8,0.3,0.7), 0.82);
+      v.gold = hsl(S.h, clamp(S.s,0.4,0.8), 0.66);
+      v.goldSoft = hsl(B.h, clamp(B.s,0.4,0.8), 0.8);
+      v.border = hsl(D.h, clamp(D.s*0.45,0.08,0.35), 0.26);
+      v.hoverBg = hsl(S.h, clamp(S.s*0.7,0.3,0.7), 0.27); v.hoverText = "#FFF8EC"; v.hoverTextSoft = "#F0E4D0";
+      v.overlayA = rgba(bgD,0.88); v.overlayB = rgba(bgD,0.82);
+      v.tocA = hsl(D.h, clamp(D.s*0.5,0.1,0.4), 0.14); v.tocB = hsl(C.h, clamp(C.s*0.4,0.08,0.35), 0.12);
+      v.tocBorder = hsl(C.h, clamp(C.s*0.4,0.08,0.35), 0.27);
+      v.tocAccent = priD; v.tocAccentDark = v.maroonDark;
+      v.indigo = hsl(D.h, clamp(D.s,0.3,0.7), 0.7);
+    }
+    v.emerald = v.maroon; v.blue = v.teal;
+    return v;
+  }
+  var MAP = {
+    "--color-bg":"bg","--color-bg-card":"bgCard","--color-text":"text","--color-text-soft":"textSoft",
+    "--color-maroon":"maroon","--color-maroon-dark":"maroonDark","--color-teal":"teal","--color-teal-dark":"tealDark",
+    "--color-gold":"gold","--color-gold-soft":"goldSoft","--color-border":"border",
+    "--color-hover-bg":"hoverBg","--color-hover-text":"hoverText","--color-hover-text-soft":"hoverTextSoft",
+    "--bg-overlay-a":"overlayA","--bg-overlay-b":"overlayB",
+    "--toc-page-bg-a":"tocA","--toc-page-bg-b":"tocB","--toc-page-border":"tocBorder",
+    "--toc-page-accent":"tocAccent","--toc-page-accent-dark":"tocAccentDark",
+    "--color-peacock-emerald":"emerald","--color-peacock-blue":"blue","--color-peacock-indigo":"indigo"
+  };
+
+  /* ---------- Persistence (per visitor, on their own device) ---------- */
+  function read(key, fallback){ try{ var r=localStorage.getItem(key); return r?JSON.parse(r):fallback; }catch(e){ return fallback; } }
+  function write(key, val){ try{ if(val===null||val===undefined){ localStorage.removeItem(key); } else { localStorage.setItem(key, JSON.stringify(val)); } }catch(e){} }
+  function loadStored(){ var s=read(STORAGE_KEY,null); return (s && s.colors && s.colors.length===4 && s.colors.every(isHex)) ? s : null; }
+
+  function clearOverride(){
+    Object.keys(MAP).forEach(function(k){ html.style.removeProperty(k); });
+    html.removeAttribute("data-accent");
+  }
+  function applyAccent(){
+    var st = loadStored();
+    if(!st){ clearOverride(); paintStrip(null); return; }
+    var v = computeVars(st.colors, html.getAttribute("data-theme")==="dark");
+    Object.keys(MAP).forEach(function(k){ html.style.setProperty(k, v[MAP[k]]); });
+    html.setAttribute("data-accent","1");
+    paintStrip(st.colors);
+  }
+  function paintStrip(cols){
+    if(!strip) return;
+    strip.innerHTML = "";
+    (cols || ["#8C2F39","#0E6B5C","#B8790F","#F3F4E9"]).forEach(function(c){ var s=document.createElement("span"); s.style.background=c; strip.appendChild(s); });
+  }
+  new MutationObserver(function(muts){
+    for(var i=0;i<muts.length;i++){ if(muts[i].attributeName==="data-theme"||muts[i].attributeName==="data-collection"){ applyAccent(); return; } }
+  }).observe(html,{ attributes:true, attributeFilter:["data-theme","data-collection"] });
+
+  /* ---------- Palette browser ---------- */
+  var view = "new", tag = "", randomOrder = null;
+  var likes = read(LIKES_KEY, []);           // array of "#a,#b,#c,#d" keys
+  function keyOf(cols){ return cols.join(",").toUpperCase(); }
+  function isLiked(cols){ return likes.indexOf(keyOf(cols))>-1; }
+  function toggleLike(cols){
+    var k=keyOf(cols), i=likes.indexOf(k);
+    if(i>-1) likes.splice(i,1); else likes.unshift(k);
+    write(LIKES_KEY, likes);
+  }
+  function showToast(msg){
+    toast.textContent = msg; toast.classList.add("show");
+    clearTimeout(showToast.t); showToast.t = setTimeout(function(){ toast.classList.remove("show"); }, 1400);
+  }
+  function copyHex(hex){
+    var done = function(){ showToast("Copied " + hex); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(hex).then(done, done); }
+    else { try{ var t=document.createElement("textarea"); t.value=hex; document.body.appendChild(t); t.select(); document.execCommand("copy"); document.body.removeChild(t); }catch(e){} done(); }
+  }
+  function currentList(){
+    var list = PALETTES.slice();
+    if(view==="saved"){
+      list = likes.map(function(k,i){ return { id:"s"+i, colors:k.split(","), tags:[] }; });
+    } else if(view==="random"){
+      if(!randomOrder){ randomOrder = list.map(function(_,i){ return i; }).sort(function(){ return Math.random()-0.5; }); }
+      list = randomOrder.map(function(i){ return PALETTES[i]; });
+    }
+    if(tag && view!=="saved"){ list = list.filter(function(p){ return p.tags.indexOf(tag)>-1; }); }
+    return list;
+  }
+  function buildTags(){
+    tagsEl.innerHTML = "";
+    TAGS.forEach(function(t){
+      var b=document.createElement("button"); b.type="button"; b.className="ch-tag"+(t===tag?" active":""); b.textContent=t.charAt(0).toUpperCase()+t.slice(1);
+      b.addEventListener("click", function(){ tag = (tag===t ? "" : t); buildTags(); buildGrid(); });
+      tagsEl.appendChild(b);
+    });
+  }
+  function buildGrid(){
+    var st = loadStored(), selKey = st ? keyOf(st.colors) : "";
+    grid.innerHTML = "";
+    var list = currentList();
+    if(!list.length){
+      var e=document.createElement("div"); e.className="ch-empty";
+      e.textContent = view==="saved" ? "No saved palettes yet — tap ♥ on any palette." : "No palettes for this tag.";
+      grid.appendChild(e); return;
+    }
+    list.forEach(function(p){
+      var card=document.createElement("div"); card.className="ch-card"+(keyOf(p.colors)===selKey?" selected":"");
+      var sw=document.createElement("div"); sw.className="ch-swatches";
+      p.colors.forEach(function(c){
+        var b=document.createElement("button"); b.type="button"; b.className="ch-swatch"; b.style.background=c; b.style.setProperty("--ch-ink", inkFor(c));
+        b.textContent=c; b.title="Click to copy "+c;
+        b.addEventListener("click", function(ev){ ev.stopPropagation(); copyHex(c); });
+        sw.appendChild(b);
+      });
+      var foot=document.createElement("div"); foot.className="ch-card-foot";
+      var heart=document.createElement("button"); heart.type="button"; heart.className="ch-heart"+(isLiked(p.colors)?" liked":""); heart.textContent=isLiked(p.colors)?"♥":"♡"; heart.setAttribute("aria-label","Save palette");
+      heart.addEventListener("click", function(){ toggleLike(p.colors); if(view==="saved"){ buildGrid(); } else { heart.classList.toggle("liked",isLiked(p.colors)); heart.textContent=isLiked(p.colors)?"♥":"♡"; } });
+      var ap=document.createElement("button"); ap.type="button"; ap.className="ch-apply"; ap.textContent="Apply";
+      ap.addEventListener("click", function(){ choose(p.colors); });
+      sw.addEventListener("dblclick", function(){ choose(p.colors); });
+      foot.appendChild(heart); foot.appendChild(ap);
+      card.appendChild(sw); card.appendChild(foot); grid.appendChild(card);
+    });
+  }
+  function choose(cols){
+    write(STORAGE_KEY, { colors:cols.map(function(c){ return c.toUpperCase(); }) });
+    applyAccent();
+    syncCreate(cols);
+    var cards=grid.querySelectorAll(".ch-card"), k=keyOf(cols);
+    for(var i=0;i<cards.length;i++){
+      var cs=cards[i].querySelectorAll(".ch-swatch"), kk=[].map.call(cs,function(x){return x.textContent;}).join(",");
+      cards[i].classList.toggle("selected", kk===k);
+    }
+  }
+  function syncCreate(cols){ for(var i=0;i<4;i++){ pick[i].value=cols[i].toLowerCase(); txt[i].value=cols[i].toUpperCase(); } }
+  function customCols(){ return txt.map(function(t){ return t.value.toUpperCase(); }); }
+
+  tabsEl.addEventListener("click", function(e){
+    var b=e.target.closest(".ch-tab"); if(!b) return;
+    view=b.getAttribute("data-view");
+    if(view==="random") randomOrder=null;
+    [].forEach.call(tabsEl.querySelectorAll(".ch-tab"), function(x){ x.classList.toggle("active", x===b); });
+    var creating = view==="create";
+    customRow.classList.toggle("hidden", !creating);
+    tagsEl.style.display = (creating||view==="saved") ? "none" : "";
+    if(creating){ grid.innerHTML=""; var st=loadStored(); if(st) syncCreate(st.colors); }
+    else { buildGrid(); }
+  });
+  pick.forEach(function(inp,i){ inp.addEventListener("input", function(){ txt[i].value=inp.value.toUpperCase(); choose(customCols()); }); });
+  txt.forEach(function(inp,i){
+    inp.addEventListener("input", function(){
+      var v=inp.value.trim(); if(v && v.charAt(0)!=="#") v="#"+v;
+      if(isHex(v)){ pick[i].value=v.toLowerCase(); choose(customCols().map(function(c,j){ return j===i?v.toUpperCase():c; })); }
+    });
+  });
+  saveCustomBtn.addEventListener("click", function(){
+    var cols=customCols(); if(!cols.every(isHex)) return;
+    if(!isLiked(cols)){ toggleLike(cols); } showToast("Saved to your collection ♥");
+  });
+  resetBtn.addEventListener("click", function(){ write(STORAGE_KEY,null); applyAccent(); buildGrid(); });
+
+  /* ---------- Movable + resizable panel ---------- */
+  function clampPanel(){
+    var vw=window.innerWidth, vh=window.innerHeight, r=panel.getBoundingClientRect();
+    var w=Math.min(r.width, vw), h=Math.min(r.height, vh);
+    var l=clamp(r.left, 0, Math.max(0, vw-w)), t=clamp(r.top, 0, Math.max(0, vh-60));
+    panel.style.left=l+"px"; panel.style.top=t+"px"; panel.style.right="auto";
+    panel.style.width=w+"px"; if(!panel.classList.contains("minimized")) panel.style.height=Math.min(h, vh-t)+"px";
+  }
+  function saveUi(){
+    var r=panel.getBoundingClientRect();
+    write(UI_KEY,{ left:r.left, top:r.top, width:r.width, height:panel.classList.contains("minimized")?(read(UI_KEY,{}).height||r.height):r.height, min:panel.classList.contains("minimized") });
+  }
+  function restoreUi(){
+    var u=read(UI_KEY,null);
+    if(u && u.width){ panel.style.left=u.left+"px"; panel.style.top=u.top+"px"; panel.style.right="auto"; panel.style.width=u.width+"px"; panel.style.height=u.height+"px"; }
+    panel.classList.toggle("minimized", !!(u && u.min));
+    minBtn.textContent = panel.classList.contains("minimized") ? "+" : "–";
+    clampPanel();
+  }
+  function startDrag(e){
+    if(e.target.closest(".accent-head-btn")) return;
+    if(e.button!==undefined && e.button!==0) return;
+    var r=panel.getBoundingClientRect(), dx=e.clientX-r.left, dy=e.clientY-r.top;
+    panel.classList.add("dragging"); head.setPointerCapture && head.setPointerCapture(e.pointerId);
+    function mv(ev){
+      var l=clamp(ev.clientX-dx, 0, Math.max(0, window.innerWidth-panel.offsetWidth));
+      var t=clamp(ev.clientY-dy, 0, Math.max(0, window.innerHeight-48));
+      panel.style.left=l+"px"; panel.style.top=t+"px"; panel.style.right="auto";
+    }
+    function up(){ panel.classList.remove("dragging"); head.removeEventListener("pointermove",mv); head.removeEventListener("pointerup",up); head.removeEventListener("pointercancel",up); saveUi(); }
+    head.addEventListener("pointermove",mv); head.addEventListener("pointerup",up); head.addEventListener("pointercancel",up);
+    e.preventDefault();
+  }
+  function startResize(e){
+    var r=panel.getBoundingClientRect(), sx=e.clientX, sy=e.clientY, sw=r.width, sh=r.height;
+    panel.classList.add("resizing"); resizeH.setPointerCapture && resizeH.setPointerCapture(e.pointerId);
+    function mv(ev){
+      var w=clamp(sw+(ev.clientX-sx), 280, window.innerWidth-panel.offsetLeft);
+      var h=clamp(sh+(ev.clientY-sy), 240, window.innerHeight-panel.offsetTop);
+      panel.style.width=w+"px"; panel.style.height=h+"px";
+    }
+    function up(){ panel.classList.remove("resizing"); resizeH.removeEventListener("pointermove",mv); resizeH.removeEventListener("pointerup",up); resizeH.removeEventListener("pointercancel",up); saveUi(); }
+    resizeH.addEventListener("pointermove",mv); resizeH.addEventListener("pointerup",up); resizeH.addEventListener("pointercancel",up);
+    e.preventDefault(); e.stopPropagation();
+  }
+  head.addEventListener("pointerdown", startDrag);
+  resizeH.addEventListener("pointerdown", startResize);
+  minBtn.addEventListener("click", function(){
+    panel.classList.toggle("minimized");
+    minBtn.textContent = panel.classList.contains("minimized") ? "+" : "–";
+    if(!panel.classList.contains("minimized")){ var u=read(UI_KEY,null); if(u&&u.height) panel.style.height=u.height+"px"; }
+    saveUi();
+  });
+  window.addEventListener("resize", function(){ if(overlay.classList.contains("open")) clampPanel(); });
+
+  /* ---------- Open / close (page stays fully visible and usable while open) ---------- */
+  var lastFocused=null;
+  function onKeydown(e){ if(e.key==="Escape"||e.key==="Esc"){ closePanel(); } }
+  function openPanel(){
+    lastFocused=document.activeElement;
+    buildTags(); buildGrid(); paintStrip(loadStored()?loadStored().colors:null);
+    overlay.classList.add("open"); btn.setAttribute("aria-expanded","true");
+    restoreUi(); document.addEventListener("keydown", onKeydown);
+  }
+  function closePanel(){
+    overlay.classList.remove("open"); btn.setAttribute("aria-expanded","false");
+    document.removeEventListener("keydown", onKeydown);
+    if(lastFocused && typeof lastFocused.focus==="function"){ lastFocused.focus(); }
+  }
+  btn.addEventListener("click", function(){ overlay.classList.contains("open") ? closePanel() : openPanel(); });
+  closeBtn.addEventListener("click", closePanel);
+
+  applyAccent();   // re-apply this visitor's saved palette on load
 })();
 </script>
 </body>
