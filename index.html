@@ -2,7 +2,7 @@
 <html lang="ta">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>திருப்புகழ்</title>
 
 <!-- ===== SEO ===== -->
@@ -1307,6 +1307,119 @@
     .fold-panel{ animation-duration:.01ms !important; animation-delay:0s !important; }
     .splash-word, .splash-screen, .splash-peacock, .smoke-wisp{ transition-duration:.01ms !important; }
   }
+</style>
+
+
+<style id="print-and-mobile-enhancements">
+  /* ===================================================================
+     PRINT: only the song content is printed (title, lyrics,
+     transliteration, meaning) -- no site header, toolbar, buttons,
+     footer, peacock assistant, toast or background artwork.
+     =================================================================== */
+  @media print{
+    @page{ margin:16mm 14mm; }
+    html, body{
+      background:#fff !important; background-image:none !important;
+      color:#000 !important; font-size:12pt !important; min-height:0 !important;
+      -webkit-print-color-adjust:economy; print-color-adjust:economy;
+    }
+    /* hide everything in <body> except <main> */
+    body > *:not(main){ display:none !important; }
+    /* inside <main>: show only the song detail view */
+    main > section{ display:none !important; }
+    main > section#view-detail{ display:block !important; }
+    #view-detail > *:not(#detailCard){ display:none !important; }
+    main{ max-width:none !important; margin:0 !important; padding:0 !important; }
+    .site-watermark, .kolam-border{ display:none !important; }
+
+    #detailCard, .detail-card{
+      background:#fff !important; border:0 !important; box-shadow:none !important;
+      border-radius:0 !important; padding:0 !important; margin:0 !important;
+    }
+    .detail-card::after{ display:none !important; }
+    .detail-header .views{ display:none !important; }
+    .detail-header .place{ background:none !important; border:0 !important; padding:0 !important; color:#000 !important; }
+    .detail-header .tamil-title{ font-size:20pt !important; color:#000 !important; }
+    .detail-header .en-title{ color:#333 !important; font-size:12pt !important; }
+    .section-label{ color:#000 !important; margin:14pt 0 4pt !important; break-after:avoid; page-break-after:avoid; }
+    .lyrics-block{ font-size:14pt !important; line-height:1.9 !important; color:#000 !important; }
+    .translit-block, .meaning-block{ font-size:12pt !important; line-height:1.6 !important; color:#000 !important; }
+    hr.divider{ border-top:1px solid #999 !important; margin:12pt 0 !important; }
+    .lyrics-block, .translit-block, .meaning-block{ orphans:3; widows:3; }
+    * { text-shadow:none !important; animation:none !important; transition:none !important; }
+  }
+
+  /* ===================================================================
+     MOBILE: fluid, screen-ratio aware layout. Only sizing/spacing is
+     adjusted -- design language, colours, data and behaviour are as-is.
+     =================================================================== */
+  html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  html, body{ overflow-x:hidden; max-width:100%; }
+  img, svg, video, canvas{ max-width:100%; }
+  .lyrics-block, .translit-block, .meaning-block, .song-card, .detail-card{ overflow-wrap:anywhere; word-break:normal; }
+  .lyrics-block, .translit-block, .meaning-block{ overflow-wrap:break-word; }
+
+  @media (max-width:768px){
+    /* iOS/Android ignore or jitter with fixed backgrounds -- scroll it instead */
+    body{ background-attachment:scroll; min-height:100vh; min-height:100dvh; }
+    header.site-header{ padding-top:env(safe-area-inset-top,0); }
+    .header-inner{
+      padding:.6rem max(.85rem, env(safe-area-inset-left)) .6rem max(.85rem, env(safe-area-inset-right));
+      gap:.55rem;
+    }
+    .brand{ flex:1 1 100%; min-width:0; }
+    .brand-mark{ width:clamp(2.8rem, 12vw, 3.4rem); height:clamp(2.8rem, 12vw, 3.4rem); }
+    .brand-text{ min-width:0; }
+    .brand-text h1{ font-size:clamp(1.05rem, 4.8vw, 1.3rem); }
+    .brand-text p{ font-size:clamp(.72rem, 3.3vw, .85rem); }
+    .header-controls{ width:100%; justify-content:space-between; gap:.4rem; }
+
+    main{
+      padding:.9rem max(.85rem, env(safe-area-inset-left)) calc(5rem + env(safe-area-inset-bottom)) max(.85rem, env(safe-area-inset-right));
+    }
+    footer.site-footer{ padding-bottom:calc(1rem + env(safe-area-inset-bottom)); }
+
+    /* comfortable touch targets */
+    .btn, .btn-sm, .fontctl button, .theme-toggle, .toc-nav-btn{ min-height:44px; }
+    .btn-sm{ padding:.5rem .8rem; }
+
+    /* detail view */
+    .detail-card{ padding:clamp(.95rem, 4.5vw, 1.4rem); border-radius:calc(var(--radius) + 2px); }
+    .detail-toolbar{ gap:.55rem; }
+    .detail-toolbar > .btn{ width:100%; justify-content:center; }
+    .detail-toolbar > div{ width:100%; display:grid !important; grid-template-columns:repeat(3, minmax(0,1fr)); gap:.45rem !important; }
+    .detail-toolbar > div .btn{
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; line-height:1.25; padding:.5rem .3rem; font-size:clamp(.78rem, 3.5vw, .9rem);
+    }
+    .detail-toolbar .btn .en-tag{ display:block; font-size:.72em; }
+    .detail-header .tamil-title{ font-size:clamp(1.4rem, 6.6vw, 1.9rem); line-height:1.35; }
+    .detail-header .en-title{ font-size:clamp(.92rem, 4vw, 1.05rem); }
+    .lyrics-block{ font-size:clamp(1.1rem, 5vw, 1.35rem); line-height:1.95; }
+    .translit-block, .meaning-block{ font-size:clamp(1rem, 4.4vw, 1.08rem); line-height:1.7; }
+
+    /* list / cards */
+    .song-grid{ gap:.8rem; }
+    .song-card .tamil-title{ font-size:clamp(1.1rem, 5vw, 1.25rem); }
+    .toc-card .tamil-title{ font-size:clamp(1.15rem, 5.4vw, 1.32rem); }
+    input[type="text"], input[type="search"], input[type="email"], input[type="password"], textarea, select{ font-size:16px; } /* prevents iOS zoom-on-focus */
+    .toast{ max-width:calc(100vw - 1.5rem); }
+  }
+
+  @media (max-width:380px){
+    .header-controls{ gap:.3rem; }
+    .fontctl button{ padding:.5rem .55rem; }
+    .detail-toolbar > div .btn{ padding:.45rem .2rem; }
+  }
+
+  /* phones held sideways: keep header slim so content gets the height */
+  @media (max-width:900px) and (orientation:landscape) and (max-height:520px){
+    header.site-header{ position:static; }
+    .brand-mark{ width:2.6rem; height:2.6rem; }
+  }
+
+  /* Listen button: visible state while reading aloud */
+  #listenBtn.is-speaking{ box-shadow:0 0 0 3px var(--color-gold-soft); }
 </style>
 
 <!-- ===== Firebase (shared global database) =====
@@ -2755,19 +2868,195 @@
     showView("list");
   });
   $("printBtn").addEventListener("click", function(){ window.print(); });
-  $("listenBtn").addEventListener("click", function(){
+  /* ---------- Listen (text-to-speech, Tamil, male-preferred) ----------
+     Voice choice is automatic -- nothing for the reader to set up:
+       1. a Tamil MALE voice if the device has one (e.g. Microsoft Valluvar);
+       2. otherwise any Tamil voice, spoken with a deeper pitch so it sounds
+          more masculine (browsers expose no official "gender" flag, so this
+          is the closest that can be done without a paid cloud voice);
+       3. otherwise the plain "ta-IN" language request (the original,
+          known-working behaviour) so the device picks its own Tamil voice.
+     If a chosen voice fails to start, it silently retries in mode 3.
+     Reading stops on a second tap, on Back, or when another song opens. */
+  var listenBtnEl = $("listenBtn");
+  var listenIdleHtml = listenBtnEl.innerHTML;
+  var listenBusyHtml = '⏹️ நிறுத்து <span class="en-tag">(Stop)</span>';
+  var ttsSession = 0, ttsActive = false, ttsVoices = [], ttsWatch = null;
+
+  function loadTtsVoices(){
+    try{ ttsVoices = window.speechSynthesis.getVoices() || []; }catch(e){ ttsVoices = []; }
+    return ttsVoices;
+  }
+  if("speechSynthesis" in window){
+    loadTtsVoices();
+    try{ window.speechSynthesis.onvoiceschanged = loadTtsVoices; }catch(e){}
+  }
+  function isTamilVoice(v){
+    var l = (v.lang || "").toLowerCase().replace("_","-");
+    return l === "ta" || l.indexOf("ta-") === 0 || /tamil|தமிழ்|valluvar|வள்ளுவர்/i.test(v.name || "");
+  }
+  function isMaleVoice(v){
+    var n = (v.name || "");
+    if(/female|woman|பெண்|pallavi|vani|kanya|google/i.test(n)) return false;
+    return /valluvar|male|man\b|ஆண்|வள்ளுவர்|-tae-|-tab-|-tad-/i.test(n);
+  }
+  // returns {voice, male}
+  function pickTamilVoice(){
+    var list = (ttsVoices.length ? ttsVoices : loadTtsVoices()).filter(isTamilVoice);
+    if(!list.length) return {voice:null, male:false};
+    var males = list.filter(isMaleVoice);
+    var pool = males.length ? males : list;
+    var exact = pool.filter(function(v){ return (v.lang || "").toLowerCase().replace("_","-") === "ta-in"; });
+    return {voice:(exact[0] || pool[0]), male:males.length > 0};
+  }
+  // Short line-based chunks: engines (esp. Chrome) drop long single utterances.
+  function ttsChunks(text){
+    var lines = String(text || "").replace(/\r/g, "").split("\n");
+    var out = [], buf = "";
+    lines.forEach(function(line){
+      line = line.trim();
+      if(!line){ if(buf){ out.push(buf); buf = ""; } return; }
+      if(buf && (buf + " " + line).length > 160){ out.push(buf); buf = line; }
+      else { buf = buf ? (buf + " " + line) : line; }
+    });
+    if(buf) out.push(buf);
+    return out;
+  }
+  function setListenUi(on){
+    ttsActive = on;
+    listenBtnEl.innerHTML = on ? listenBusyHtml : listenIdleHtml;
+    listenBtnEl.classList.toggle("is-speaking", on);
+    listenBtnEl.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+  var stopSpeech = function(){
+    ttsSession++;
+    clearInterval(ttsWatch); ttsWatch = null;
+    try{ if("speechSynthesis" in window) window.speechSynthesis.cancel(); }catch(e){}
+    if(ttsActive) setListenUi(false);
+  };
+  window.addEventListener("pagehide", function(){ stopSpeech(); });
+  document.addEventListener("visibilitychange", function(){ if(document.hidden) stopSpeech(); });
+
+  /* Online Tamil fallback: used automatically when the device has NO Tamil
+     text-to-speech voice (the usual reason a laptop/phone stays silent --
+     an English voice cannot pronounce Tamil script) or the built-in voice
+     fails to start. Plays short audio pieces one after another through a
+     single <audio> element (created inside the tap so phones allow sound). */
+  var ttsAudio = null;
+  function onlineChunks(text){
+    var base = ttsChunks(text), out = [];
+    base.forEach(function(c){
+      while(c.length > 180){
+        var cut = c.lastIndexOf(" ", 180); if(cut < 60) cut = 180;
+        out.push(c.slice(0, cut).trim()); c = c.slice(cut).trim();
+      }
+      if(c) out.push(c);
+    });
+    return out;
+  }
+  function speakOnline(text, mySession, mySongId, onFail){
+    var parts = onlineChunks(text), i = 0;
+    if(!parts.length) return;
+    if(!ttsAudio) ttsAudio = new Audio();
+    var a = ttsAudio;
+    a.onended = a.onerror = null;
+    function play(){
+      if(mySession !== ttsSession) return;
+      if(i >= parts.length){ stopSpeech(); return; }
+      a.src = "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ta&q=" + encodeURIComponent(parts[i]);
+      a.preservesPitch = a.mozPreservesPitch = a.webkitPreservesPitch = false;
+      a.playbackRate = 0.9;                       // slightly slower + deeper
+      var pr = a.play();
+      if(pr && pr.catch) pr.catch(function(){ if(mySession === ttsSession) onFail(); });
+    }
+    a.onended = function(){ if(mySession !== ttsSession) return; i++; play(); };
+    a.onerror = function(){ if(mySession === ttsSession) onFail(); };
+    play();
+  }
+  var origStop = stopSpeech;
+  stopSpeech = function(){ try{ if(ttsAudio){ ttsAudio.onended = ttsAudio.onerror = null; ttsAudio.pause(); } }catch(e){} origStop(); };
+
+  listenBtnEl.addEventListener("click", function(){
     if(!activeSongId) return;
     var song = activeDetailSong || songs.find(function(s){ return s.id === activeSongId; });
     if(!song) return;
-    if(!("speechSynthesis" in window)){
-      showToast("மன்னிக்கவும், இந்த உலாவி எழுத்தை உரக்கப் படிக்க முடியாது. (Sorry, this browser cannot read text aloud.)");
-      return;
+    if(ttsActive){ stopSpeech(); return; }      // second tap = stop
+
+    var chunks = ttsChunks(song.lyrics);
+    if(!chunks.length) return;
+    var hasSynth = ("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+    var synth = hasSynth ? window.speechSynthesis : null;
+    var picked = hasSynth ? pickTamilVoice() : {voice:null, male:false};
+    var voicesKnown = hasSynth && loadTtsVoices().length > 0;
+    var mySession = ++ttsSession;
+    var mySongId = activeSongId;
+    var idx = 0, usedOnline = false;
+
+    // Stop automatically if the reader leaves this song (Back, another song, other page).
+    clearInterval(ttsWatch);
+    ttsWatch = setInterval(function(){
+      var dv = $("view-detail");
+      if(mySession !== ttsSession){ clearInterval(ttsWatch); return; }
+      if(activeSongId !== mySongId || (dv && dv.classList.contains("hidden"))) stopSpeech();
+    }, 600);
+
+    function failFinal(){
+      if(mySession !== ttsSession) return;
+      stopSpeech();
+      showToast("குரல் வாசிப்பு தொடங்கவில்லை. இணைய இணைப்பு, ஒலி அளவு மற்றும் தமிழ் Text-to-speech குரலைச் சரிபார்க்கவும். (Could not read aloud — check internet, volume and that a Tamil text-to-speech voice is installed.)");
     }
-    window.speechSynthesis.cancel();
-    var utter = new SpeechSynthesisUtterance(song.lyrics);
-    utter.lang = "ta-IN";
-    utter.rate = 0.85;
-    window.speechSynthesis.speak(utter);
+    function goOnline(){
+      if(mySession !== ttsSession || usedOnline) { failFinal(); return; }
+      usedOnline = true;
+      try{ if(synth) synth.cancel(); }catch(e){}
+      speakOnline(song.lyrics, mySession, mySongId, failFinal);
+    }
+
+    setListenUi(true);
+
+    // No Tamil voice on this device (or no speech engine at all) -> online Tamil right away.
+    if(!hasSynth || (voicesKnown && !picked.voice)){ goOnline(); return; }
+
+    var mode = picked.voice ? "voice" : "plain";
+    var retried = false;
+    function speakNext(){
+      if(mySession !== ttsSession || usedOnline) return;
+      if(idx >= chunks.length){ stopSpeech(); return; }
+      var started = false, done = false;
+      var u = new SpeechSynthesisUtterance(chunks[idx]);
+      u.lang = "ta-IN"; u.rate = 0.85; u.volume = 1;
+      if(mode === "voice"){
+        u.voice = picked.voice; u.lang = picked.voice.lang || "ta-IN";
+        u.pitch = picked.male ? 1 : 0.75;
+      } else { u.pitch = 0.8; }
+      function retry(){
+        if(mode === "voice" && !retried){
+          retried = true; mode = "plain";
+          try{ synth.cancel(); }catch(e){}
+          setTimeout(speakNext, 150);
+        } else { goOnline(); }
+      }
+      u.onstart = function(){ started = true; };
+      u.onend = function(){ if(done || mySession !== ttsSession) return; done = true; idx++; speakNext(); };
+      u.onerror = function(ev){
+        if(done || mySession !== ttsSession) return;
+        var err = ev && ev.error;
+        if(err === "canceled" || err === "interrupted") return;
+        done = true; retry();
+      };
+      setTimeout(function(){
+        if(done || started || mySession !== ttsSession) return;
+        if(synth.speaking) return;
+        done = true; retry();
+      }, 3000);
+      try{ synth.speak(u); }catch(e){ done = true; retry(); }
+    }
+    var wasBusy = synth.speaking || synth.pending || synth.paused;
+    if(wasBusy){
+      try{ synth.cancel(); }catch(e){}
+      try{ synth.resume(); }catch(e){}
+      setTimeout(speakNext, 150);
+    } else { speakNext(); }
   });
 
   /* ---------- Share feature: expandable drawer + shareable card + platform intents ---------- */
