@@ -2575,6 +2575,7 @@
       assistant.classList.toggle("assistant-hidden", !showAssistant);
     }
     window.scrollTo({top:0, behavior:"smooth"});
+    if(name === "toc" && window.__omSpark){ try{ window.__omSpark(); }catch(e){} }
   }
   /*©Sivakumar*/
   // Clicking the site logo/title should return to whatever counts as "home"
@@ -3235,30 +3236,55 @@
     });
     return out;
   }
+  var ttsEndpoints = [
+    function(q){ return "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ta&q=" + q; },
+    function(q,n){ return "https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=ta&total=1&idx=0&textlen=" + n + "&q=" + q; },
+    function(q,n){ return "https://translate.google.com/translate_tts?ie=UTF-8&client=gtx&tl=ta&total=1&idx=0&textlen=" + n + "&q=" + q; }
+  ];
+  var ttsGoodEp = 0, ttsStall = null;
   function speakOnline(text, mySession, mySongId, onFail){
-    var parts = onlineChunks(text), i = 0;
+    var parts = onlineChunks(text), i = 0, tries = 0;
     if(!parts.length) return;
-    /*©Sivakumar*/
     if(!ttsAudio) ttsAudio = new Audio();
     var a = ttsAudio;
-    a.onended = a.onerror = null;
+    try{ a.setAttribute("referrerpolicy", "no-referrer"); a.referrerPolicy = "no-referrer"; }catch(e){}
+    a.onended = a.onerror = a.onplaying = null;
+    // If one online voice address stops answering, quietly try the next one
+    // before giving up, so reading keeps working even when one is blocked.
+    function nextEndpoint(){
+      clearTimeout(ttsStall);
+      if(mySession !== ttsSession) return;
+      tries++;
+      if(tries >= ttsEndpoints.length){ onFail(); return; }
+      play();
+    }
     function play(){
       if(mySession !== ttsSession) return;
       if(i >= parts.length){ stopSpeech(); return; }
-      a.src = "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ta&q=" + encodeURIComponent(parts[i]);
-      a.preservesPitch = a.mozPreservesPitch = a.webkitPreservesPitch = false;
-      /*©Sivakumar*/
+      var ep = (ttsGoodEp + tries) % ttsEndpoints.length;
+      a.src = ttsEndpoints[ep](encodeURIComponent(parts[i]), parts[i].length);
+      try{ a.preservesPitch = a.mozPreservesPitch = a.webkitPreservesPitch = false; }catch(e){}
       a.playbackRate = 0.9;                       // slightly slower + deeper
+      clearTimeout(ttsStall);
+      ttsStall = setTimeout(function(){ if(mySession === ttsSession) nextEndpoint(); }, 8000);
       var pr = a.play();
-      if(pr && pr.catch) pr.catch(function(){ if(mySession === ttsSession) onFail(); });
+      if(pr && pr.catch) pr.catch(function(e){
+        if(mySession !== ttsSession) return;
+        if(e && e.name === "AbortError") return;
+        nextEndpoint();
+      });
     }
-    a.onended = function(){ if(mySession !== ttsSession) return; i++; play(); };
-    a.onerror = function(){ if(mySession === ttsSession) onFail(); };
+    a.onplaying = function(){
+      clearTimeout(ttsStall);
+      ttsGoodEp = (ttsGoodEp + tries) % ttsEndpoints.length; tries = 0;
+    };
+    a.onended = function(){ if(mySession !== ttsSession) return; clearTimeout(ttsStall); i++; play(); };
+    a.onerror = function(){ if(mySession === ttsSession) nextEndpoint(); };
     play();
   }
   /*©Sivakumar*/
   var origStop = stopSpeech;
-  stopSpeech = function(){ try{ if(ttsAudio){ ttsAudio.onended = ttsAudio.onerror = null; ttsAudio.pause(); } }catch(e){} origStop(); };
+  stopSpeech = function(){ clearTimeout(ttsStall); try{ if(ttsAudio){ ttsAudio.onended = ttsAudio.onerror = ttsAudio.onplaying = null; ttsAudio.pause(); } }catch(e){} origStop(); };
 
   listenBtnEl.addEventListener("click", function(){
     if(!activeSongId) return;
@@ -3287,15 +3313,24 @@
       /*©Sivakumar*/
     }, 600);
 
+    var triedPlain = false, onlineRunning = false;
     function failFinal(){
       if(mySession !== ttsSession) return;
+      // Online voice failed -> one last try with the device's own speech engine.
+      if(hasSynth && !triedPlain){
+        triedPlain = true; onlineRunning = false; mode = "plain"; retried = true; idx = 0;
+        try{ if(ttsAudio){ ttsAudio.onended = ttsAudio.onerror = ttsAudio.onplaying = null; ttsAudio.pause(); } }catch(e){}
+        try{ synth.cancel(); }catch(e){}
+        setTimeout(speakNext, 200);
+        return;
+      }
       stopSpeech();
       showToast("குரல் வாசிப்பு தொடங்கவில்லை. இணைய இணைப்பு, ஒலி அளவு மற்றும் தமிழ் Text-to-speech குரலைச் சரிபார்க்கவும். (Could not read aloud — check internet, volume and that a Tamil text-to-speech voice is installed.)");
     }
     function goOnline(){
       if(mySession !== ttsSession || usedOnline) { failFinal(); return; }
       /*©Sivakumar*/
-      usedOnline = true;
+      usedOnline = true; onlineRunning = true;
       try{ if(synth) synth.cancel(); }catch(e){}
       speakOnline(song.lyrics, mySession, mySongId, failFinal);
     }
@@ -3309,7 +3344,7 @@
     var mode = picked.voice ? "voice" : "plain";
     var retried = false;
     function speakNext(){
-      if(mySession !== ttsSession || usedOnline) return;
+      if(mySession !== ttsSession || onlineRunning) return;
       if(idx >= chunks.length){ stopSpeech(); return; }
       var started = false, done = false;
       /*©Sivakumar*/
@@ -4578,6 +4613,139 @@
     /*©Sivakumar*/
   });
   evaluate();
+})();
+</script>
+
+<script>
+/* ---------- Divine Om (ௐ) sparkle: plays only when the Main Table of Contents appears ---------- */
+(function(){
+  "use strict";
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var running = null;
+  function stopCurrent(){ if(running){ running.kill(); running = null; } }
+  window.__omSpark = function(){
+    if(calm) return;
+    stopCurrent();
+    var waitTimer = setInterval(function(){
+      if(!document.body.classList.contains("splash-active")){ clearInterval(waitTimer); setTimeout(start, 450); }
+    }, 150);
+    running = { kill: function(){ clearInterval(waitTimer); } };
+  };
+  function start(){
+    var toc = document.getElementById("view-toc");
+    if(!toc || toc.classList.contains("hidden")) return;
+    var cv = document.createElement("canvas");
+    cv.setAttribute("aria-hidden", "true");
+    cv.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:30;opacity:0;transition:opacity 1.2s ease;";
+    document.body.appendChild(cv);
+    var ctx = cv.getContext("2d");
+    var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    function size(){
+      W = window.innerWidth; H = window.innerHeight;
+      cv.width = W * dpr; cv.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size(); window.addEventListener("resize", size);
+    requestAnimationFrame(function(){ cv.style.opacity = "1"; });
+
+    var OM = "\u0BD0";
+    var FONT = '"Noto Sans Tamil","Latha","Nirmala UI","Tamil Sangam MN",sans-serif';
+    var DURATION = 9000, t0 = performance.now(), dead = false, raf = 0;
+    var small = W < 600;
+    var sparks = [], oms = [], i;
+    var nS = small ? 46 : 80, nO = small ? 9 : 15;
+    function rnd(a, b){ return a + Math.random() * (b - a); }
+    for(i = 0; i < nS; i++){
+      sparks.push({ x: rnd(0, 1), y: rnd(0, 1), r: rnd(1.2, 3.2), hue: rnd(0, 360),
+        born: rnd(0, 4200), life: rnd(2600, 4200), ph: rnd(0, 6.28), rise: rnd(6, 22), star: Math.random() < 0.4 });
+    }
+    for(i = 0; i < nO; i++){
+      oms.push({ x: rnd(0.04, 0.96), y: rnd(0.1, 0.95), size: rnd(18, 34), hue: rnd(0, 360),
+        born: rnd(300, 4600), life: rnd(3200, 4600), rise: rnd(10, 26), sway: rnd(0, 6.28) });
+    }
+    function env(age, life){            // gentle fade in / out, 0..1
+      if(age < 0 || age > life) return 0;
+      var u = age / life;
+      return Math.sin(Math.PI * u) * Math.sin(Math.PI * u);
+    }
+    function glow(x, y, r, h, a){
+      var g = ctx.createRadialGradient(x, y, 0, x, y, r * 5);
+      g.addColorStop(0, "hsla(" + h + ",90%,72%," + a + ")");
+      g.addColorStop(0.35, "hsla(" + h + ",90%,70%," + (a * 0.35) + ")");
+      g.addColorStop(1, "hsla(" + h + ",90%,70%,0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 5, 0, 6.2832); ctx.fill();
+    }
+    function frame(now){
+      if(dead) return;
+      var t = now - t0;
+      var tocNow = document.getElementById("view-toc");
+      if(!tocNow || tocNow.classList.contains("hidden")){ finish(); return; }
+      if(t > DURATION){ finish(); return; }
+      ctx.clearRect(0, 0, W, H);
+      var master = Math.min(1, t / 1200) * Math.min(1, (DURATION - t) / 1600);
+
+      // soft, large golden Om at the heart of the page
+      var big = Math.min(W, H) * (small ? 0.62 : 0.5);
+      var pulse = 0.5 + 0.5 * Math.sin(t / 900);
+      ctx.save();
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.font = "600 " + big + "px " + FONT;
+      ctx.shadowColor = "hsla(" + (40 + 20 * pulse) + ",95%,60%,0.7)";
+      ctx.shadowBlur = 40 + 24 * pulse;
+      ctx.fillStyle = "hsla(42,92%,58%," + (0.13 * master) + ")";
+      ctx.fillText(OM, W / 2, H * 0.46);
+      ctx.restore();
+
+      // scattered small Om glyphs in pastel rainbow tones
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      for(i = 0; i < oms.length; i++){
+        var o = oms[i], e = env(t - o.born, o.life) * master;
+        if(e <= 0) continue;
+        var age = (t - o.born) / 1000;
+        var ox = o.x * W + Math.sin(age * 0.9 + o.sway) * 10;
+        var oy = o.y * H - age * o.rise;
+        ctx.font = "500 " + o.size + "px " + FONT;
+        ctx.shadowColor = "hsla(" + o.hue + ",90%,70%,0.9)"; ctx.shadowBlur = 12;
+        ctx.fillStyle = "hsla(" + o.hue + ",85%,68%," + (0.5 * e) + ")";
+        ctx.fillText(OM, ox, oy);
+      }
+      ctx.shadowBlur = 0;
+
+      // twinkling rainbow sparks
+      for(i = 0; i < sparks.length; i++){
+        var s = sparks[i], se = env(t - s.born, s.life) * master;
+        if(se <= 0) continue;
+        var sa = (t - s.born) / 1000;
+        var tw = 0.6 + 0.4 * Math.sin(t / 260 + s.ph);
+        var x = s.x * W + Math.sin(sa * 0.7 + s.ph) * 8;
+        var y = s.y * H - sa * s.rise;
+        var h = (s.hue + t / 40) % 360;
+        glow(x, y, s.r, h, 0.55 * se * tw);
+        if(s.star){
+          var L = s.r * 4.2 * tw;
+          ctx.strokeStyle = "hsla(" + h + ",95%,78%," + (0.75 * se * tw) + ")";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(x - L, y); ctx.lineTo(x + L, y);
+          ctx.moveTo(x, y - L); ctx.lineTo(x, y + L);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "hsla(" + h + ",100%,88%," + (0.9 * se) + ")";
+        ctx.beginPath(); ctx.arc(x, y, s.r * 0.6, 0, 6.2832); ctx.fill();
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function finish(){
+      if(dead) return; dead = true;
+      cancelAnimationFrame(raf);
+      cv.style.opacity = "0";
+      window.removeEventListener("resize", size);
+      setTimeout(function(){ if(cv.parentNode) cv.parentNode.removeChild(cv); }, 1300);
+      running = null;
+    }
+    running = { kill: function(){ finish(); } };
+    raf = requestAnimationFrame(frame);
+  }
 })();
 </script>
 </body>
