@@ -52,7 +52,7 @@
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAEjklEQVR4nO2aS28TVxiGn7nYiW8kJRcTp2lKIVG5CKQCalJA4i8Aq1Yg0V33iAWVEIhFKKCw5A+A2kUFbCrYdIEUCEGERRAQlDTQKLaDgRAn43Gwx3O+LqzQZteN57TKPEtfznnn0Tkz5/s0hvzwubCOMXUH0E0oQHcA3YQCdAfQTShAdwDdhAJ0B9BNKEB3AN2EAnQH0E0oQHcA3YQCdAfQzboXYGNaujNoxcYtBj6pUoISwbbqC7DmK0zDwDSNwLMYMv5boE1RXwlWIgLxCJSq9Q+TUSh7+K6HFbAEQ0QCE+ADFjA153Nh6AGj9/MAfLM/w+nTg/R/Zn38TVAY4tcCEeD7CisS4ZfrT/nu+C36NrdzYH8PAPfuzzH96h0/XzvMt8d24nselhXQ/VkCoFZTIiJy5/ZLgSG5dPGhuK738fuy68mliw8FhuTO7Zdr/tNoGi5AKRGllCwvVSSTvirnz42KiEg268jk8wWZfL4g2awjIiLnz41KJn1VlpcqopQSFYCDhq8z31cYhsGV4XE62mOcOTvIzEyRXNahUHApFFxyWYeZmSJnzg7S3h7jyvA4hmHg+6rR8Rp/ELIsk1pNcfPGFJeHD7G0VGE+XyKXK/Fi8j0vJt+Ty5WYz5dYXqpwefgQN29MUaupQO4DdiMHV0owTYMnE29ZKXts39FOds6hWKzwZOIt01OLYEBf3yfs3ZtmLuuwfUcbK+UaTybe8tWe9McxGkVDFStVf8CMPcizd18XyWQE1/V4OVNkcnKBWMwm1mzxYnKBmZkibskjlYqyZ1+asQf5NWM0ikCeNdPTi2S6kzhOldevXfJ5l+Ymi9nZZWZnHaJNFvPz9fuBs1yluzvFH9PFIKIFI6DkeKTTcSzbxDQNnFIVz1OMjMwxMjKHXxOWliooBYZp0NkZx1k9JTaYsBoMYpJUKkqhUMavKZQSUskorlPl4MH6SdCyDVpamjBNECW8eVMmlYwGES2YFbC1r5V8ziGVipLelCCTSfCh4tPbu4He3hTVik9XV4J0OkFqQ5RczmFrf2sQ0RorYPXxNTCYYfxRgVKpSjIR4YstrWzb1sbKSo2VDz5fbmtjy5ZWEokIjlPl8aMCAwOZNWM0ioZuAdM0EIFduzuIxW2ePVvg64EuFhc/sGt3B5s2JQDoTMdpaW2mpyfF2Ng8sbjNrt0diPzPBUD9KGzbJkeO9nPq5F0mnp6gK5MkGrXYuLEZgFjMpq09xoaWJk6dvMuRo/3Ydv0EadsN3qWNLjb+WQx1/4tiqDvgYkhPOfzT2Jpy2NVYDhteAA0RA/B9IRqxuX79GceP32Lz5nYO7P8UgHv3srz68x3Xrh3m2LEdVL0almUQRKcm0JbYKm/malwYGl3bEvtxkM6eSNBRMH59/HuwTVFfSCQixOMRSm79uJtMRCmXPVzXw7ICbory/c7gX5VVAgKsXqwv9X2ioS1uNyVaAp/0b1bdB3/hq9i+8rVN/l9g3VeDoQDdAXQTCtAdQDehAN0BdBMK0B1AN6EA3QF0EwrQHUA3oQDdAXQTCtAdQDfrXsBfkSRabBXJx1UAAAAASUVORK5CYII=">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Serif+Tamil:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Serif+Tamil:wght@500;600;700&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     /* Shared hand-drawn artwork used for both the main site background
@@ -191,6 +191,46 @@
   }
 
 /*©Sivakumar*/
+  /* Hanuman Chalisa — a SAFFRON + RAMA-BLUE theme: saffron/orange (Lord
+     Hanuman's sindoor & the dhvaja) as the primary colour, Lord Rama's
+     blue as the secondary. The page backdrop is a Hanuman/Rama artwork
+     (sunrise of the Suryavamsha, Rama's bow & arrow, Hanuman's gada, the
+     Sanjeevani mountain). It only applies while this one topic is open —
+     every other topic keeps its own colours and background untouched. */
+  html[data-collection="hanuman"]{
+    --site-bg-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDE2MDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIHNsaWNlIj4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0ic2t5IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzZCMUEwOCIvPjxzdG9wIG9mZnNldD0iMC4yOCIgc3RvcC1jb2xvcj0iI0I4NDIwQyIvPjxzdG9wIG9mZnNldD0iMC41MiIgc3RvcC1jb2xvcj0iI0VFOEExQyIvPjxzdG9wIG9mZnNldD0iMC43NCIgc3RvcC1jb2xvcj0iI0ZCQzg2MiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0ZGRTlCOCIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmFkaWFsR3JhZGllbnQgaWQ9InN1biIgY3g9IjAuNSIgY3k9IjAuNSIgcj0iMC41Ij4KPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjRkZGNkQwIi8+PHN0b3Agb2Zmc2V0PSIwLjU1IiBzdG9wLWNvbG9yPSIjRkZEMzVBIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjU5RTBCIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ2xvdyIgY3g9IjAuNSIgY3k9IjAuNSIgcj0iMC41Ij4KPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjRkZFOUEwIiBzdG9wLW9wYWNpdHk9IjAuODUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGRkU5QTAiIHN0b3Atb3BhY2l0eT0iMCIvPgo8L3JhZGlhbEdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjE2MDAiIGZpbGw9InVybCgjc2t5KSIvPgo8Y2lyY2xlIGN4PSI2MDAiIGN5PSI3MDAiIHI9IjUyMCIgZmlsbD0idXJsKCNnbG93KSIvPgo8cG9seWdvbiBwb2ludHM9Ijg1MCw2OTggMTY5OSw2NjAgMTY5OSw3NDAgODUwLDcwMiIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iODQ4LDczMCAxNjk1LDgwNCAxNjg1LDg4MyA4NDgsNzM1IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI4NDIsNzYzIDE2NzIsOTQ2IDE2NTIsMTAyMyA4NDEsNzY3IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSI4MzIsNzk0IDE2MzEsMTA4NCAxNjAwLDExNTcgODMwLDc5OCIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iODE4LDgyMyAxNTcyLDEyMTUgMTUzMiwxMjg0IDgxNSw4MjciIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMjIiLz48cG9seWdvbiBwb2ludHM9IjgwMCw4NTAgMTQ5NiwxMzM4IDE0NDgsMTQwMSA3OTcsODU0IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI3NzgsODc1IDE0MDUsMTQ0OSAxMzQ5LDE1MDUgNzc1LDg3OCIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iNzU0LDg5NyAxMzAxLDE1NDggMTIzOCwxNTk2IDc1MCw5MDAiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMTIiLz48cG9seWdvbiBwb2ludHM9IjcyNyw5MTUgMTE4NCwxNjMyIDExMTUsMTY3MiA3MjMsOTE4IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSI2OTgsOTMwIDEwNTcsMTcwMCA5ODQsMTczMSA2OTQsOTMyIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI2NjcsOTQxIDkyMywxNzUyIDg0NiwxNzcyIDY2Myw5NDIiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMjIiLz48cG9seWdvbiBwb2ludHM9IjYzNSw5NDggNzgzLDE3ODUgNzA0LDE3OTUgNjMwLDk0OCIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iNjAyLDk1MCA2NDAsMTc5OSA1NjAsMTc5OSA1OTgsOTUwIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSI1NzAsOTQ4IDQ5NiwxNzk1IDQxNywxNzg1IDU2NSw5NDgiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMTIiLz48cG9seWdvbiBwb2ludHM9IjUzNyw5NDIgMzU0LDE3NzIgMjc3LDE3NTIgNTMzLDk0MSIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iNTA2LDkzMiAyMTYsMTczMSAxNDMsMTcwMCA1MDIsOTMwIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI0NzcsOTE4IDg1LDE2NzIgMTYsMTYzMiA0NzMsOTE1IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSI0NTAsOTAwIC0zOCwxNTk2IC0xMDEsMTU0OCA0NDYsODk3IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI0MjUsODc4IC0xNDksMTUwNSAtMjA1LDE0NDkgNDIyLDg3NSIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iNDAzLDg1NCAtMjQ4LDE0MDEgLTI5NiwxMzM4IDQwMCw4NTAiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMTIiLz48cG9seWdvbiBwb2ludHM9IjM4NSw4MjcgLTMzMiwxMjg0IC0zNzIsMTIxNSAzODIsODIzIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSIzNzAsNzk4IC00MDAsMTE1NyAtNDMxLDEwODQgMzY4LDc5NCIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iMzU5LDc2NyAtNDUyLDEwMjMgLTQ3Miw5NDYgMzU4LDc2MyIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iMzUyLDczNSAtNDg1LDg4MyAtNDk1LDgwNCAzNTIsNzMwIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSIzNTAsNzAyIC00OTksNzQwIC00OTksNjYwIDM1MCw2OTgiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMjIiLz48cG9seWdvbiBwb2ludHM9IjM1Miw2NzAgLTQ5NSw1OTYgLTQ4NSw1MTcgMzUyLDY2NSIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iMzU4LDYzNyAtNDcyLDQ1NCAtNDUyLDM3NyAzNTksNjMzIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSIzNjgsNjA2IC00MzEsMzE2IC00MDAsMjQzIDM3MCw2MDIiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMTIiLz48cG9seWdvbiBwb2ludHM9IjM4Miw1NzcgLTM3MiwxODUgLTMzMiwxMTYgMzg1LDU3MyIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iNDAwLDU1MCAtMjk2LDYyIC0yNDgsLTEgNDAzLDU0NiIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iNDIyLDUyNSAtMjA1LC00OSAtMTQ5LC0xMDUgNDI1LDUyMiIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iNDQ2LDUwMyAtMTAxLC0xNDggLTM4LC0xOTYgNDUwLDUwMCIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iNDczLDQ4NSAxNiwtMjMyIDg1LC0yNzIgNDc3LDQ4MiIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iNTAyLDQ3MCAxNDMsLTMwMCAyMTYsLTMzMSA1MDYsNDY4IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI1MzMsNDU5IDI3NywtMzUyIDM1NCwtMzcyIDUzNyw0NTgiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMjIiLz48cG9seWdvbiBwb2ludHM9IjU2NSw0NTIgNDE3LC0zODUgNDk2LC0zOTUgNTcwLDQ1MiIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iNTk4LDQ1MCA1NjAsLTM5OSA2NDAsLTM5OSA2MDIsNDUwIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSI2MzAsNDUyIDcwNCwtMzk1IDc4MywtMzg1IDYzNSw0NTIiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMTIiLz48cG9seWdvbiBwb2ludHM9IjY2Myw0NTggODQ2LC0zNzIgOTIzLC0zNTIgNjY3LDQ1OSIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4yMiIvPjxwb2x5Z29uIHBvaW50cz0iNjk0LDQ2OCA5ODQsLTMzMSAxMDU3LC0zMDAgNjk4LDQ3MCIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iNzIzLDQ4MiAxMTE1LC0yNzIgMTE4NCwtMjMyIDcyNyw0ODUiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMjIiLz48cG9seWdvbiBwb2ludHM9Ijc1MCw1MDAgMTIzOCwtMTk2IDEzMDEsLTE0OCA3NTQsNTAzIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI3NzUsNTIyIDEzNDksLTEwNSAxNDA1LC00OSA3NzgsNTI1IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSI3OTcsNTQ2IDE0NDgsLTEgMTQ5Niw2MiA4MDAsNTUwIiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjEyIi8+PHBvbHlnb24gcG9pbnRzPSI4MTUsNTczIDE1MzIsMTE2IDE1NzIsMTg1IDgxOCw1NzciIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMjIiLz48cG9seWdvbiBwb2ludHM9IjgzMCw2MDIgMTYwMCwyNDMgMTYzMSwzMTYgODMyLDYwNiIgZmlsbD0iI0ZGRDM2QiIgb3BhY2l0eT0iMC4xMiIvPjxwb2x5Z29uIHBvaW50cz0iODQxLDYzMyAxNjUyLDM3NyAxNjcyLDQ1NCA4NDIsNjM3IiBmaWxsPSIjRkZEMzZCIiBvcGFjaXR5PSIwLjIyIi8+PHBvbHlnb24gcG9pbnRzPSI4NDgsNjY1IDE2ODUsNTE3IDE2OTUsNTk2IDg0OCw2NzAiIGZpbGw9IiNGRkQzNkIiIG9wYWNpdHk9IjAuMTIiLz4KPGNpcmNsZSBjeD0iNjAwIiBjeT0iNzAwIiByPSIzMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRTA4QSIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIwLjQ1Ii8+CjxjaXJjbGUgY3g9IjYwMCIgY3k9IjcwMCIgcj0iMjkwIiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkYxQzAiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iMC40IiBzdHJva2UtZGFzaGFycmF5PSIzIDkiLz4KPGNpcmNsZSBjeD0iNjAwIiBjeT0iNzAwIiByPSIyMzUiIGZpbGw9InVybCgjc3VuKSIvPgo8Y2lyY2xlIGN4PSI2MDAiIGN5PSI3MDAiIHI9IjIzNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGNkQwIiBzdHJva2Utd2lkdGg9IjQiIG9wYWNpdHk9IjAuNyIvPgo8IS0tIGZhciBoaWxscyAtLT4KPHBhdGggZD0iTTAgMTAxMCBMMTIwIDkzMCBMMjQwIDk4NSBMMzgwIDg4MCBMNTIwIDk3NSBMNjUwIDkwNSBMODAwIDk5MCBMOTQwIDkwMCBMMTA4MCA5NzAgTDEyMDAgOTI1IEwxMjAwIDE2MDAgTDAgMTYwMCBaIiBmaWxsPSIjOUEzQTBFIiBvcGFjaXR5PSIwLjU1Ii8+CjwhLS0gU2FuamVldmFuaSBtb3VudGFpbiAoY2FycmllZCBieSBIYW51bWFuKSAtLT4KPHBhdGggZD0iTTE4MCAxMTMwIEwyNTAgMTA2MCBMMzAwIDEwNTAgTDMzMCAxMDM1IEw0MjAgMTAzMCBMNDcwIDEwNTAgTDUyMCAxMDYyIEw2MDAgMTEzNSBaIiBmaWxsPSIjNkUyQTBBIiBvcGFjaXR5PSIwLjc4Ii8+CjxjaXJjbGUgY3g9IjMwMCIgY3k9IjEwOTAiIHI9IjUiIGZpbGw9IiNGRkU5QTgiIG9wYWNpdHk9IjAuODUiLz48Y2lyY2xlIGN4PSIzNDAiIGN5PSIxMDcwIiByPSI0IiBmaWxsPSIjRkZFOUE4IiBvcGFjaXR5PSIwLjg1Ii8+PGNpcmNsZSBjeD0iMzgwIiBjeT0iMTA4NSIgcj0iNiIgZmlsbD0iI0ZGRTlBOCIgb3BhY2l0eT0iMC44NSIvPjxjaXJjbGUgY3g9IjQyMCIgY3k9IjEwNjAiIHI9IjQiIGZpbGw9IiNGRkU5QTgiIG9wYWNpdHk9IjAuODUiLz48Y2lyY2xlIGN4PSI0NTUiIGN5PSIxMDgyIiByPSI1IiBmaWxsPSIjRkZFOUE4IiBvcGFjaXR5PSIwLjg1Ii8+PGNpcmNsZSBjeD0iNTAwIiBjeT0iMTEwMCIgcj0iNCIgZmlsbD0iI0ZGRTlBOCIgb3BhY2l0eT0iMC44NSIvPjxjaXJjbGUgY3g9IjI3MCIgY3k9IjExMTIiIHI9IjQiIGZpbGw9IiNGRkU5QTgiIG9wYWNpdHk9IjAuODUiLz4KPCEtLSBuZWFyIGhpbGxzIC0tPgo8cGF0aCBkPSJNMCAxMTgwIEwxNDAgMTExMCBMMzAwIDExNzAgTDQ3MCAxMDkwIEw2NDAgMTE2NSBMODIwIDEwODUgTDEwMDAgMTE2MCBMMTIwMCAxMTAwIEwxMjAwIDE2MDAgTDAgMTYwMCBaIiBmaWxsPSIjNEExQTA2IiBvcGFjaXR5PSIwLjcyIi8+CjxwYXRoIGQ9Ik0wIDEzMzAgTDIwMCAxMjcwIEw0MjAgMTMzMCBMNjQwIDEyNTUgTDg2MCAxMzI1IEwxMDYwIDEyNjUgTDEyMDAgMTMwMCBMMTIwMCAxNjAwIEwwIDE2MDAgWiIgZmlsbD0iIzJFMEYwMyIgb3BhY2l0eT0iMC44MiIvPgo8IS0tIExvcmQgUmFtYSdzIGJvdyAoS29kYW5kYSkgYW5kIGFycm93IC0tPgo8ZyBmaWxsPSJub25lIiBzdHJva2U9IiMyQTBFMDMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iMC42MiI+CjxwYXRoIGQ9Ik05MzAgMTAxMCBRMTEzMCAxMjkwIDkzMCAxNTcwIiBzdHJva2Utd2lkdGg9IjE2Ii8+CjxsaW5lIHgxPSI5MzAiIHkxPSIxMDEwIiB4Mj0iOTMwIiB5Mj0iMTU3MCIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxsaW5lIHgxPSI5MzAiIHkxPSIxMjkwIiB4Mj0iNTYwIiB5Mj0iMTI5MCIgc3Ryb2tlLXdpZHRoPSI5Ii8+CjwvZz4KPGcgZmlsbD0iIzJBMEUwMyIgb3BhY2l0eT0iMC42MiI+Cjxwb2x5Z29uIHBvaW50cz0iNTYwLDEyOTAgNjEyLDEyNjggNjEyLDEzMTIiLz4KPHBvbHlnb24gcG9pbnRzPSI5MzAsMTI5MCA5NjgsMTI2OCA5NTAsMTI5MCA5NjgsMTMxMiIvPgo8cG9seWdvbiBwb2ludHM9IjkzMCwxMjkwIDEwMDAsMTI2MiA5NzIsMTI5MCAxMDAwLDEzMTgiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjwhLS0gSGFudW1hbidzIG1hY2UgKGdhZGEpIC0tPgo8ZyBmaWxsPSIjMkEwRTAzIiBvcGFjaXR5PSIwLjYyIj4KPGxpbmUgeDE9IjIwNSIgeTE9IjExOTAiIHgyPSIyOTIiIHkyPSIxNjAwIiBzdHJva2U9IiMyQTBFMDMiIHN0cm9rZS13aWR0aD0iMjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8Y2lyY2xlIGN4PSIyMDUiIGN5PSIxMTIwIiByPSI3MiIvPgo8Y2lyY2xlIGN4PSIyMDUiIGN5PSIxMTIwIiByPSI3MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZEMzZCIiBzdHJva2Utd2lkdGg9IjMiIG9wYWNpdHk9IjAuNSIvPgo8Y2lyY2xlIGN4PSIyMDUiIGN5PSIxMDQwIiByPSIxNiIvPgo8Y2lyY2xlIGN4PSIyMDUiIGN5PSIxMjAwIiByPSIxNiIvPgo8Y2lyY2xlIGN4PSIxMjUiIGN5PSIxMTIwIiByPSIxNiIvPgo8Y2lyY2xlIGN4PSIyODUiIGN5PSIxMTIwIiByPSIxNiIvPgo8Y2lyY2xlIGN4PSIxNDgiIGN5PSIxMDYzIiByPSIxMiIvPjxjaXJjbGUgY3g9IjI2MiIgY3k9IjEwNjMiIHI9IjEyIi8+PGNpcmNsZSBjeD0iMTQ4IiBjeT0iMTE3NyIgcj0iMTIiLz48Y2lyY2xlIGN4PSIyNjIiIGN5PSIxMTc3IiByPSIxMiIvPgo8L2c+CjwhLS0gc2FmZnJvbiBwZW5uYW50cyAtLT4KPGcgb3BhY2l0eT0iMC41Ij4KPGxpbmUgeDE9IjEwNjAiIHkxPSI2MTAiIHgyPSIxMDYwIiB5Mj0iOTAwIiBzdHJva2U9IiMzQTE0MDUiIHN0cm9rZS13aWR0aD0iNSIvPgo8cG9seWdvbiBwb2ludHM9IjEwNjAsNjEyIDExNTAsNjQyIDEwNjAsNjgwIiBmaWxsPSIjRkY3QTAwIi8+CjxsaW5lIHgxPSIxNTAiIHkxPSI1NjAiIHgyPSIxNTAiIHkyPSI4NTAiIHN0cm9rZT0iIzNBMTQwNSIgc3Ryb2tlLXdpZHRoPSI1Ii8+Cjxwb2x5Z29uIHBvaW50cz0iMTUwLDU2MiAyNDAsNTkyIDE1MCw2MzAiIGZpbGw9IiNGRjdBMDAiLz4KPC9nPgo8L3N2Zz4=');
+    --color-bg:#FFF1DA;
+    --color-bg-card:#FFF9EE;
+    --color-border:#EBCB98;
+    --color-maroon:#C2570C;
+    --color-maroon-dark:#8A3A06;
+    --color-teal:#1E4F9C;
+    --color-teal-dark:#143A78;
+    --color-text:#2B1A0E;
+    --color-text-soft:#5C4631;
+    --color-peacock-emerald: var(--color-maroon);
+    --color-peacock-blue: var(--color-teal);
+    --color-peacock-indigo: var(--color-teal-dark);
+    --bg-overlay-a: rgba(255,243,224,0.70);
+    --bg-overlay-b: rgba(255,236,206,0.60);
+  }
+  html[data-collection="hanuman"][data-theme="dark"]{
+    --color-bg:#1F140D;
+    --color-bg-card:#2B1D13;
+    --color-border:#4D3622;
+    --color-maroon:#F0A056;
+    --color-maroon-dark:#F8CB9C;
+    --color-teal:#7FA9EA;
+    --color-teal-dark:#AAC6F2;
+    --color-text:#F1E6D6;
+    --color-text-soft:#C7B49B;
+    --bg-overlay-a: rgba(24,13,6,0.82);
+    --bg-overlay-b: rgba(24,13,6,0.76);
+  }
+  html[data-collection="hanuman"] .lyrics-block,
+  html[data-collection="hanuman"] .share-card-lyrics{ font-family:'Noto Serif Tamil','Noto Serif Devanagari',serif; }
+  html[data-collection="hanuman"] .detail-card::before{ content:"ராம்"; font-size:5.5rem; }
+
   *{box-sizing:border-box;}
   html{font-size:calc(16px * var(--font-scale)); scroll-behavior:smooth;}
   html, body{ transition:background-color .35s ease, color .35s ease; }
@@ -492,6 +532,17 @@
   html[data-theme="dark"] .toc-card[data-collection-id="kandharanubhuti"] .toc-cta{ color:#83D2AC; }
   html[data-theme="dark"] .toc-card[data-collection-id="kandharanubhuti"] .toc-icon-badge{
     background:linear-gradient(160deg, #4E90D2, #7FB3E8); color:#0E2A47;
+  }
+  /* ஹனுமான் சாலீசா (Hanuman Chalisa) — saffron / Rama-blue palette. */
+  .toc-card[data-collection-id="hanuman"]{ border-top:4px solid #1E4F9C; }
+  .toc-card[data-collection-id="hanuman"] .toc-icon-badge{
+    background:linear-gradient(160deg, #E2751A, #A8470A);
+  }
+  .toc-card[data-collection-id="hanuman"] .toc-cta{ color:#1E4F9C; }
+  html[data-theme="dark"] .toc-card[data-collection-id="hanuman"]{ border-top-color:#7FA9EA; }
+  html[data-theme="dark"] .toc-card[data-collection-id="hanuman"] .toc-cta{ color:#9DBDF0; }
+  html[data-theme="dark"] .toc-card[data-collection-id="hanuman"] .toc-icon-badge{
+    background:linear-gradient(160deg, #F0A056, #F8CB9C); color:#3A1A06;
   }
   /*©Sivakumar*/
 
@@ -1830,8 +1881,8 @@
   <section id="view-toc" class="hidden">
     <h2 class="toc-title">முருகப் பெருமான் பக்தி நூல்கள் (தமிழ்) <span class="en-tag" style="display:block; font-size:.68em; font-weight:500; margin-top:.15rem;">(Lord Muruga Devotional Contents in Tamil)</span></h2>
     <div class="intro-note" style="border-left-color:var(--color-gold); text-align:center;">
-      கீழே உள்ள மூன்று நூல்களில் ஒன்றைத் தொட்டுத் திறக்கவும்.
-      <span class="en-tag">(Below are three sacred texts. Simply tap any one card to open it.)</span>
+      கீழே உள்ள நான்கு நூல்களில் ஒன்றைத் தொட்டுத் திறக்கவும்.
+      <span class="en-tag">(Below are four sacred texts. Simply tap any one card to open it.)</span>
     </div>
     <div id="collectionGrid" class="song-grid" role="list" aria-label="Collections"></div>
   </section>
@@ -1965,7 +2016,7 @@
             <textarea id="lyrics" rows="6" required></textarea>
             <div class="field-hint">படிக்கும்போது காட்சியளிக்க வேண்டிய வகையில், புதிய வரிக்கு Enter அழுத்தவும். <span class="en-tag">(Press Enter for a new line, the way it should appear while reading.)</span></div>
           </div>
-          <div class="field">
+          <div class="field" id="meaningField">
             <label for="meaning">பொருள் / விளக்கம் * <span class="en-tag">(Meaning / explanation *)</span></label>
             <textarea id="meaning" rows="6" required></textarea>
           </div>
@@ -2303,15 +2354,53 @@
         '<p>ஒவ்வொரு செய்யுளும் "ஓம்" என்ற பிரணவப் பொருளுடன் தொடங்கி, மனதை அடக்கி இறைவனை அடையும் வழியைச் சுட்டிக் காட்டுகிறது. அகங்காரம், மாயை போன்ற தடைகளை நீக்கி ஞானம் பெற வேண்டும் என்ற வேண்டுகோளாக இச்செய்யுட்கள் அமைந்துள்ளன.</p>' +
         '<h4>பாராயண பலன்:</h4>' +
         '<p>இச்செய்யுட்களை தினமும் ஓதுவது மனத் தெளிவையும், இறை நெருக்கத்தையும் தரும் என பக்தி மரபில் போற்றப்படுகிறது.</p>'
+    },
+    hanuman: {
+      id: "hanuman",
+      firestoreCollection: "songs_hanuman",
+      titleTamil: "ஹனுமான் சாலீசா",
+      titleEn: "Hanuman Chalisa",
+      subtitleTamil: "துளசிதாசர் அருளிய அனுமன் துதி",
+      subtitleEn: "Hymn to Lord Hanuman, devoted servant of Lord Ram, by Saint Tulsidas",
+      cardBlurbTamil: "ஸ்ரீ ராம பக்தன் அனுமனைப் போற்றும் 40 துதி வரிகள்.",
+      cardBlurbEn: "Forty verses praising Lord Hanuman, the devoted servant of Lord Ram.",
+      icon: "ராம்",
+      iconHtml: '<span lang="ta" style="font-family:\'Noto Serif Tamil\',serif; font-weight:700; line-height:1; font-size:.62em;">ராம்</span>',
+      pageTitle: "ஹனுமான் சாலீசா — Hanuman Chalisa",
+      // One complete text, opened straight into the reading view, and shown
+      // as lyrics only: the admin pastes just the song (no meaning field),
+      // and visitors see just the song (no meaning section).
+      singleContentMode: true,
+      lyricsOnly: true,
+      greetingMainHtml: '<strong>ஜெய் ஸ்ரீ ராம், பக்தர்களே.</strong> ஸ்ரீ ராம பக்தர் அனுமனைப் போற்றும் ஹனுமான் சாலீசாவை கீழே படித்து பாராயணம் செய்யலாம். இது ஒரே ஒரு முழுமையான துதிப் பாடல் என்பதால், இப்பக்கமே நேரடியாகத் திறக்கும். மேலே உள்ள <strong>A / A+ / A++</strong> பொத்தான்களைப் பயன்படுத்தி எழுத்துருவின் அளவை பெரிதாக்கிக் கொள்ளலாம்.',
+      greetingEnText: "(Jai Shri Ram, devotees. Read and recite the Hanuman Chalisa, in praise of Lord Hanuman, the devoted servant of Lord Ram, below. As this is one single, complete hymn, it opens directly on this page. Use the A / A+ / A++ buttons above to make the text larger.)",
+      assistantRingText: "ஹனுமான் சாலீசா பற்றி அறிய இங்கே கிளிக் செய்யுங்கள் (Click here to know about Hanuman Chalisa)",
+      assistantTitle: "ஹனுமான் சாலீசா: அனுமனின் துதிப் பாடல்",
+      assistantHtml:
+        '<p>ஹனுமான் சாலீசா என்பது ஸ்ரீ ராம பக்தர் அனுமனைப் போற்றும் புகழ்பெற்ற பக்திப் பாடலாகும். இதனை துளசிதாசர் அவதி மொழியில் இயற்றினார் என்று பக்தி மரபு கூறுகிறது.</p>' +
+        '<h4>அமைப்பு:</h4>' +
+        '<p>"சாலீசா" என்றால் நாற்பது என்று பொருள். இப்பாடல் தொடக்கத் துதி ஈரடிகளுடன் நாற்பது துதி வரிகளைக் கொண்டுள்ளது. அனுமனின் பலம், அறிவு, பணிவு, ஸ்ரீ ராமனிடம் கொண்ட அன்பு ஆகியவற்றை இது போற்றுகிறது.</p>' +
+        '<h4>பாராயணம்:</h4>' +
+        '<p>செவ்வாய், சனிக்கிழமைகளில் இதனைப் பாராயணம் செய்வது சிறப்பு என பக்தர்கள் போற்றுகின்றனர். பயம் நீங்கி மன உறுதி கிடைக்கும் என்பது நம்பிக்கை.</p>'
     }
     /*©Sivakumar*/
   };
-  var COLLECTION_ORDER = ["thirupugazh","kandhasashti","kandharanubhuti"];
+  var COLLECTION_ORDER = ["thirupugazh","kandhasashti","kandharanubhuti","hanuman"];
   var COLLECTION_KEY = "thirupugazh_collection_v1";
   var currentCollection = COLLECTIONS.thirupugazh;
 
+  // Lyrics-only topics (e.g. Hanuman Chalisa): the admin form drops the
+  // "Meaning" box (and its required check) so only the song is pasted.
+  function applyLyricsOnlyMode(){
+    var lo = !!(currentCollection && currentCollection.lyricsOnly);
+    var f = $("meaningField"), m = $("meaning");
+    if(f) f.classList.toggle("hidden", lo);
+    if(m) m.required = !lo;
+  }
+
   function applyCollection(coll, opts){
     currentCollection = coll;
+    applyLyricsOnlyMode();
     songsRef = db.collection(coll.firestoreCollection);
     /*©Sivakumar*/
     localStorage.setItem(COLLECTION_KEY, coll.id);
@@ -2574,6 +2663,7 @@
         (name === "detail" && currentCollection && currentCollection.singleContentMode);
       assistant.classList.toggle("assistant-hidden", !showAssistant);
     }
+    if(name === "admin") applyLyricsOnlyMode();
     window.scrollTo({top:0, behavior:"smooth"});
     if(name === "toc" && window.__omSpark){ try{ window.__omSpark(); }catch(e){} }
   }
@@ -3112,12 +3202,13 @@
         (song.place ? '<span class="place">📍 ' + escapeHtml(song.place) + '</span>' : '') +
         '<span class="views">👁 ' + (song.views || 0) + ' <span class="en-tag">views</span></span>' +
       '</div>' +
-      '<div class="section-label">பாடல் (தமிழ்) <span class="en-tag">(Song (Tamil))</span></div>' +
+      '<div class="section-label">' + (currentCollection.lyricsOnly ? 'பாடல் வரிகள் <span class="en-tag">(Lyrics)</span>' : 'பாடல் (தமிழ்) <span class="en-tag">(Song (Tamil))</span>') + '</div>' +
       '<div class="lyrics-block">' + nl2br(song.lyrics) + '</div>' +
       (song.translit ? '<hr class="divider"><div class="section-label">ஒலிபெயர்ப்பு <span class="en-tag">(Transliteration)</span></div><div class="translit-block">' + nl2br(song.translit) + '</div>' : '') +
-      '<hr class="divider">' +
-      '<div class="section-label">பொருள் <span class="en-tag">(Meaning)</span></div>' +
-      '<div class="meaning-block">' + nl2br(song.meaning) + '</div>';
+      (currentCollection.lyricsOnly ? '' :
+        '<hr class="divider">' +
+        '<div class="section-label">பொருள் <span class="en-tag">(Meaning)</span></div>' +
+        '<div class="meaning-block">' + nl2br(song.meaning) + '</div>');
     closeShareDrawer();
     showView("detail");
   }
@@ -3414,7 +3505,7 @@
   // Short, teaser-only text for platforms with hard character limits (e.g.
   // a tweet). The full song still travels via the link + the shared image.
   function shareTeaser(song){
-    var flat = (song.meaning || "").replace(/\n+/g, " ").trim();
+    var flat = ((currentCollection.lyricsOnly ? song.lyrics : song.meaning) || "").replace(/\n+/g, " ").trim();
     return truncateWords(flat, 140);
   }
 
@@ -3427,11 +3518,31 @@
     $("shareCardPlace").style.display = song.place ? "" : "none";
     $("shareCardLyrics").textContent = shareLyricsSnippet(song);
     $("shareCardMeaning").textContent = shareMeaningSnippet(song);
+    // Lyrics-only topics: no meaning block on the card, own branding.
+    var lo = !!currentCollection.lyricsOnly;
+    var cardLabels = document.querySelectorAll("#shareCard .share-card-label");
+    var cardDividers = document.querySelectorAll("#shareCard .share-card-divider");
+    if(cardLabels[0]) cardLabels[0].textContent = lo ? "பாடல் வரிகள் (Lyrics)" : "பாடல் (Song)";
+    if(cardLabels[1]) cardLabels[1].style.display = lo ? "none" : "";
+    if(cardDividers[1]) cardDividers[1].style.display = lo ? "none" : "";
+    $("shareCardMeaning").style.display = lo ? "none" : "";
+    var cardBrand = document.querySelector("#shareCard .share-card-brand");
+    var cardFoot = document.querySelectorAll("#shareCard .share-card-footer span");
+    if(cardBrand) cardBrand.textContent = lo ? "🚩 ஹனுமான் சாலீசா · Hanuman Chalisa" : "🦚 திருப்புகழ் · Thiruppugazh";
+    if(cardFoot[0]) cardFoot[0].textContent = lo ? "ஜெய் ஸ்ரீ ராம் 🙏" : "ஓம் முருகா 🙏";
   }
 
 /*©Sivakumar*/
   function buildShareText(song){
     var title = song.titleTamil + (song.titleEn ? " (" + song.titleEn + ")" : "");
+    if(currentCollection.lyricsOnly){
+      return (
+        "🚩 " + title + "\n\n" +
+        shareLyricsSnippet(song) + "\n\n" +
+        "🔗 " + SITE_URL + "\n" +
+        "ஜெய் ஸ்ரீ ராம் 🙏"
+      );
+    }
     return (
       "🦚 திருப்புகழ்: " + title + "\n\n" +
       shareLyricsSnippet(song) + "\n\n" +
@@ -3826,7 +3937,7 @@
     var titleTamil = $("titleTamil").value.trim();
     var lyrics = $("lyrics").value.trim();
     var meaning = $("meaning").value.trim();
-    if(!titleTamil || !lyrics || !meaning){
+    if(!titleTamil || !lyrics || (!meaning && !currentCollection.lyricsOnly)){
       $("formError").textContent = "* குறியிடப்பட்ட கட்டாயப் புலங்களை நிரப்பவும். (Please fill in the fields marked *.)";
       return;
     }
