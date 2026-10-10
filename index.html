@@ -3458,6 +3458,38 @@
      fails to start. Plays short audio pieces one after another through a
      single <audio> element (created inside the tap so phones allow sound). */
   var ttsAudio = null;
+  /* Why Listen worked from a saved file but not from the website: Google's
+     voice service refuses requests that carry a website address (Referer).
+     A saved local file sends none, the hosted site sends
+     "https://iaintcoding.github.io/". <audio> elements ignore any
+     "referrerPolicy" setting, so the sound is played from a tiny invisible
+     same-origin frame whose own policy is "no-referrer" -- its requests then
+     leave without any address, exactly like the local file. Nothing else on
+     the page (Firebase etc.) is affected. */
+  var ttsFrame = null;
+  function makeTtsFrame(){
+    try{
+      if(ttsFrame || !document.body) return;
+      ttsFrame = document.createElement("iframe");
+      ttsFrame.setAttribute("aria-hidden", "true");
+      ttsFrame.setAttribute("tabindex", "-1");
+      ttsFrame.setAttribute("title", "");
+      ttsFrame.setAttribute("referrerpolicy", "no-referrer");
+      ttsFrame.style.cssText = "position:fixed;width:0;height:0;border:0;opacity:0;pointer-events:none;left:-9999px;top:0;";
+      ttsFrame.srcdoc = '<!doctype html><html><head><meta name="referrer" content="no-referrer"></head><body></body></html>';
+      document.body.appendChild(ttsFrame);
+    }catch(e){ ttsFrame = null; }
+  }
+  function newTtsAudio(){
+    try{
+      makeTtsFrame();
+      var w = ttsFrame && ttsFrame.contentWindow;
+      var ready = w && w.document && w.document.readyState === "complete" && w.document.querySelector('meta[name="referrer"]');
+      if(ready && w.Audio) return new w.Audio();
+    }catch(e){}
+    return new Audio();                       // fallback: same behaviour as before
+  }
+  makeTtsFrame();
   function onlineChunks(text){
     var base = ttsChunks(text), out = [];
     base.forEach(function(c){
@@ -3479,7 +3511,7 @@
   function speakOnline(text, mySession, mySongId, onFail){
     var parts = onlineChunks(text), i = 0, tries = 0;
     if(!parts.length) return;
-    if(!ttsAudio) ttsAudio = new Audio();
+    if(!ttsAudio) ttsAudio = newTtsAudio();
     var a = ttsAudio;
     try{ a.setAttribute("referrerpolicy", "no-referrer"); a.referrerPolicy = "no-referrer"; }catch(e){}
     a.onended = a.onerror = a.onplaying = null;
@@ -3537,7 +3569,7 @@
     // Unlock audio playback inside the tap itself (phones refuse sound that
     // starts later from a timer or network callback).
     try{
-      if(!ttsAudio) ttsAudio = new Audio();
+      if(!ttsAudio) ttsAudio = newTtsAudio();
       ttsAudio.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YQAAAAA=";
       var unlock = ttsAudio.play(); if(unlock && unlock.catch) unlock.catch(function(){});
     }catch(e){}
